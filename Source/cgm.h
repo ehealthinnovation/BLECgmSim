@@ -1,9 +1,9 @@
 /**************************************************************************************************
-  Filename:       glucose.h
+  Filename:       cgm.h
   Revised:        $Date $
   Revision:       $Revision $
 
-  Description:    This file contains the Glucose Sensor sample application
+  Description:    This file contains the CGM simulator application
                   definitions and prototypes.
 
   Copyright 2011 Texas Instruments Incorporated. All rights reserved.
@@ -37,8 +37,8 @@
   contact Texas Instruments Incorporated at www.TI.com.
 **************************************************************************************************/
 
-#ifndef GLUCOSE_H
-#define GLUCOSE_H
+#ifndef CGM_H
+#define CGM_H
 
 #ifdef __cplusplus
 extern "C"
@@ -55,7 +55,7 @@ extern "C"
 // CGM application level constant
 #define CGM_MEAS_DB_SIZE                              10
   
-// Glucose Task Events
+// CGM Task Events
 #define START_DEVICE_EVT                              0x0001
 #define NOTI_TIMEOUT_EVT                              0x0002
 
@@ -75,12 +75,12 @@ extern "C"
  */
 
 /*
- * Task Initialization for the Glucose Application
+ * Task Initialization for the CGM application
  */
 extern void CGM_Init( uint8 task_id );
 
 /*
- * Task Event Processor for the Glucose Application
+ * Task Event Processor for the CGM application
  */
 extern uint16 CGM_ProcessEvent( uint8 task_id, uint16 events );
 
@@ -91,4 +91,4 @@ extern uint16 CGM_ProcessEvent( uint8 task_id, uint16 events );
 }
 #endif
 
-#endif /*GLUCOSE_H */
+#endif /* CGM_H */

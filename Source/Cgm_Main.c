@@ -1,10 +1,10 @@
 /**************************************************************************************************
-  Filename:       Glucose_Main.c
+  Filename:       Cgm_Main.c
   Revised:        $Date: 2011-10-28 12:10:02 -0700 (Fri, 28 Oct 2011) $
   Revision:       $Revision: 52 $
 
   Description:    This file contains the main and callback functions for
-                  the Glucose Sensor sample application.
+                  the CGM simulator application.
 
 
   Copyright 2011 Texas Instruments Incorporated. All rights reserved.
