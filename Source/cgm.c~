@@ -749,7 +749,7 @@ static void cgmMeasSend(void)
   //manually change the CGM measurement value
   cgmCurrentMeas.size=6;
   cgmCurrentMeas.flags=0;
-  cgmCurrentMeas.concentration= (cgmCurrentMeas.concentration+1)%250;
+  cgmCurrentMeas.concentration++;
   cgmCurrentMeas.timeoffset++;
   
   //att value notification structure
@@ -787,7 +787,7 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 rspcode)
 {
   cgmCtlPntRsp.value[0]=opcode;
   cgmCtlPntRsp.value[1]=rspcode;
-  Glucose_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp,  cgmTaskId);
+  CGM_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp,  cgmTaskId);
 }
 
 
