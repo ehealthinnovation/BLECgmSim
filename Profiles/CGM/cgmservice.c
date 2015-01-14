@@ -774,7 +774,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
     break;
 
     case CGM_SES_START_TIME_UUID:
-       (*CGMServiceCB)(CGM_SESSION_START_TIME_CHANGED, pValue, len);
+       (*CGMServiceCB)(CGM_START_TIME_WRITE_REQUEST, pValue, len);
     break;
    //NEW 
     case CGM_SPEC_OPS_CTRL_PT_UUID: //if CGM specific control point is written

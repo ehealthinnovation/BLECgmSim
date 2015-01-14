@@ -132,6 +132,8 @@
 // Maximum number of dynamically allocated measurements (must be less than MEAS_IDX_MAX)
 #define DYNAMIC_REC_MAX                       3
 
+// Maximim size of glucose measurement record database
+#define CGM_MEAS_DB_SIZE		      100
 /*********************************************************************
  * TYPEDEFS
  */
@@ -147,6 +149,18 @@ typedef struct {
   uint16        concentration;
   uint16        timeoffset;
 } cgmMeas_t;
+
+//complete measurement result data structure
+typedef struct {
+  uint8         size;
+  uint8         flags;
+  uint16        concentration;
+  uint16        timeoffset;
+  uint24        annunication;
+  uint16        trend;
+  uint16        quality;
+} cgmMeasC_t;
+
 //NEW
 typedef struct {
   uint24 cgmFeature;
@@ -292,22 +306,24 @@ static bool glucoseAdvCancelled = FALSE;
 bool glucoseSendAllRecords = false;
 
 //the most current measurement
-static cgmMeas_t        cgmCurrentMeas;
+static cgmMeasC_t        cgmCurrentMeas;
+static cgmMeasC_t	cgmPreviousMeas;
+
 //NEW - for the glucose history record
-static cgmMeas_t        cgmMeasDB[CGM_MEAS_DB_SIZE];
-static uint8            cgmMeasDBWriteIndex=0; //pointing to the most current glucose record
-static uint8            cgmMeasDBCount=0;
+static cgmMeas_t        * cgmMeasDB;
+static uint16            cgmMeasDBWriteIndex=0; //pointing to the most current glucose record
+static uint16            cgmMeasDBCount=0;
+static uint16		 cgmMeasDBReadIndex=0;
 
 //new all the variables needed for the cgm simulator
 //the support feature
 static cgmFeature_t             cgmFeature={CGM_FEATURE_MULTI_BOND | CGM_FEATURE_E2E_CRC | CGM_FEATURE_CAL, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; //for testing purpose only
-static cgmSessionStartTime_t    cgmStartTime={{20,3,3,8,1,2015},TIME_ZONE_UTC_M5,DST_STANDARD_TIME};
-static UTCTimeStruct            cgmCurrentTime;
+static cgmSessionStartTime_t    cgmStartTime={{20,3,3,8,1,2015},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}; static UTCTimeStruct            cgmCurrentTime;
 static UTCTime                  cgmCurrentTime_UTC;     //the UTC format of the current start time
 static uint16                   cgmOffsetTime;//this can be derived from subtracting start time from current time
-static uint16                   cgmSessionRunTime=0x1234;
-static bool                     cgmSesStartIndicator=false;
+static uint16                   cgmSessionRunTime=0x00A8;
+static bool                     cgmSessionStartIndicator=false;
 static bool                     cgmSensorMalfunctionIndicator=false;
 static uint8                    cgmBatteryLevel=95;//battery level in percentage
 static uint16                   cgmCommInterval=1000;//the communication interval in ms
@@ -321,7 +337,7 @@ static uint16                   cgmChangeRate=0x0777;//the rate of change of glu
 static uint16                   cgmSensorTemperature=0x888;//the temperature of sensor
 static uint16                   cgmQuality=0x0999;      //the quality of CGM data
 
-
+//The glucose measurement record database
 
 // For the example application we have hard coded glucose measurements
 // Note dates are in UTC time; day and month start at 0
@@ -592,6 +608,8 @@ static void glucoseCtlPntResponse(uint8 rspCode, uint8 opcode);
 static void cgmCtlPntResponse(uint8 opcode, uint8 rspcode);
 static void glucoseCtlPntNumRecordsResponse(uint16 numRecords);
 static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len);
+static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);                                      //this function loads the structure with the most recent glucose reading while upadting the internal record database
+static void cgmSimulationAppInit();							//initialize the simulation app
 static uint8 glucoseMarkAllRecords(bool setBits, uint8 mask);
 static uint8 glucoseMarkFirstValidRecord(bool setBits, uint8 mask);
 static uint8 glucoseMarkLastValidRecord(bool setBits, uint8 mask);
@@ -745,6 +763,9 @@ void CGM_Init( uint8 task_id )
   P2 = 0;   // All pins on port 2 to low
 
 #endif // #if defined( CC2540_MINIDK )
+
+  // Simulation Application Initialization
+  cgmSimulationAppInit();
 
   // Setup a delayed profile startup
   osal_set_event( glucoseTaskId, START_DEVICE_EVT );
@@ -1270,10 +1291,7 @@ static void glucosePasscodeCB( uint8 *deviceAddr, uint16 connectionHandle,
 static void CGMMeasSend(void)
 {
   //manually change the CGM measurement value
-  cgmCurrentMeas.size=6;
-  cgmCurrentMeas.flags=0;
-  cgmCurrentMeas.concentration++;
-  cgmCurrentMeas.timeoffset++;
+  cgmNewGlucoseMeas(&cgmCurrentMeas);
   
   //att value notification structure
   uint8 *p=CGMMeas.value;
@@ -1285,10 +1303,24 @@ static void CGMMeasSend(void)
   *p++ = HI_UINT16(cgmCurrentMeas.concentration);
   *p++ = LO_UINT16(cgmCurrentMeas.timeoffset);
   *p++ = HI_UINT16(cgmCurrentMeas.timeoffset);
+
+  if (flags & CGM_STATUS_ANNUNC_STATUS_OCT)
+	  *p++ = cgmCurrentMeas.flags
+  if (flags & CGM_TREND_INFO_PRES)
+	  
+  if (flags & CGM_STATUS_ANNUNC_WARNING_OCT)
+    size++;
+  
+  if (flags & CGM_STATUS_ANNUNC_CAL_TEMP_OCT)
+    size++;
+  
+    size++;
+M
   CGMMeas.len=(uint8)(p-CGMMeas.value);
   //command the GATT service to send the measurement
   CGM_MeasSend(gapConnHandle, &CGMMeas,  glucoseTaskId);
   osal_start_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
+
 }
   
 /*********************************************************************
@@ -1523,12 +1555,12 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
    */
   case CGM_MEAS_NTF_ENABLED:
     {
-        osal_start_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT, DEFAULT_NOTI_PERIOD);
+        //osal_start_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
         break;
     }
   case CGM_MEAS_NTF_DISABLED:
     {
-        osal_stop_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT);
+        //osal_stop_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT);
         break;
     }
     
@@ -1585,6 +1617,8 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
       cgmStartTime.dstOffset=valueP[8];
       cgmCurrentTime_UTC=osal_ConvertUTCSecs(&cgmStartTime.startTime);//convert to second format
       osal_setClock(cgmCurrentTime_UTC);//set the system clock to the session start time
+      osal_start_timerEx(glucoseTaskId,NOTI_TIMEOUT_EVT, cgmCommInterval);
+      cgmSessionStartIndicator=true;
       break;
     }
 
@@ -2155,5 +2189,107 @@ static void glucoseCtlPntHandleOpcode(uint8 opcode, uint8 oper, uint8 filterType
   }
 }
 */
+
+/*********************************************************************
+ * @fn      cgmNewGlucoseMeas
+ *
+ * @brief   Update with the lastest reading while updating the internal database
+ *
+ * @param   pMeas - pointer to the input data structure
+ * @param   pPMeas - pointer to the structure to store previous measurement
+ *
+ * @return  none
+ */
+static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
+{
+  //generate the glucose reading.
+  static uint16 glucoseGen=0;
+  static uint16 glucosePreviousGen=0;
+  static uint8  flag=0;
+  uint8         size=6;
+  uint16        trend;
+ // int32		trend_32i; //the signed version for calculation
+  uint16        quality;
+  UTCTime currentTime, startTime;
+  uint32 offset;
+  // Store the current CGM measurement
+  glucosePreviousGen=glucoseGen;
+
+  //get the glucose information
+  glucoseGen = (glucoseGen++) % 0x07FD;
+  glucoseGen |= 0xF000;
+  pMeas->concentration=glucoseGen;
+  
+  //get the time offset
+  currentTime=osal_GetClock();
+  startTime=sal_ConvertUTCSecs(&cgmStartTime.startTime);
+  if (currentTime>startTime)
+  {     
+      offset=currentTime-startTime;
+      if (offset > 0x0000FFFF) //UTCTime counts in second, target is minute
+        offset=0;
+      else
+       pMeas->timeoffset=offset & 0xFFFF; //EXTRA needs here second minute conflict
+  }
+  
+  //get the flag information
+  flag++; //simulate all flag situation
+  
+  //trend information
+  if(offset!=0)
+  {
+  	( 
+	  trend=0xF001; //0.1 mg/mol/min testing
+	  }
+  } 
+  //quality information
+  quality=0xF200; //51.2%
+  
+  //get the status annunication
+  pMeas->annunication=0x00FFFFFF;
+  
+  //update the annuciation field
+  if (flag & CGM_TREND_INFO_PRES)
+  {
+    size+=2;
+    pMeas->trend=trend;
+  }
+  
+  if (flag & CGM_QUALITY_PRES)
+  {
+    size+=2;
+    pMeas->quality=quality;
+  }
+  //EXTRA: cause consequence reversed, should test the annunication field
+  //to get the flag field set/clear
+  if (flag & CGM_STATUS_ANNUNC_WARNING_OCT)
+    size++;
+  
+  if (flag & CGM_STATUS_ANNUNC_CAL_TEMP_OCT)
+    size++;
+  
+  if (flag & CGM_STATUS_ANNUNC_STATUS_OCT)
+    size++;
+
+  pMeas->size=size;  
+
+  //here update the data base record
+
+  
+}
+  
+
+/*********************************************************************
+ * @fn      cgmSimulationAppInit
+ *
+ * @brief   Update with the lastest reading while updating the internal database
+ *
+ * @param   pMeas - pointer to the input data structure
+ *
+ * @return  none
+ */
+
+static void cgmSimulationAppInit();							//initialize the simulation app
+
 /*********************************************************************
 *********************************************************************/
