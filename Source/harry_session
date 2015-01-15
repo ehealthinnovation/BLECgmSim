@@ -16,8 +16,8 @@ onoremap  gggHG
 nnoremap  gggHG
 vnoremap  "+y
 noremap  
-vnoremap  :update
 nnoremap  :update
+vnoremap  :update
 onoremap  :update
 nmap  "+gP
 omap  "+gP
@@ -26,12 +26,13 @@ noremap  
 noremap  u
 map Q gq
 nmap gx <Plug>NetrwBrowseX
+nmap <S-Insert> "+gP
+nnoremap <C-Tab> w
+nnoremap <C-F4> c
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 onoremap <C-F4> c
-nnoremap <C-F4> c
 vnoremap <C-F4> c
 onoremap <C-Tab> w
-nnoremap <C-Tab> w
 vnoremap <C-Tab> w
 noremap <M-Space> :simalt ~
 vmap <S-Insert> 
@@ -39,7 +40,6 @@ vnoremap <BS> d
 vmap <C-Del> "*d
 vnoremap <S-Del> "+x
 vnoremap <C-Insert> "+y
-nmap <S-Insert> "+gP
 omap <S-Insert> "+gP
 cnoremap  gggHG
 inoremap  gggHG
@@ -72,9 +72,10 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +336 cgm.c
-badd +0 ..\Profiles\CGM\cgmservice.c
+badd +1326 cgm.c
+badd +21 ..\Profiles\CGM\cgmservice.c
 badd +20 .\CGM_Service_values.h
+badd +60 .\cgm.h
 args cgm.c
 edit ..\Profiles\CGM\cgmservice.c
 set splitbelow splitright
@@ -91,9 +92,9 @@ set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
-exe '2resize ' . ((&lines * 6 + 28) / 57)
+exe '2resize ' . ((&lines * 21 + 28) / 57)
 exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
-exe '3resize ' . ((&lines * 48 + 28) / 57)
+exe '3resize ' . ((&lines * 33 + 28) / 57)
 exe 'vert 3resize ' . ((&columns * 117 + 117) / 235)
 argglobal
 setlocal keymap=
@@ -197,7 +198,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 799 - ((43 * winheight(0) + 27) / 55)
+let s:l = 799 - ((37 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -307,11 +308,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 21 - ((3 * winheight(0) + 3) / 6)
+let s:l = 26 - ((9 * winheight(0) + 10) / 21)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-21
+26
 normal! 0
 wincmd w
 argglobal
@@ -417,18 +418,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1308 - ((37 * winheight(0) + 24) / 48)
+let s:l = 2300 - ((32 * winheight(0) + 16) / 33)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1308
-normal! 017|
+2300
+normal! 0
 wincmd w
 3wincmd w
 exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
-exe '2resize ' . ((&lines * 6 + 28) / 57)
+exe '2resize ' . ((&lines * 21 + 28) / 57)
 exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
-exe '3resize ' . ((&lines * 48 + 28) / 57)
+exe '3resize ' . ((&lines * 33 + 28) / 57)
 exe 'vert 3resize ' . ((&columns * 117 + 117) / 235)
 tabnext 1
 if exists('s:wipebuf')

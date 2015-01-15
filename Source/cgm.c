@@ -132,8 +132,7 @@
 // Maximum number of dynamically allocated measurements (must be less than MEAS_IDX_MAX)
 #define DYNAMIC_REC_MAX                       3
 
-// Maximim size of glucose measurement record database
-#define CGM_MEAS_DB_SIZE		      100
+
 /*********************************************************************
  * TYPEDEFS
  */
@@ -1305,18 +1304,22 @@ static void CGMMeasSend(void)
   *p++ = HI_UINT16(cgmCurrentMeas.timeoffset);
 
   if (flags & CGM_STATUS_ANNUNC_STATUS_OCT)
-	  *p++ = cgmCurrentMeas.flags
-  if (flags & CGM_TREND_INFO_PRES)
-	  
+	  *p++ = (cgmCurrentMeas.annunication) & 0xFF;
   if (flags & CGM_STATUS_ANNUNC_WARNING_OCT)
-    size++;
-  
+    	  *p++ = (cgmCurrentMeas.annunication>>16) & 0xFF;
   if (flags & CGM_STATUS_ANNUNC_CAL_TEMP_OCT)
-    size++;
-  
-    size++;
-M
-  CGMMeas.len=(uint8)(p-CGMMeas.value);
+	  *p++ = (cgmCurrentMeas.annunication>>8)  & 0xFF;
+  if (flags & CGM_TREND_INFO_PRES)
+	{  *p++ = LO_UINT16(cgmCurrentMeas.trend);
+	   *p++ = HI_UINT16(cgmCurrentMeas.trend);
+	}
+  if (flags & CGM_QUALITY_PRES)
+  	{ 
+		*p++ = LO_UINT16(cgmCurrentMeas.quality);
+	        *p++ = HI_UINT16(cgmCurrentMeas.quality);
+	}	
+  CGMMeas.len=cgmCurrentMeas.size;
+  //CGMMeas.len=(uint8)(p-CGMMeas.value);
   //command the GATT service to send the measurement
   CGM_MeasSend(gapConnHandle, &CGMMeas,  glucoseTaskId);
   osal_start_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
@@ -2203,26 +2206,31 @@ static void glucoseCtlPntHandleOpcode(uint8 opcode, uint8 oper, uint8 filterType
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 {
   //generate the glucose reading.
-  static uint16 glucoseGen=0;
+  static uint16 glucoseGen=0x0000;
   static uint16 glucosePreviousGen=0;
   static uint8  flag=0;
   uint8         size=6;
   uint16        trend;
- // int32		trend_32i; //the signed version for calculation
+  int32		currentGlucose_cal=0;
+  int32		previousGlucose_cal=0;
+  uint16	offset_dif; //for calculating trend
+  int32		trend_cal; //the signed version for calculation
+  
   uint16        quality;
   UTCTime currentTime, startTime;
   uint32 offset;
+
   // Store the current CGM measurement
   glucosePreviousGen=glucoseGen;
 
   //get the glucose information
-  glucoseGen = (glucoseGen++) % 0x07FD;
-  glucoseGen |= 0xF000;
+  glucoseGen+=4; 
+  glucoseGen =( glucoseGen % 0x07FD);
   pMeas->concentration=glucoseGen;
   
   //get the time offset
-  currentTime=osal_GetClock();
-  startTime=sal_ConvertUTCSecs(&cgmStartTime.startTime);
+  currentTime=osal_getClock();
+  startTime=osal_ConvertUTCSecs(&cgmStartTime.startTime);
   if (currentTime>startTime)
   {     
       offset=currentTime-startTime;
@@ -2234,19 +2242,45 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   
   //get the flag information
   flag++; //simulate all flag situation
+  flag |= CGM_TREND_INFO_PRES;
+   pMeas->flags= (flag);  
+ 
   
   //trend information
   if(offset!=0)
   {
-  	( 
-	  trend=0xF001; //0.1 mg/mol/min testing
-	  }
+    { /*
+	0x07FD 2045
+	0x0803 -2045
+	maximal difference
+	2045-(-2045)=4090 or -4090
+	minimal difference
+	1 or -1
+	normal glucose level 80-110mg/dL
+	diabetics level can rise up to 140 mg/dL, even 200mg/dL
+	http://www.diabetes.co.uk/diabetes_care/blood-sugar-level-ranges.html
+     
+	*/
+	    currentGlucose_cal=(glucoseGen & 0x07FF);
+	    previousGlucose_cal=(glucosePreviousGen & 0x07FF);
+	    offset_dif=cgmCommInterval/1000;	//EXTRA: currnt communication interval counts in ms.
+	    trend_cal=(currentGlucose_cal-previousGlucose_cal)*10/offset_dif; //elevate the power by 10 to gain 1 digit accuracy, the highest resolution is 0.1mg/dl/min
+	    
+	    //convert the calculation result back to SFLOAT
+	    if (trend_cal>2045) //when exponent is -1, the mantissa can be at most 20e5
+		    trend=0x07FE;//+infinity
+	    else if (trend_cal<-2045)
+		    trend=0x0F02;//-infinity
+	    else
+		    trend= (trend_cal & 0x0FFF) | 0xF000;
+    }
   } 
+  
   //quality information
   quality=0xF200; //51.2%
   
   //get the status annunication
-  pMeas->annunication=0x00FFFFFF;
+  pMeas->annunication=0x00CCDDEE;
   
   //update the annuciation field
   if (flag & CGM_TREND_INFO_PRES)
@@ -2289,7 +2323,8 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
  * @return  none
  */
 
-static void cgmSimulationAppInit();							//initialize the simulation app
-
+static void cgmSimulationAppInit()							//initialize the simulation a
+{
+}	
 /*********************************************************************
 *********************************************************************/
