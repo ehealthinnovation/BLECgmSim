@@ -1,0 +1,5 @@
+#ignore the object file folder, which consume a lot of memory
+**/Obj
+**/List
+**/*.tmp
+**/*~
