@@ -1086,6 +1086,9 @@
       <name>$PROJ_DIR$\..\Source\Cgm_Main.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\Source\cgmSimData.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\Source\OSAL_Cgm.c</name>
     </file>
   </group>

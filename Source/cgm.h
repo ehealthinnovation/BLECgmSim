@@ -58,9 +58,17 @@ extern "C"
 // CGM Task Events
 #define START_DEVICE_EVT                              0x0001
 #define NOTI_TIMEOUT_EVT                              0x0002
+#define RACP_IND_SEND_EVT			      0x0004
+
 
 // Message event  
 #define CTL_PNT_MSG                                   0xE0
+#define RACP_MSG				      0xE1
+//RACP Search Function Response Code
+#define RACP_SEARCH_RSP_SUCCESS			0x01		//the search is successful
+#define RACP_SEARCH_RSP_NO_RECORD		0x06		//there is no record matching the criteria
+#define	RACP_SEARCH_RSP_INVALID_OPERAND		0x05		// the operand is not valid
+#define RACP_SEARCH_RSP_NOT_COMPLETE		0x08		//the procedure is not completed for a reason
   
 /*********************************************************************
  * MACROS

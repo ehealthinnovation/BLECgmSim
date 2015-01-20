@@ -161,7 +161,7 @@ CONST uint8 CGMSpecificOpsControlPointUUID[ATT_BT_UUID_SIZE] =
 
 
 static CGMServiceCB_t CGMServiceCB;
- 
+static bool	      cgmMeasDBSendInProgress; 
 /*********************************************************************
  * Profile Attributes - variables
  */
@@ -407,6 +407,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
                                  uint8 *pValue, uint8 len, uint16 offset );
 
 static void CGM_HandleConnStatusCB( uint16 connHandle, uint8 changeType );
+bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId );
 
 /*********************************************************************
  * PROFILE CALLBACKS
@@ -571,7 +572,7 @@ bStatus_t CGM_MeasSend( uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 ta
     // Set the handle
     pNoti->handle = CGMAttrTbl[CGM_MEAS_VALUE_POS].handle;
 
-    // Send the Indication
+    // Send the Notiication
     return GATT_Notification( connHandle, pNoti, FALSE );
   }
 
@@ -627,6 +628,23 @@ bStatus_t Glucose_CtlPntIndicate( uint16 connHandle, attHandleValueInd_t *pInd, 
   {
     // Set the handle
     pInd->handle = CGMAttrTbl[CGM_CGM_OPCP_VALUE_POS].handle;
+
+    // Send the Indication
+    return GATT_Indication( connHandle, pInd, FALSE, taskId );
+  }
+
+  return bleNotReady;
+}
+
+bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId )
+{
+  uint16 value = GATTServApp_ReadCharCfg( connHandle, CGMRacpConfig );
+
+  // If indications enabled
+  if ( value & GATT_CLIENT_CFG_INDICATE )
+  {
+    // Set the handle
+    pInd->handle = CGMAttrTbl[CGM_RACP_VALUE_POS].handle;
 
     // Send the Indication
     return GATT_Indication( connHandle, pInd, FALSE, taskId );
@@ -762,9 +780,16 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
         if ( status == SUCCESS )
         {
             uint16 charCfg = BUILD_UINT16( pValue[0], pValue[1] );
-
+	    if(pAttr->handle == CGMAttrTbl[CGM_CGM_OPCP_CONFIG_POS].handle)
+	    {
             (*CGMServiceCB)((charCfg == 0) ? CGM_CTL_PNT_IND_DISABLED :
                                                  CGM_CTL_PNT_IND_ENABLED, NULL, NULL);
+	    }
+	    else if (pAttr->handle == CGMAttrTbl[CGM_RACP_CONFIG_POS].handle)
+	    {
+            	(*CGMServiceCB)((charCfg == 0) ? CGM_RACP_IND_DISABLED :
+                                                 CGM_RACP_IND_ENABLED, NULL, NULL);
+	    }
         }
       }
       else
@@ -786,8 +811,33 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
       {
         status = ATT_ERR_INVALID_VALUE_SIZE;
       }
-    break;
+      break;
     
+    //if RACP is written to 
+    case REC_ACCESS_CTRL_PT_UUID:
+      if(len>=CGM_RACP_MIN_SIZE && len<= CGM_RACP_MAX_SIZE)
+      {
+	      uint8 opcode = pValue[0];
+	      //If transfer in progress
+	      if (opcode != CTL_PNT_OP_ABORT && cgmMeasDBSendInProgress)
+	      {
+		      status = CGM_ERR_IN_PROGRESS;
+	      }
+	      else if ( opcode == CTL_PNT_OP_REQ &&
+			      !( GATTServApp_ReadCharCfg( connHandle, CGMRacpConfig) & GATT_CLIENT_CFG_INDICATE))
+	      {
+		      status = CGM_ERR_CCC_CONFIG;
+	      }
+	      else
+	      {
+	      	      (*CGMServiceCB)(CGM_RACP_CTL_PNT_CMD,pValue,len);
+	      }
+      }
+      else
+      {
+	      status = ATT_ERR_INVALID_VALUE_SIZE;
+      }
+      break;
     /*
     case  RECORD_CTRL_PT_UUID:
       if(len >= GLUCOSE_CTL_PNT_MIN_SIZE  && len <= GLUCOSE_CTL_PNT_MAX_SIZE)
@@ -851,6 +901,13 @@ static void CGM_HandleConnStatusCB( uint16 connHandle, uint8 changeType )
     }
   }
 }
+
+bool CGM_SetSendState(bool input)
+{
+	cgmMeasDBSendInProgress=input;
+	return cgmMeasDBSendInProgress;
+}
+
 
 /*********************************************************************
 *********************************************************************/

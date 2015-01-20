@@ -68,6 +68,8 @@ extern "C"
 // Characteristic Value sizes
 #define CGM_CTL_PNT_MIN_SIZE          2  
 #define CGM_CTL_PNT_MAX_SIZE          20  
+#define CGM_RACP_MIN_SIZE	      2
+#define CGM_RACP_MAX_SIZE	      20
 
 // Values for meas flags
 
@@ -239,7 +241,9 @@ extern "C"
 #define CGM_START_TIME_READ_REQUEST       12
 #define CGM_RUN_TIME_READ_REQUEST         13
 #define CGM_START_TIME_WRITE_REQUEST      14
-
+#define	CGM_RACP_IND_DISABLED		  15
+#define	CGM_RACP_IND_ENABLED		  16
+	
 
 
 
@@ -250,6 +254,8 @@ extern "C"
 // ATT status values
 #define GLUCOSE_ERR_IN_PROGRESS               0x80
 #define GLUCOSE_ERR_CCC_CONFIG                0x81
+#define	CGM_ERR_IN_PROGRESS		      0x80
+#define CGM_ERR_CCC_CONFIG		      0x81
 
 /*********************************************************************
  * TYPEDEFS
@@ -351,6 +357,10 @@ extern bStatus_t CGM_ContextSend( uint16 connHandle, attHandleValueNoti_t *pNoti
  * @return      Success or Failure
  */
 extern bStatus_t Glucose_CtlPntIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId );
+
+extern bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId );
+
+extern bool CGM_SetSendState(bool input);
 
 
 /*********************************************************************

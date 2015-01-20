@@ -1,2 +1,0 @@
-.\
-E:\CGM_SIM_HARDWARE\Texas Instruments\BLE-CC254x-1.4.0\Components\

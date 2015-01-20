@@ -64,7 +64,7 @@
 #include "OSAL_Clock.h"
 #include "CGM_Service_values.h"
 #include "battservice.h"
-#include "math.h"
+#include "cgmsimdata.h"
 
 /*********************************************************************
  * MACROS
@@ -108,7 +108,7 @@
 #define DEFAULT_PASSCODE                      19655
 
 // Default GAP pairing mode
-#define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_WAIT_FOR_REQ //GAPBOND_PAIRING_MODE_INITIATE [use this]
+#define DEFAULT_PAIRING_MODE                   GAPBOND_PAIRING_MODE_WAIT_FOR_REQ //GAPBOND_PAIRING_MODE_INITIATE [use this]
 
 // Default MITM mode (TRUE to require passcode or OOB when pairing)
 #define DEFAULT_MITM_MODE                     TRUE
@@ -176,6 +176,11 @@ typedef struct {
   uint8 data[CGM_CTL_PNT_MAX_SIZE];
 } cgmCtlPntMsg_t;
 
+ typedef struct {
+  osal_event_hdr_t hdr; //!< MSG_EVENT and status
+  uint8 len;
+  uint8 data[CGM_RACP_MAX_SIZE];
+} cgmRACPMsg_t;
 
 /*********************************************************************
  * GLOBAL VARIABLES
@@ -247,20 +252,14 @@ static uint16 gapConnHandle;
 //NEW
 static attHandleValueInd_t cgmCtlPntRsp;
 static attHandleValueNoti_t  CGMMeas;
-static attHandleValueInd_t   cgmCtlPntRsp;
+static attHandleValueInd_t   cgmRACPRsp;
 
 // Advertising user-cancelled state
 static bool cgmAdvCancelled = FALSE;
 
 //the most current measurement
 static cgmMeasC_t        cgmCurrentMeas;
-static cgmMeasC_t	cgmPreviousMeas;
-
-//NEW - for the glucose history record
-static cgmMeas_t        * cgmMeasDB;
-static uint16            cgmMeasDBWriteIndex=0; //pointing to the most current glucose record
-static uint16            cgmMeasDBCount=0;
-static uint16		 cgmMeasDBReadIndex=0;
+//static cgmMeasC_t	cgmPreviousMeas;
 
 //new all the variables needed for the cgm simulator
 //the support feature
@@ -268,8 +267,19 @@ static uint16                   cgmCommInterval=1000;//the communication interva
 static cgmFeature_t             cgmFeature={CGM_FEATURE_MULTI_BOND | CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; //for testing purpose only
 static cgmSessionStartTime_t    cgmStartTime={{20,3,3,8,1,2015},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}; 
-static UTCTimeStruct            cgmCurrentTime;
+//static UTCTimeStruct            cgmCurrentTime;
 static UTCTime                  cgmCurrentTime_UTC;     //the UTC format of the current start time
+
+//RACP Related Variables
+static cgmMeasC_t *	cgmMeasDB;
+static uint8		cgmMeasDBWriteIndx;
+static uint8		cgmMeasDBCount;
+static uint8		cgmMeasDBOldestIndx;
+static uint8		cgmMeasDBSearchStart; //the starting index record meeting the search criteria
+static uint8		cgmMeasDBSearchEnd;   //the end index of record meeting the search criteria
+static uint8		cgmMeasDBSearchNum;   //the resulting record number that matches the criteria
+static uint8		cgmMeasDBSendIndx;   //the index of the next record to be sent
+static bool		cgmRACPSendInProgress; //indicate if the sensor is sending out data
 
 /*
 static UTCTimeStruct            cgmCurrentTime;
@@ -306,6 +316,14 @@ static void cgmPasscodeCB( uint8 *deviceAddr, uint16 connectionHandle,uint8 uiIn
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);                                      //this function loads the structure with the most recent glucose reading while upadting the internal record database
 static void cgmSimulationAppInit();							//initialize the simulation app
 static void cgmPairStateCB( uint16 connHandle, uint8 state, uint8 status );
+//RACP Related Function
+static void cgmSimAPPInit();							//initialize the simulation a
+static uint8 cgmSearchMeasDB(uint8 filter,uint16 operand1, uint16 operand2); // seach for the required range
+static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas);
+static void cgmProcessRACPMsg( cgmRACPMsg_t * pMsg);
+static void cgmRACPSendNextMeas();
+static void cgmResetMeasDB();
+
 
 
 
@@ -500,9 +518,20 @@ uint16 CGM_ProcessEvent( uint8 task_id, uint16 events )
   if ( events & NOTI_TIMEOUT_EVT )
   {
     // Send the current value of the CGM reading
+    //Generate New Measurement
+    cgmNewGlucoseMeas(&cgmCurrentMeas);
+    //Add the generated record to database
+    cgmAddRecord(&cgmCurrentMeas);
     cgmMeasSend();
     return ( events ^ NOTI_TIMEOUT_EVT );
   }
+
+  if ( events & RACP_IND_SEND_EVT)
+  {
+	cgmRACPSendNextMeas();
+	return (events ^ RACP_IND_SEND_EVT);
+  }
+
 
   return 0;
 }
@@ -526,6 +555,10 @@ static void cgm_ProcessOSALMsg( osal_event_hdr_t *pMsg )
 
   case CTL_PNT_MSG:
       cgmProcessCtlPntMsg( (cgmCtlPntMsg_t *) pMsg);
+      break;
+
+  case RACP_MSG:
+      cgmProcessRACPMsg( (cgmRACPMsg_t *) pMsg);
       break;
 
   default:
@@ -622,7 +655,31 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
           }
           cgmCtlPntRsp.len=2;
           break;
+    case CGM_SPEC_OP_START_SES:
+	  //EXTRA if RACP is in transfer, this command is invalid
+	  //wipe the database
+	  cgmResetMeasDB();
+      	  cgmSessionStartIndicator=true;
+	  cgmStatus.cgmStatus &= (~CGM_STATUS_ANNUNC_SES_STOP);
+	  osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
+          ropcode=CGM_SPEC_OP_RESP_CODE;
+	  rspcode=CGM_SPEC_OP_RESP_SUCCESS;
+	  cgmCtlPntRsp.len=2;
+	  break;
+    case CGM_SPEC_OP_STOP_SES:
+	  osal_stop_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT);
+	  //Change the sensor status
+	  cgmStatus.cgmStatus|= CGM_STATUS_ANNUNC_SES_STOP;
+      	  cgmSessionStartIndicator=false;
+          ropcode=CGM_SPEC_OP_RESP_CODE;
+	  rspcode=CGM_SPEC_OP_RESP_SUCCESS;
+	  cgmCtlPntRsp.len=2;
+	  break;
+    
   default:
+	  ropcode=CGM_SPEC_OP_RESP_CODE;
+	  rspcode=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
+	  cgmCtlPntRsp.len=2;
           break;
   }
   cgmCtlPntResponse(ropcode,rspcode);
@@ -767,8 +824,6 @@ static void cgmPasscodeCB( uint8 *deviceAddr, uint16 connectionHandle,
 //NEW
 static void cgmMeasSend(void)
 {
-  //manually change the CGM measurement value
-  cgmNewGlucoseMeas(&cgmCurrentMeas);
   
   //att value notification structure
   uint8 *p=CGMMeas.value;
@@ -844,12 +899,12 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
   {
   case CGM_MEAS_NTF_ENABLED:
     {
-        //osal_start_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
+        //osal_start_timerEx(cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
         break;
     }
   case CGM_MEAS_NTF_DISABLED:
     {
-        //osal_stop_timerEx(glucoseTaskId, NOTI_TIMEOUT_EVT);
+      //  osal_stop_timerEx(cgmTaskId, NOTI_TIMEOUT_EVT);
         break;
     }
     
@@ -906,8 +961,6 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
       cgmStartTime.dstOffset=valueP[8];
       cgmCurrentTime_UTC=osal_ConvertUTCSecs(&cgmStartTime.startTime);//convert to second format
       osal_setClock(cgmCurrentTime_UTC);//set the system clock to the session start time
-      osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT, cgmCommInterval);
-      cgmSessionStartIndicator=true;
       break;
     }
 
@@ -924,6 +977,21 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
         osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
       }
     }
+      break;
+    
+  case CGM_RACP_CTL_PNT_CMD:
+      {
+	cgmRACPMsg_t * msgPtr;
+	// Send the address to the task list
+	msgPtr = (cgmRACPMsg_t *)osal_msg_allocate( sizeof(cgmRACPMsg_t) );
+	if ( msgPtr )
+	{
+	  msgPtr->hdr.event = RACP_MSG;
+	  msgPtr->len = len;
+	  osal_memcpy(msgPtr->data, valueP, len);
+	  osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
+	}
+      }
       break;
     
   default:
@@ -997,7 +1065,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   glucosePreviousGen=glucoseGen;
 
   //get the glucose information
-  glucoseGen+=4; 
+  glucoseGen =cgmGetNextData();
   glucoseGen =( glucoseGen % 0x07FD);
   pMeas->concentration=glucoseGen;
   
@@ -1080,9 +1148,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 
   pMeas->size=size;  
 
-  //here update the data base record
-
-  
+  //here update the data base record 
 }
   
 
@@ -1096,8 +1162,335 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
  * @return  none
  */
 
-static void cgmSimulationAppInit()							//initialize the simulation a
+static void cgmSimulationAppInit()				 //initialize the simulation a
 {
+	cgmMeasDB=(cgmMeasC_t *)osal_mem_alloc(CGM_MEAS_DB_SIZE*sizeof(cgmMeasC_t));
+	cgmMeasDBCount=0;
+	cgmMeasDBWriteIndx=0;
+	cgmMeasDBOldestIndx=0;
+	cgmSimDataReset();
+//	cgmMeasC_t temp;
+//	for (uint8 i=0;i<10;i++)
+//	{
+//		cgmNewGlucoseMeas(&temp);
+//		temp->timeoffset++;
+//		osal_memcpy(cgmMeasDB+i,&temp,sizeof(cgmMeasC_t));
+//	}		
+//	temp.size=6;/\
+//	temp.flags=0x33;
+//	temp.concentration=0x0123;
+//	temp.timeoffset=0;
+//	for (temp.timeoffset=0;temp.timeoffset<10;temp.timeoffset++)
+//	{
+//		osal_memcpy(cgmMeasDB+temp.timeoffset,&temp,sizeof(cgmMeasC_t));
+//	}
+//	cgmMeasDBCount=10;
 }	
+
+/*********************************************************************
+ * @fn      cgmSearchMeasDB
+ *
+ * @brief  This function implements the search function for the gluocose measurement. 
+ * 	   It assumes the measurement database consist of continous records arranged in ascending order.
+ * 	   The current version is based on the continuity of data records.
+ *
+ * @param   filter - the filter type in searching
+ * @param   operand1 - the primary operand to the search operation.
+ * @param   operand2 - the scrondary operand to the search operation, it is currently used only in searching for a range of record.
+ *
+ * @return  the result code
+ */
+static uint8 cgmSearchMeasDB(uint8 filter,uint16 operand1, uint16 operand2)
+{
+	uint8 i=0;
+        uint8 j=0;
+	//EXTRA:test record availability
+	if(cgmMeasDBCount==0)
+		return  RACP_SEARCH_RSP_NO_RECORD;
+        
+	switch (filter)
+        {
+                case CTL_PNT_OPER_ALL:
+                        {
+                                cgmMeasDBSearchStart=cgmMeasDBOldestIndx;
+                                cgmMeasDBSearchEnd=(cgmMeasDBOldestIndx+cgmMeasDBCount-1)%CGM_MEAS_DB_SIZE;
+                                cgmMeasDBSearchNum=cgmMeasDBCount;
+				return RACP_SEARCH_RSP_SUCCESS;
+
+                        }
+                case CTL_PNT_OPER_GREATER_EQUAL:
+                        {
+                                do
+                                {
+				
+					j=(cgmMeasDBOldestIndx+i)%CGM_MEAS_DB_SIZE;
+                                        if( (cgmMeasDB+j)->timeoffset >= operand1)
+					{
+						cgmMeasDBSearchStart=j;
+						break;
+					}
+					i++;
+					if (i>=cgmMeasDBCount)
+					{
+						cgmMeasDBSearchNum=0;
+						return RACP_SEARCH_RSP_NO_RECORD;
+					}
+				}while(1);
+
+				cgmMeasDBSearchEnd=(cgmMeasDBOldestIndx+cgmMeasDBCount-1)%CGM_MEAS_DB_SIZE;
+				if(cgmMeasDBSearchEnd>=cgmMeasDBSearchStart)
+				{
+					cgmMeasDBSearchNum= (cgmMeasDBSearchEnd-cgmMeasDBSearchStart+1);
+				}
+				else
+				{
+					cgmMeasDBSearchNum= -(cgmMeasDBSearchStart-cgmMeasDBSearchEnd-1)+CGM_MEAS_DB_SIZE;
+				}
+				return RACP_SEARCH_RSP_SUCCESS;
+			}
+		case CTL_PNT_OPER_FIRST:
+			{
+				cgmMeasDBSearchStart=cgmMeasDBOldestIndx;
+				cgmMeasDBSearchEnd=cgmMeasDBOldestIndx;
+				cgmMeasDBSearchNum=1;
+				return RACP_SEARCH_RSP_SUCCESS;
+			}
+		case CTL_PNT_OPER_LAST:
+			{
+				cgmMeasDBSearchStart=(cgmMeasDBOldestIndx+cgmMeasDBCount-1)%CGM_MEAS_DB_SIZE;
+				cgmMeasDBSearchEnd=cgmMeasDBSearchStart;
+				cgmMeasDBSearchNum=1;
+				return RACP_SEARCH_RSP_SUCCESS;
+			}
+		case CTL_PNT_OPER_LESS_EQUAL:
+			{
+				do
+				{
+				j=(cgmMeasDBOldestIndx+i)%CGM_MEAS_DB_SIZE;
+				if ( (cgmMeasDB+j)->timeoffset > operand1)
+				{
+					if(i==0)//no record has a smaller offset value
+					{
+						cgmMeasDBSearchNum=0;
+						return RACP_SEARCH_RSP_NO_RECORD;
+					}
+
+					cgmMeasDBSearchEnd=(j+CGM_MEAS_DB_SIZE-1)%CGM_MEAS_DB_SIZE;
+					break;
+				}
+				i++;
+				
+				if ( i >= cgmMeasDBCount)
+				{
+					cgmMeasDBSearchEnd=(cgmMeasDBOldestIndx+cgmMeasDBCount-1)%CGM_MEAS_DB_SIZE;
+					break;
+				}
+
+				}while(1);
+				
+				cgmMeasDBSearchStart=cgmMeasDBOldestIndx;
+
+				if(cgmMeasDBSearchEnd>=cgmMeasDBSearchStart)
+				{
+					cgmMeasDBSearchNum= (cgmMeasDBSearchEnd-cgmMeasDBSearchStart+1);
+				}
+				else
+				{
+					cgmMeasDBSearchNum= -(cgmMeasDBSearchStart-cgmMeasDBSearchEnd-1)+CGM_MEAS_DB_SIZE;
+				}
+				return RACP_SEARCH_RSP_SUCCESS;
+			}
+		case CTL_PNT_OPER_RANGE:
+			{
+				if (operand1>operand2)
+					return RACP_SEARCH_RSP_INVALID_OPERAND;
+				uint8 startindx,endindx;
+				if (cgmSearchMeasDB(CTL_PNT_OPER_GREATER_EQUAL,operand1,0)!=RACP_SEARCH_RSP_NO_RECORD)
+					{
+						startindx=cgmMeasDBSearchStart;
+					}
+				else
+				{
+					return RACP_SEARCH_RSP_NO_RECORD;
+				}
+
+				if(cgmSearchMeasDB(CTL_PNT_OPER_LESS_EQUAL,operand2,0)!= RACP_SEARCH_RSP_NO_RECORD)
+				{
+					endindx=cgmMeasDBSearchEnd;
+				}
+				else
+				{
+					return RACP_SEARCH_RSP_NO_RECORD;
+				}
+				cgmMeasDBSearchStart=startindx;
+				cgmMeasDBSearchEnd=endindx;
+				
+				if(cgmMeasDBSearchEnd>=cgmMeasDBSearchStart)
+				{
+					cgmMeasDBSearchNum= (cgmMeasDBSearchEnd-cgmMeasDBSearchStart+1);
+				}
+				else
+				{
+					cgmMeasDBSearchNum= -(cgmMeasDBSearchStart-cgmMeasDBSearchEnd-1)+CGM_MEAS_DB_SIZE;
+				}
+				return RACP_SEARCH_RSP_SUCCESS;
+			}
+
+		default:
+			break;
+	}
+
+	return RACP_SEARCH_RSP_NOT_COMPLETE;	
+}
+
+/*********************************************************************
+ * @fn     cgmAddRecord 
+ *
+ * @brief  Add record to the database 
+ *
+ * @param   cgmCurrentMeas - the current measurement to be added to the database.
+ *
+ *
+ * @return  the result code */
+static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas)
+{
+	cgmMeasDBWriteIndx=(cgmMeasDBOldestIndx+cgmMeasDBCount)%CGM_MEAS_DB_SIZE;
+	if ((cgmMeasDBWriteIndx==cgmMeasDBOldestIndx) && cgmMeasDBCount>0)
+		cgmMeasDBOldestIndx=(cgmMeasDBOldestIndx+1)%CGM_MEAS_DB_SIZE;
+	osal_memcpy(cgmMeasDB+cgmMeasDBWriteIndx,cgmCurrentMeas,sizeof(cgmMeasC_t));
+	cgmMeasDBCount++;
+	if (cgmMeasDBCount>CGM_MEAS_DB_SIZE)
+		cgmMeasDBCount=CGM_MEAS_DB_SIZE;
+}	
+
+static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
+{
+	uint8 opcode=pMsg->data[0];
+	uint8 operator=pMsg->data[1];
+	uint16 operand1=0,operand2=0;
+	uint8 reopcode=0;
+
+	switch (opcode)
+	{
+		case CTL_PNT_OP_REQ:
+		case CTL_PNT_OP_GET_NUM:
+			if (operator==CTL_PNT_OPER_LESS_EQUAL 
+					|| operator==CTL_PNT_OPER_GREATER_EQUAL 
+					|| operator==CTL_PNT_OPER_RANGE)
+				operand1=BUILD_UINT16(pMsg->data[2],pMsg->data[3]);
+			if (operator==CTL_PNT_OPER_RANGE)
+				operand2=BUILD_UINT16(pMsg->data[4],pMsg->data[5]);
+			if ((reopcode=cgmSearchMeasDB(operator,operand1,operand2))==RACP_SEARCH_RSP_SUCCESS)
+			{
+				if (opcode==CTL_PNT_OP_REQ){
+				cgmMeasDBSendIndx=0;
+				osal_start_timerEx(cgmTaskId,RACP_IND_SEND_EVT,100); //start the data transfer event  				   
+				CGM_SetSendState(true);
+				return;}
+				else if (opcode==CTL_PNT_OP_GET_NUM)
+				{
+					
+					cgmRACPRsp.value[0]=CTL_PNT_OP_NUM_RSP;
+				 	cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+					cgmRACPRsp.value[2]=cgmMeasDBSearchNum; //EXTRA: epand to uint16 
+					cgmRACPRsp.value[3]=0x00;
+					cgmRACPRsp.len=4;
+  					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+				}
+			}
+			else
+			{
+				cgmRACPRsp.value[3]=reopcode;
+				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+			 	cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+				cgmRACPRsp.value[2]=opcode;
+				cgmRACPRsp.len=4;
+  				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+			}
+			break;
+
+		case CTL_PNT_OP_ABORT:
+			{
+			osal_stop_timerEx(cgmTaskId,RACP_IND_SEND_EVT);	
+			CGM_SetSendState(false);
+		      	cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+			cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+  			cgmRACPRsp.value[2]=opcode;
+  			cgmRACPRsp.value[3]=CTL_PNT_RSP_SUCCESS;	
+			cgmRACPRsp.len=4;
+  			CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+			}
+		
+			
+		default:
+			break;
+	}
+
+	//send the response to the RACP by GATT indication
+}	
+			
+
+static void cgmRACPSendNextMeas(){
+
+	if (cgmMeasDBSendIndx < cgmMeasDBSearchNum)
+	{
+		cgmMeasC_t *currentRecord=cgmMeasDB+((cgmMeasDBSearchStart+cgmMeasDBSendIndx)%CGM_MEAS_DB_SIZE);
+		//att value notification structure
+	  	uint8 *p=cgmRACPRsp.value;
+	  	uint8 flags=currentRecord->flags;
+  
+ 		 //load data into the package buffer
+ 		 *p++ = currentRecord->size;
+	 	 *p++ = flags;
+		 *p++ = LO_UINT16(currentRecord->concentration);
+	 	 *p++ = HI_UINT16(currentRecord->concentration);
+		 *p++ = LO_UINT16(currentRecord->timeoffset);
+		 *p++ = HI_UINT16(currentRecord->timeoffset);
+
+		  if (flags & CGM_STATUS_ANNUNC_STATUS_OCT)
+			  *p++ = (currentRecord->annunication) & 0xFF;
+		  if (flags & CGM_STATUS_ANNUNC_WARNING_OCT)
+    			  *p++ = (currentRecord->annunication>>16) & 0xFF;
+		  if (flags & CGM_STATUS_ANNUNC_CAL_TEMP_OCT)
+			  *p++ = (currentRecord->annunication>>8)  & 0xFF;
+		  if (flags & CGM_TREND_INFO_PRES)
+			{  
+				*p++ = LO_UINT16(currentRecord->trend);
+	   			*p++ = HI_UINT16(currentRecord->trend);
+			}
+	  	if (flags & CGM_QUALITY_PRES)
+  		{ 
+			*p++ = LO_UINT16(currentRecord->quality);
+	        	*p++ = HI_UINT16(currentRecord->quality);
+		}	
+	  	cgmRACPRsp.len=currentRecord->size;
+		cgmMeasDBSendIndx++;
+  		//CGMMeas.len=(uint8)(p-CGMMeas.value);
+  		//command the GATT service to send the measurement
+  		CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+	  	osal_start_timerEx(cgmTaskId, RACP_IND_SEND_EVT, 50); //EXTRA: set the timer to be smaller to improve speed
+	}
+	else
+	{
+		//The current RACP transfer is finished
+		cgmRACPRsp.len=4;
+		cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+		cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+		cgmRACPRsp.value[2]=CTL_PNT_OP_REQ;
+		cgmRACPRsp.value[3]=CTL_PNT_RSP_SUCCESS;
+		CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+		CGM_SetSendState(false);
+		osal_stop_timerEx(cgmTaskId, RACP_IND_SEND_EVT);
+	}
+
+}
+
+
+static void cgmResetMeasDB()
+{
+	cgmMeasDBOldestIndx=0;
+	cgmMeasDBCount=0;
+}
+	
 /*********************************************************************
 *********************************************************************/
