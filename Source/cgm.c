@@ -259,6 +259,8 @@ static bool cgmAdvCancelled = FALSE;
 
 //the most current measurement
 static cgmMeasC_t        cgmCurrentMeas;
+
+
 //static cgmMeasC_t	cgmPreviousMeas;
 
 //new all the variables needed for the cgm simulator
@@ -266,9 +268,17 @@ static cgmMeasC_t        cgmCurrentMeas;
 static uint16                   cgmCommInterval=1000;//the communication interval in ms
 static cgmFeature_t             cgmFeature={CGM_FEATURE_MULTI_BOND | CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; //for testing purpose only
-static cgmSessionStartTime_t    cgmStartTime={{20,3,3,8,1,2015},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}; 
+static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}; 
+
+
+//Time related
 //static UTCTimeStruct            cgmCurrentTime;
-static UTCTime                  cgmCurrentTime_UTC;     //the UTC format of the current start time
+static UTCTime                 	 cgmCurrentTime_UTC;     //the UTC format of the current system time.
+static UTCTime			 cgmStartTime_UTC;	 // the UTC format of the start time.
+static bool			 cgmStartTimeConfigIndicator;
+// The time offset since the session start time
+static uint16			 cgmTimeOffset;
+
 
 //RACP Related Variables
 static cgmMeasC_t *	cgmMeasDB;
@@ -657,10 +667,14 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
           break;
     case CGM_SPEC_OP_START_SES:
 	  //EXTRA if RACP is in transfer, this command is invalid
-	  //wipe the database
+	  //Reset the sensor state
 	  cgmResetMeasDB();
       	  cgmSessionStartIndicator=true;
 	  cgmStatus.cgmStatus &= (~CGM_STATUS_ANNUNC_SES_STOP);
+	  cgmTimeOffset=0;
+	  if(cgmStartTimeConfigIndicator==false)
+	  	cgmStartTime_UTC=0;
+	  osal_setClock(0);
 	  osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
           ropcode=CGM_SPEC_OP_RESP_CODE;
 	  rspcode=CGM_SPEC_OP_RESP_SUCCESS;
@@ -920,6 +934,7 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
    
    case CGM_STATUS_READ_REQUEST:
      {
+	cgmStatus.timeOffset=(uint16)osal_getClock();
         *valueP = LO_UINT16(cgmStatus.timeOffset);
         *(++valueP) = HI_UINT16(cgmStatus.timeOffset);
         *(++valueP) = BREAK_UINT32(cgmStatus.cgmStatus,0);
@@ -950,17 +965,42 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
     }
     
   case CGM_START_TIME_WRITE_REQUEST:
-    {
-      cgmStartTime.startTime.year=BUILD_UINT16(valueP[0],valueP[1]);
-      cgmStartTime.startTime.month=valueP[2];
-      cgmStartTime.startTime.day=valueP[3];
-      cgmStartTime.startTime.hour=valueP[4];
-      cgmStartTime.startTime.minutes=valueP[5];
-      cgmStartTime.startTime.seconds=valueP[6];
-      cgmStartTime.timeZone=valueP[7];
-      cgmStartTime.dstOffset=valueP[8];
-      cgmCurrentTime_UTC=osal_ConvertUTCSecs(&cgmStartTime.startTime);//convert to second format
-      osal_setClock(cgmCurrentTime_UTC);//set the system clock to the session start time
+    {	cgmSessionStartTime_t input;
+     	UTCTime input_UTC;	
+	
+	input.startTime.year=BUILD_UINT16(valueP[0],valueP[1]);
+     	input.startTime.month=valueP[2];
+     	input.startTime.day=valueP[3];
+     	input.startTime.hour=valueP[4];
+     	input.startTime.minutes=valueP[5];
+     	input.startTime.seconds=valueP[6];
+     	input.timeZone=valueP[7];
+     	input.dstOffset=valueP[8];
+	input_UTC=osal_ConvertUTCSecs(&input.startTime);
+	
+	if( cgmSessionStartIndicator == false)
+	{
+		cgmStartTime_UTC=input_UTC;
+	}
+	else
+	{
+		cgmCurrentTime_UTC=osal_getClock();
+		cgmStartTime_UTC= input_UTC-(cgmCurrentTime_UTC); //EXTRA:account for the case when input_time is less than the cuurent-start
+	}	
+		osal_ConvertUTCTime( &(cgmStartTime.startTime), cgmStartTime_UTC);
+		cgmStartTime.timeZone=input.timeZone;
+		cgmStartTime.dstOffset=input.dstOffset;
+		cgmStartTimeConfigIndicator=true;
+     // cgmStartTime.startTime.year=BUILD_UINT16(valueP[0],valueP[1]);
+     // cgmStartTime.startTime.month=valueP[2];
+     // cgmStartTime.startTime.day=valueP[3];
+     // cgmStartTime.startTime.hour=valueP[4];
+     // cgmStartTime.startTime.minutes=valueP[5];
+     // cgmStartTime.startTime.seconds=valueP[6];
+     // cgmStartTime.timeZone=valueP[7];
+     // cgmStartTime.dstOffset=valueP[8];
+     // cgmCurrentTime_UTC=osal_ConvertUTCSecs(&cgmStartTime.startTime);//convert to second format
+     // osal_setClock(cgmCurrentTime_UTC);//set the system clock to the session start time
       break;
     }
 
@@ -1059,7 +1099,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   
   uint16        quality;
   UTCTime currentTime, startTime;
-  uint32 offset;
+ 
 
   // Store the current CGM measurement
   glucosePreviousGen=glucoseGen;
@@ -1070,16 +1110,18 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   pMeas->concentration=glucoseGen;
   
   //get the time offset
-  currentTime=osal_getClock();
-  startTime=osal_ConvertUTCSecs(&cgmStartTime.startTime);
-  if (currentTime>startTime)
-  {     
-      offset=currentTime-startTime;
-      if (offset > 0x0000FFFF) //UTCTime counts in second, target is minute
-        offset=0;
-      else
-       pMeas->timeoffset=offset & 0xFFFF; //EXTRA needs here second minute conflict
-  }
+  cgmTimeOffset += cgmCommInterval/1000;
+
+
+  //startTime=osal_ConvertUTCSecs(&cgmStartTime.startTime);
+  //if (currentTime>startTime)
+  //{     
+  //    offset=currentTime-startTime;
+  //    if (offset > 0x0000FFFF) //UTCTime counts in second, target is minute
+  //      offset=0;
+  //    else
+       pMeas->timeoffset=cgmTimeOffset & 0xFFFF; //EXTRA needs here second minute conflict
+  //}
   
   //get the flag information
   flag++; //simulate all flag situation
@@ -1088,7 +1130,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
  
   
   //trend information
-  if(offset!=0)
+  if(cgmTimeOffset!=0)
   {
     { /*
 	0x07FD 2045
@@ -1168,6 +1210,7 @@ static void cgmSimulationAppInit()				 //initialize the simulation a
 	cgmMeasDBCount=0;
 	cgmMeasDBWriteIndx=0;
 	cgmMeasDBOldestIndx=0;
+	cgmStartTimeConfigIndicator=false;
 	cgmSimDataReset();
 //	cgmMeasC_t temp;
 //	for (uint8 i=0;i<10;i++)
