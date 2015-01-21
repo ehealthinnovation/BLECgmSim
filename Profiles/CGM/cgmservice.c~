@@ -216,12 +216,8 @@ static uint8 CGMControlDummy=0;
 
 // Glucose Control
 //static uint8  glucoseControlProps = GATT_PROP_INDICATE | GATT_PROP_WRITE;
-//static uint8  glucoseControl=0;
-//static gattCharCfg_t glucoseControlConfig[GATT_MAX_NUM_CONN];
-
-/*********************************************************************
- * Profile Attributes - Table
- */
+//static uint8  glucoseControl=0; //static gattCharCfg_t glucoseControlConfig[GATT_MAX_NUM_CONN]; 
+///********************************************************************* * Profile Attributes - Table */
 //NEW
 static gattAttribute_t CGMAttrTbl[] =
 {
@@ -255,7 +251,8 @@ static gattAttribute_t CGMAttrTbl[] =
     // 3.Characteristic Configuration
     {
       { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-      GATT_PERMIT_READ | GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ | GATT_PERMIT_AUTHEN_WRITE |
+      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
       0,
       (uint8 *)&CGMMeasConfig
     },
@@ -275,7 +272,7 @@ static gattAttribute_t CGMAttrTbl[] =
     // 5.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMFeatureUUID },
-      GATT_PERMIT_AUTHOR_READ| GATT_PERMIT_ENCRYPT_READ,
+      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_AUTHEN_READ,
       0,
       &CGMFeatureDummy
     },
@@ -295,7 +292,7 @@ static gattAttribute_t CGMAttrTbl[] =
     // 7.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMStatusUUID },
-      GATT_PERMIT_READ,
+      GATT_PERMIT_AUTHEN_READ | GATT_PERMIT_ENCRYPT_READ,
       0,
       &CGMStatusDummy
     },
@@ -315,7 +312,8 @@ static gattAttribute_t CGMAttrTbl[] =
     // 9.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMSessionStartTimeUUID },
-      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE |
+      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
       0,
       &CGMSessionStartTimeDummy
     },
@@ -335,7 +333,7 @@ static gattAttribute_t CGMAttrTbl[] =
     // 11.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMSessionRunTimeUUID },
-      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ | GATT_PERMIT_ENCRYPT_READ,
       0,
       (uint8 *)&CGMSessionRunTimeDummy
     },
@@ -347,7 +345,7 @@ static gattAttribute_t CGMAttrTbl[] =
     // 12.Characteristic Declaration
     {
       { ATT_BT_UUID_SIZE, characterUUID },
-      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
+      GATT_PERMIT_READ,
       0,
       &CGMRacpProps
     },
@@ -355,7 +353,8 @@ static gattAttribute_t CGMAttrTbl[] =
     // 13.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, recordControlPointUUID },
-      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE |
+      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
       0,
       &CGMRacpDummy
     },
@@ -363,7 +362,7 @@ static gattAttribute_t CGMAttrTbl[] =
       // 14.Characteristic Configuration
     {
       { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-      GATT_PERMIT_READ | GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE,
       0,
       (uint8 *)&CGMRacpConfig
     },
@@ -383,7 +382,7 @@ static gattAttribute_t CGMAttrTbl[] =
     // 16.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMSpecificOpsControlPointUUID },
-      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE,
       0,
       &CGMControlDummy
     },
@@ -391,7 +390,7 @@ static gattAttribute_t CGMAttrTbl[] =
       // 17.Characteristic Configuration
     {
       { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-      GATT_PERMIT_READ | GATT_PERMIT_WRITE,
+      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE,
       0,
       (uint8 *)&CGMControlConfig
     }
@@ -673,6 +672,8 @@ static uint8 CGM_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
                             uint8 *pValue, uint8 *pLen, uint16 offset, uint8 maxLen )
 {
   bStatus_t status = SUCCESS;
+  // Make sure authentication is done
+
   // Make sure it's not a blob operation (no attributes in the profile are long)
   if ( offset > 0 )
   {
@@ -690,22 +691,22 @@ static uint8 CGM_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
 
       case CGM_FEATURE_UUID:       
         *pLen = CGM_CHAR_VAL_SIZE_FEATURE;
-         (*CGMServiceCB)(CGM_FEATURE_READ_REQUEST, pValue, *pLen);
+         (*CGMServiceCB)(CGM_FEATURE_READ_REQUEST, pValue, *pLen, (uint8 *)&status );
       break;
 
      case CGM_STATUS_UUID:
         *pLen = CGM_CHAR_VAL_SIZE_STATUS;
-         (*CGMServiceCB)(CGM_STATUS_READ_REQUEST, pValue, *pLen);
+         (*CGMServiceCB)(CGM_STATUS_READ_REQUEST, pValue, *pLen,(uint8 *)&status);
          break;
      
       case CGM_SES_START_TIME_UUID:
         *pLen = CGM_CHAR_VAL_SIZE_START_TIME;
-        (*CGMServiceCB)(CGM_START_TIME_READ_REQUEST, pValue, *pLen);
+        (*CGMServiceCB)(CGM_START_TIME_READ_REQUEST, pValue, *pLen,(uint8 *)&status);
       break;
     
       case CGM_SES_RUN_TIME_UUID:
         *pLen = CGM_CHAR_VAL_SIZE_RUN_TIME;
-        (*CGMServiceCB)(CGM_RUN_TIME_READ_REQUEST, pValue, *pLen);
+        (*CGMServiceCB)(CGM_RUN_TIME_READ_REQUEST, pValue, *pLen,(uint8 *)&status);
       break;
       
       
@@ -766,7 +767,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
           if(pAttr->handle == CGMAttrTbl[CGM_MEAS_CONFIG_POS].handle)
           {
             (*CGMServiceCB)((charCfg == 0) ? CGM_MEAS_NTF_DISABLED :
-                                                 CGM_MEAS_NTF_ENABLED, NULL, NULL);
+                                                 CGM_MEAS_NTF_ENABLED, NULL, NULL,(uint8 *)&status);
           }
         }
       }
@@ -783,12 +784,12 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
 	    if(pAttr->handle == CGMAttrTbl[CGM_CGM_OPCP_CONFIG_POS].handle)
 	    {
             (*CGMServiceCB)((charCfg == 0) ? CGM_CTL_PNT_IND_DISABLED :
-                                                 CGM_CTL_PNT_IND_ENABLED, NULL, NULL);
+                                                 CGM_CTL_PNT_IND_ENABLED, NULL, NULL,(uint8 *)&status);
 	    }
 	    else if (pAttr->handle == CGMAttrTbl[CGM_RACP_CONFIG_POS].handle)
 	    {
             	(*CGMServiceCB)((charCfg == 0) ? CGM_RACP_IND_DISABLED :
-                                                 CGM_RACP_IND_ENABLED, NULL, NULL);
+                                                 CGM_RACP_IND_ENABLED, NULL, NULL,(uint8 *)&status);
 	    }
         }
       }
@@ -799,13 +800,13 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
     break;
 
     case CGM_SES_START_TIME_UUID:
-       (*CGMServiceCB)(CGM_START_TIME_WRITE_REQUEST, pValue, len);
+       (*CGMServiceCB)(CGM_START_TIME_WRITE_REQUEST, pValue, len, (uint8 *)&status);
     break;
    //NEW 
     case CGM_SPEC_OPS_CTRL_PT_UUID: //if CGM specific control point is written
       if(len >= CGM_CTL_PNT_MIN_SIZE  && len <= CGM_CTL_PNT_MAX_SIZE)
       { //do preliminary filtering of the Op code, to filter out invalid codes
-        (*CGMServiceCB)(CGM_CTL_PNT_CMD, pValue, len); //call back to APP2SERV to process the command received.
+        (*CGMServiceCB)(CGM_CTL_PNT_CMD, pValue, len, (uint8 *)&status); //call back to APP2SERV to process the command received.
       }
       else
       {
@@ -830,7 +831,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
 	      }
 	      else
 	      {
-	      	      (*CGMServiceCB)(CGM_RACP_CTL_PNT_CMD,pValue,len);
+	      	      (*CGMServiceCB)(CGM_RACP_CTL_PNT_CMD,pValue,len, (uint8 *) &status);
 	      }
       }
       else

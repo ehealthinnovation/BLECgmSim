@@ -108,7 +108,7 @@
 #define DEFAULT_PASSCODE                      19655
 
 // Default GAP pairing mode
-#define DEFAULT_PAIRING_MODE                   GAPBOND_PAIRING_MODE_WAIT_FOR_REQ //GAPBOND_PAIRING_MODE_INITIATE [use this]
+#define DEFAULT_PAIRING_MODE                   GAPBOND_PAIRING_MODE_INITIATE //GAPBOND_PAIRING_MODE_WAIT_FOR_REQ //GAPBOND_PAIRING_MODE_INITIATE [use this]
 
 // Default MITM mode (TRUE to require passcode or OOB when pairing)
 #define DEFAULT_MITM_MODE                     TRUE
@@ -117,7 +117,7 @@
 #define DEFAULT_BONDING_MODE                  TRUE
 
 // Default GAP bonding I/O capabilities
-#define DEFAULT_IO_CAPABILITIES               GAPBOND_IO_CAP_NO_INPUT_NO_OUTPUT
+#define DEFAULT_IO_CAPABILITIES               GAPBOND_IO_CAP_DISPLAY_ONLY
 
 // Notification period in ms
 #define DEFAULT_NOTI_PERIOD                   1000
@@ -320,8 +320,10 @@ static void cgmGapStateCB( gaprole_States_t newState );
 static void cgm_HandleKeys( uint8 shift, uint8 keys );
 static void cgmMeasSend(void);
 static uint8 cgmVerifyTime(UTCTimeStruct* pTime);
+static uint8 cgmVerifyTimeZone( int8 input);
+static uint8 cgmVerifyDSTOffset( uint8 input);
 static void cgmCtlPntResponse(uint8 opcode, uint8 rspcode);
-static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len);
+static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result);
 static void cgmPasscodeCB( uint8 *deviceAddr, uint16 connectionHandle,uint8 uiInputs, uint8 uiOutputs );
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);                                      //this function loads the structure with the most recent glucose reading while upadting the internal record database
 static void cgmSimulationAppInit();							//initialize the simulation app
@@ -333,6 +335,7 @@ static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas);
 static void cgmProcessRACPMsg( cgmRACPMsg_t * pMsg);
 static void cgmRACPSendNextMeas();
 static void cgmResetMeasDB();
+
 
 
 
@@ -476,6 +479,7 @@ void CGM_Init( uint8 task_id )
 
   // Setup a delayed profile startup
   osal_set_event( cgmTaskId, START_DEVICE_EVT );
+  osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
   
 }
 
@@ -689,7 +693,24 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	  rspcode=CGM_SPEC_OP_RESP_SUCCESS;
 	  cgmCtlPntRsp.len=2;
 	  break;
-    
+    case  CGM_SPEC_OP_SET_CAL:			
+    case  CGM_SPEC_OP_GET_CAL:			
+    case  CGM_SPEC_OP_SET_ALERT_HIGH:		
+    case  CGM_SPEC_OP_GET_ALERT_HIGH:		
+    case  CGM_SPEC_OP_SET_ALERT_LOW:		
+    case  CGM_SPEC_OP_GET_ALERT_LOW:		
+    case  CGM_SPEC_OP_SET_ALERT_HYPO:		
+    case  CGM_SPEC_OP_GET_ALERT_HYPO:		
+    case  CGM_SPEC_OP_SET_ALERT_HYPER:		
+    case  CGM_SPEC_OP_GET_ALERT_HYPER:		
+    case  CGM_SPEC_OP_SET_ALERT_RATE_DECREASE:	
+    case  CGM_SPEC_OP_GET_ALERT_RATE_DECREASE:	
+    case  CGM_SPEC_OP_SET_ALERT_RATE_INCREASE:	
+    case  CGM_SPEC_OP_GET_ALERT_RATE_INCREASE:	
+	   ropcode=CGM_SPEC_OP_RESP_CODE;
+ 	   rspcode=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
+	   cgmCtlPntRsp.len=2;
+	   break;
   default:
 	  ropcode=CGM_SPEC_OP_RESP_CODE;
 	  rspcode=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
@@ -906,7 +927,7 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 rspcode)
  */
 
 //NEW
-static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
+static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 {
 
   switch (event)
@@ -929,6 +950,8 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
         *(++valueP) = (cgmFeature.cgmFeature >> 8) & 0xFF;
         *(++valueP) = (cgmFeature.cgmFeature >> 16) & 0xFF;
         *(++valueP) =  cgmFeature.cgmTypeSample;
+	*(++valueP) =  0xFF;
+	*(++valueP) =  0xFF;
         break;
     }
    
@@ -976,8 +999,13 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
      	input.startTime.seconds=valueP[6];
      	input.timeZone=valueP[7];
      	input.dstOffset=valueP[8];
+	//test the time value
+	if (  cgmVerifyTimeZone(input.timeZone)==false || cgmVerifyDSTOffset(input.dstOffset)==false ) //`cgmVerifyTime(&input.startTime)==false)// ||
+	{
+		*result=0x04;
+	}
 	input_UTC=osal_ConvertUTCSecs(&input.startTime);
-	
+		
 	if( cgmSessionStartIndicator == false)
 	{
 		cgmStartTime_UTC=input_UTC;
@@ -991,6 +1019,7 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len)
 		cgmStartTime.timeZone=input.timeZone;
 		cgmStartTime.dstOffset=input.dstOffset;
 		cgmStartTimeConfigIndicator=true;
+	*result=SUCCESS;
      // cgmStartTime.startTime.year=BUILD_UINT16(valueP[0],valueP[1]);
      // cgmStartTime.startTime.month=valueP[2];
      // cgmStartTime.startTime.day=valueP[3];
@@ -1073,7 +1102,21 @@ static uint8 cgmVerifyTime(UTCTimeStruct* pTime)
   return true;
 }
 
+static uint8 cgmVerifyTimeZone( int8 input)
+{
+	if ( (input % 2) !=0)
+		return false;
+	if ( ((input > -48) && (input<56)) || (input==128))
+	      	return true;
+	return false;
+}
 
+static uint8 cgmVerifyDSTOffset( uint8 input)
+{
+	if ( input==0x02 || input==0x04 || input==0x00 || input==0x08 || input==0xFF)
+		return true;
+		return false;
+}
 /*********************************************************************
  * @fn      cgmNewGlucoseMeas
  *
@@ -1124,8 +1167,8 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   //}
   
   //get the flag information
-  flag++; //simulate all flag situation
-  flag |= CGM_TREND_INFO_PRES;
+  flag=0; //simulate all flag situation
+ // flag |= CGM_TREND_INFO_PRES;
    pMeas->flags= (flag);  
  
   

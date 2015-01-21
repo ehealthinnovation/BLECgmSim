@@ -224,7 +224,7 @@
 #define UNIT_TIME_MIN				0x2760		//time (minute)
 
 // The following definition is inferred from the CGM profile specification
-#define CGM_CHAR_VAL_SIZE_FEATURE                   4               //The size of the feature characteristic without the CRC 
+#define CGM_CHAR_VAL_SIZE_FEATURE                   6               //The size of the feature characteristic without the CRC 
 #define CGM_CHAR_VAL_SIZE_STATUS                    5               //The size of the status characteristic without the CRC 
 #define CGM_CHAR_VAL_SIZE_START_TIME                9               //The size of the start time characteristic without the CRC 
 #define CGM_CHAR_VAL_SIZE_RUN_TIME                  2               //The size of the run time characteristic without the CRC 

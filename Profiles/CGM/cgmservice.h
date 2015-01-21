@@ -257,6 +257,7 @@ extern "C"
 #define	CGM_ERR_IN_PROGRESS		      0x80
 #define CGM_ERR_CCC_CONFIG		      0x81
 
+
 /*********************************************************************
  * TYPEDEFS
  */
@@ -264,7 +265,7 @@ extern "C"
 //
 
 // Glucose Service callback function
-typedef void (*CGMServiceCB_t)(uint8 event, uint8* data, uint8 dataLen);
+typedef void (*CGMServiceCB_t)(uint8 event, uint8* data, uint8 dataLen,uint8 *result);
 
 
 /*********************************************************************
