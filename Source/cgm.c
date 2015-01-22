@@ -267,7 +267,7 @@ static cgmMeasC_t        cgmCurrentMeas;
 //new all the variables needed for the cgm simulator
 //the support feature
 static uint16                   cgmCommInterval=1000;//the communication interval in ms
-static cgmFeature_t             cgmFeature={CGM_FEATURE_MULTI_BOND | CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};
+static cgmFeature_t             cgmFeature={ CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; //for testing purpose only
 static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}; 
 
@@ -323,7 +323,7 @@ static void cgmMeasSend(void);
 static uint8 cgmVerifyTime(UTCTimeStruct* pTime);
 static uint8 cgmVerifyTimeZone( int8 input);
 static uint8 cgmVerifyDSTOffset( uint8 input);
-static void cgmCtlPntResponse(uint8 opcode, uint8 rspcode);
+static void cgmCtlPntResponse(uint8 opcode, uint8 *roperand,uint8 roperand_len);
 static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result);
 static void cgmPasscodeCB( uint8 *deviceAddr, uint16 connectionHandle,uint8 uiInputs, uint8 uiOutputs );
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);                                      //this function loads the structure with the most recent glucose reading while upadting the internal record database
@@ -480,12 +480,9 @@ void CGM_Init( uint8 task_id )
 
   // Setup a delayed profile startup
   osal_set_event( cgmTaskId, START_DEVICE_EVT );
-  //osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
+  osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
+  cgmSessionStartIndicator=true;
   
-    cgmNewGlucoseMeas(&cgmCurrentMeas);
-    cgmAddRecord(&cgmCurrentMeas);
-    cgmNewGlucoseMeas(&cgmCurrentMeas);
-    cgmAddRecord(&cgmCurrentMeas);
 }
 
 /*********************************************************************
@@ -678,11 +675,13 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	    else if((*operand)==0xFF)
 	    {
 		    cgmCommInterval=1000*1; //fastest
+		    if(cgmSessionStartIndicator==true)
 		    osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
 	    }
             else              
 	    {
 		    cgmCommInterval=(uint16)1000*(*operand); // in ms
+		    if(cgmSessionStartIndicator==true)
 		    osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
 	    }
             roperand[0]=opcode;
@@ -730,14 +729,15 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
     case  CGM_SPEC_OP_GET_ALERT_RATE_DECREASE:	
     case  CGM_SPEC_OP_SET_ALERT_RATE_INCREASE:	
     case  CGM_SPEC_OP_GET_ALERT_RATE_INCREASE:	
-	   ropcode=CGM_SPEC_OP_RESP_CODE;
- 	   rspcode=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
-	   cgmCtlPntRsp.len=2;
+	   roperand[0]=CGM_SPEC_OP_RESP_CODE;
+ 	   roperand[1]=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
+	   roperand_len=2;
 	   break;
   default:
 	  ropcode=CGM_SPEC_OP_RESP_CODE;
 	  roperand[0]=opcode;
-	  roperand_len=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
+	  roperand[1]=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
+	  roperand_len=2;
           break;
   }
   cgmCtlPntResponse(ropcode,roperand,roperand_len);
@@ -992,6 +992,7 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
     
   case CGM_START_TIME_READ_REQUEST:
     {
+	osal_ConvertUTCTime( &(cgmStartTime.startTime), cgmStartTime_UTC);
         *valueP = (cgmStartTime.startTime.year & 0xFF);
         *(++valueP) = (cgmStartTime.startTime.year >> 8) & 0xFF;
         *(++valueP) = (cgmStartTime.startTime.month) & 0xFF;
@@ -1191,8 +1192,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   //}
   
   //get the flag information
-  flag=0; //simulate all flag situation
- // flag |= CGM_TREND_INFO_PRES;
+   flag |= CGM_TREND_INFO_PRES;
    pMeas->flags= (flag);  
  
   
@@ -1506,7 +1506,7 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 			{
 				if (opcode==CTL_PNT_OP_REQ){
 				cgmMeasDBSendIndx=0;
-				osal_start_timerEx(cgmTaskId,RACP_IND_SEND_EVT,3000); //start the data transfer event  				   
+				osal_start_timerEx(cgmTaskId,RACP_IND_SEND_EVT,500); //start the data transfer event  				   
 				CGM_SetSendState(true);
 				return;}
 				else if (opcode==CTL_PNT_OP_GET_NUM)

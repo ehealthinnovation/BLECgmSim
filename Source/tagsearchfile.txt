@@ -194,6 +194,7 @@ E:\CGM_SIM_HARDWARE\Logan_hardware\Source\cgm.c
 E:\CGM_SIM_HARDWARE\Logan_hardware\Source\cgmSimData.c 
 E:\CGM_SIM_HARDWARE\Logan_hardware\Source\Cgm_Main.c 
 E:\CGM_SIM_HARDWARE\Logan_hardware\Source\OSAL_Cgm.c 
+E:\CGM_SIM_HARDWARE\Logan_hardware\Source\racp.c 
 E:\CGM_SIM_HARDWARE\Logan_hardware\Source\cgm.h 
 E:\CGM_SIM_HARDWARE\Logan_hardware\Source\cgmsimdata.h 
 E:\CGM_SIM_HARDWARE\Logan_hardware\Source\CGM_Service_values.h 
