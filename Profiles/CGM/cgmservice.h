@@ -66,7 +66,7 @@ extern "C"
 
 
 // Characteristic Value sizes
-#define CGM_CTL_PNT_MIN_SIZE          2  
+#define CGM_CTL_PNT_MIN_SIZE          1 
 #define CGM_CTL_PNT_MAX_SIZE          20  
 #define CGM_RACP_MIN_SIZE	      2
 #define CGM_RACP_MAX_SIZE	      20

@@ -645,35 +645,50 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 {
   uint8 opcode = pMsg->data[0];
   uint8 ropcode; //the op code in the return char value
-  uint8 rspcode; //the response code in the return char value
-  uint8 *operand;//the operand in eith the input or reuturn char value
+  uint8 *operand; //the operand in the input
+  uint8 roperand[CGM_CTL_PNT_MAX_SIZE];//the operand in reuturn char value
+  uint8 roperand_len;//
   uint8 operand_len; // the operand length
  
   switch(opcode)
   { //currently only implement the set/get communication interval
     case CGM_SPEC_OP_GET_INTERVAL:
           ropcode=CGM_SPEC_OP_RESP_INTERVAL;
-          rspcode=CGM_SPEC_OP_RESP_SUCCESS;
-          cgmCtlPntRsp.len=sizeof(cgmCommInterval)+2;
-          osal_memcpy(cgmCtlPntRsp.value+2,(uint8 *)&cgmCommInterval,sizeof(cgmCommInterval));
+	  roperand[0]= (cgmCommInterval/1000)&0xFF;
+	  roperand_len=1;
           break;
           
     case CGM_SPEC_OP_SET_INTERVAL:
           ropcode=CGM_SPEC_OP_RESP_CODE;
-          operand=pMsg->data+2;
-          operand_len=pMsg->len-2;
+          operand=pMsg->data+1;
+          operand_len=pMsg->len-1;
           if (operand_len!=1) //the input interval assumes 1 byte
-            rspcode=CGM_SPEC_OP_RESP_OPERAND_INVALID;
+	  {
+		  roperand[0]=CGM_SPEC_OP_RESP_OPERAND_INVALID;
+		  roperand_len=1;
+	  }
           else
           {
 
             if ((*operand)==0) //input value being 0x00 would stop the timer.
-              osal_stop_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT);
+	    {
+		    osal_stop_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT);
+
+	    }
+	    else if((*operand)==0xFF)
+	    {
+		    cgmCommInterval=1000*1; //fastest
+		    osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
+	    }
             else              
-              cgmCommInterval=1000*(0xFF-*operand+1); // in ms
-            rspcode=CGM_SPEC_OP_RESP_SUCCESS; 
+	    {
+		    cgmCommInterval=(uint16)1000*(*operand); // in ms
+		    osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
+	    }
+            roperand[0]=opcode;
+	    roperand[1]=CGM_SPEC_OP_RESP_SUCCESS; 
+	    roperand_len=2;
           }
-          cgmCtlPntRsp.len=2;
           break;
     case CGM_SPEC_OP_START_SES:
 	  //EXTRA if RACP is in transfer, this command is invalid
@@ -687,8 +702,9 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	  osal_setClock(0);
 	  osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
           ropcode=CGM_SPEC_OP_RESP_CODE;
-	  rspcode=CGM_SPEC_OP_RESP_SUCCESS;
-	  cgmCtlPntRsp.len=2;
+	  roperand[0]=opcode;
+	  roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
+	  roperand_len=2;
 	  break;
     case CGM_SPEC_OP_STOP_SES:
 	  osal_stop_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT);
@@ -696,8 +712,9 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	  cgmStatus.cgmStatus|= CGM_STATUS_ANNUNC_SES_STOP;
       	  cgmSessionStartIndicator=false;
           ropcode=CGM_SPEC_OP_RESP_CODE;
-	  rspcode=CGM_SPEC_OP_RESP_SUCCESS;
-	  cgmCtlPntRsp.len=2;
+	  roperand[0]=opcode;
+	  roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
+	  roperand_len=2;
 	  break;
     case  CGM_SPEC_OP_SET_CAL:			
     case  CGM_SPEC_OP_GET_CAL:			
@@ -719,11 +736,11 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	   break;
   default:
 	  ropcode=CGM_SPEC_OP_RESP_CODE;
-	  rspcode=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
-	  cgmCtlPntRsp.len=2;
+	  roperand[0]=opcode;
+	  roperand_len=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
           break;
   }
-  cgmCtlPntResponse(ropcode,rspcode);
+  cgmCtlPntResponse(ropcode,roperand,roperand_len);
           
 }
 
@@ -914,11 +931,12 @@ static void cgmMeasSend(void)
  *
  * @return  none
  */
-static void cgmCtlPntResponse(uint8 opcode, uint8 rspcode)
+static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len)
 {
   cgmCtlPntRsp.value[0]=opcode;
-  cgmCtlPntRsp.value[1]=rspcode;
-  Glucose_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp,  cgmTaskId);
+  cgmCtlPntRsp.len=1+roperand_len;
+  osal_memcpy(cgmCtlPntRsp.value+1,roperand, roperand_len);
+  Glucose_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp, cgmTaskId);
 }
 
 
@@ -1159,7 +1177,6 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   pMeas->concentration=glucoseGen;
   
   //get the time offset
-  cgmTimeOffset += cgmCommInterval/1000;
 
 
   //startTime=osal_ConvertUTCSecs(&cgmStartTime.startTime);
@@ -1169,7 +1186,8 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
   //    if (offset > 0x0000FFFF) //UTCTime counts in second, target is minute
   //      offset=0;
   //    else
-       pMeas->timeoffset=cgmTimeOffset & 0xFFFF; //EXTRA needs here second minute conflict
+  pMeas->timeoffset=cgmTimeOffset & 0xFFFF; //EXTRA needs here second minute conflict
+  cgmTimeOffset += cgmCommInterval/1000;
   //}
   
   //get the flag information
