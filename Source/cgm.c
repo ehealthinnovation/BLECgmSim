@@ -253,6 +253,7 @@ static uint16 gapConnHandle;
 static attHandleValueInd_t cgmCtlPntRsp;
 static attHandleValueNoti_t  CGMMeas;
 static attHandleValueInd_t   cgmRACPRsp;
+static attHandleValueNoti_t   cgmRACPRspNoti;
 
 // Advertising user-cancelled state
 static bool cgmAdvCancelled = FALSE;
@@ -287,7 +288,7 @@ static uint8		cgmMeasDBCount;
 static uint8		cgmMeasDBOldestIndx;
 static uint8		cgmMeasDBSearchStart; //the starting index record meeting the search criteria
 static uint8		cgmMeasDBSearchEnd;   //the end index of record meeting the search criteria
-static uint8		cgmMeasDBSearchNum;   //the resulting record number that matches the criteria
+static uint16		cgmMeasDBSearchNum;   //the resulting record number that matches the criteria
 static uint8		cgmMeasDBSendIndx;   //the index of the next record to be sent
 static bool		cgmRACPSendInProgress; //indicate if the sensor is sending out data
 
@@ -479,8 +480,12 @@ void CGM_Init( uint8 task_id )
 
   // Setup a delayed profile startup
   osal_set_event( cgmTaskId, START_DEVICE_EVT );
-  osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
+  //osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
   
+    cgmNewGlucoseMeas(&cgmCurrentMeas);
+    cgmAddRecord(&cgmCurrentMeas);
+    cgmNewGlucoseMeas(&cgmCurrentMeas);
+    cgmAddRecord(&cgmCurrentMeas);
 }
 
 /*********************************************************************
@@ -537,6 +542,7 @@ uint16 CGM_ProcessEvent( uint8 task_id, uint16 events )
     //Add the generated record to database
     cgmAddRecord(&cgmCurrentMeas);
     cgmMeasSend();
+
     return ( events ^ NOTI_TIMEOUT_EVT );
   }
 
@@ -1453,6 +1459,7 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 {
 	uint8 opcode=pMsg->data[0];
 	uint8 operator=pMsg->data[1];
+	uint8 filter;
 	uint16 operand1=0,operand2=0;
 	uint8 reopcode=0;
 
@@ -1460,17 +1467,28 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 	{
 		case CTL_PNT_OP_REQ:
 		case CTL_PNT_OP_GET_NUM:
+	//		if ( filter=pMsg->data[2] != 0x01)
+	//		{
+	//			cgmRACPRsp.value[3]=CTL_PNT_RSP_OPER_NOT_SUPPORTED;
+	//			cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+	//	 		cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+	//			cgmRACPRsp.value[2]=opcode;
+	//			cgmRACPRsp.len=4;
+  	//			CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+	//l			return;
+	//		}
+
 			if (operator==CTL_PNT_OPER_LESS_EQUAL 
 					|| operator==CTL_PNT_OPER_GREATER_EQUAL 
 					|| operator==CTL_PNT_OPER_RANGE)
-				operand1=BUILD_UINT16(pMsg->data[2],pMsg->data[3]);
+				operand1=BUILD_UINT16(pMsg->data[3],pMsg->data[4]);
 			if (operator==CTL_PNT_OPER_RANGE)
-				operand2=BUILD_UINT16(pMsg->data[4],pMsg->data[5]);
+				operand2=BUILD_UINT16(pMsg->data[5],pMsg->data[6]);
 			if ((reopcode=cgmSearchMeasDB(operator,operand1,operand2))==RACP_SEARCH_RSP_SUCCESS)
 			{
 				if (opcode==CTL_PNT_OP_REQ){
 				cgmMeasDBSendIndx=0;
-				osal_start_timerEx(cgmTaskId,RACP_IND_SEND_EVT,100); //start the data transfer event  				   
+				osal_start_timerEx(cgmTaskId,RACP_IND_SEND_EVT,3000); //start the data transfer event  				   
 				CGM_SetSendState(true);
 				return;}
 				else if (opcode==CTL_PNT_OP_GET_NUM)
@@ -1478,33 +1496,43 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 					
 					cgmRACPRsp.value[0]=CTL_PNT_OP_NUM_RSP;
 				 	cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
-					cgmRACPRsp.value[2]=cgmMeasDBSearchNum; //EXTRA: epand to uint16 
-					cgmRACPRsp.value[3]=0x00;
+					cgmRACPRsp.value[2]=LO_UINT16(cgmMeasDBSearchNum); //EXTRA: epand to uint16 
+      					cgmRACPRsp.value[3]=HI_UINT16(cgmMeasDBSearchNum);
 					cgmRACPRsp.len=4;
-  					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+  					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
 				}
 			}
 			else
 			{
-				cgmRACPRsp.value[3]=reopcode;
-				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
-			 	cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
-				cgmRACPRsp.value[2]=opcode;
-				cgmRACPRsp.len=4;
+				if (reopcode==RACP_SEARCH_RSP_NO_RECORD && opcode==CTL_PNT_OP_GET_NUM)
+				{
+					cgmRACPRsp.value[3]=0x00;
+					cgmRACPRsp.value[0]=CTL_PNT_OP_NUM_RSP;
+			 		cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+					cgmRACPRsp.value[2]=0x00;
+					cgmRACPRsp.len=4;
+				}
+				else{
+					cgmRACPRsp.value[3]=reopcode;
+					cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+			 		cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+					cgmRACPRsp.value[2]=opcode;
+					cgmRACPRsp.len=4;
+				}
   				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
 			}
 			break;
 
 		case CTL_PNT_OP_ABORT:
 			{
-			osal_stop_timerEx(cgmTaskId,RACP_IND_SEND_EVT);	
-			CGM_SetSendState(false);
-		      	cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
-			cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
-  			cgmRACPRsp.value[2]=opcode;
-  			cgmRACPRsp.value[3]=CTL_PNT_RSP_SUCCESS;	
-			cgmRACPRsp.len=4;
-  			CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+				osal_stop_timerEx(cgmTaskId,RACP_IND_SEND_EVT);	
+				CGM_SetSendState(false);
+		      		cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+				cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+  				cgmRACPRsp.value[2]=opcode;
+  				cgmRACPRsp.value[3]=CTL_PNT_RSP_SUCCESS;	
+				cgmRACPRsp.len=4;
+  				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
 			}
 		
 			
@@ -1522,7 +1550,7 @@ static void cgmRACPSendNextMeas(){
 	{
 		cgmMeasC_t *currentRecord=cgmMeasDB+((cgmMeasDBSearchStart+cgmMeasDBSendIndx)%CGM_MEAS_DB_SIZE);
 		//att value notification structure
-	  	uint8 *p=cgmRACPRsp.value;
+	  	uint8 *p=cgmRACPRspNoti.value;
 	  	uint8 flags=currentRecord->flags;
   
  		 //load data into the package buffer
@@ -1549,16 +1577,17 @@ static void cgmRACPSendNextMeas(){
 			*p++ = LO_UINT16(currentRecord->quality);
 	        	*p++ = HI_UINT16(currentRecord->quality);
 		}	
-	  	cgmRACPRsp.len=currentRecord->size;
+	  	cgmRACPRspNoti.len=currentRecord->size;
 		cgmMeasDBSendIndx++;
   		//CGMMeas.len=(uint8)(p-CGMMeas.value);
   		//command the GATT service to send the measurement
-  		CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
-	  	osal_start_timerEx(cgmTaskId, RACP_IND_SEND_EVT, 50); //EXTRA: set the timer to be smaller to improve speed
+  		CGM_MeasSend(gapConnHandle, &cgmRACPRspNoti, cgmTaskId);
+	  	osal_start_timerEx(cgmTaskId, RACP_IND_SEND_EVT, 1000); //EXTRA: set the timer to be smaller to improve speed
 	}
 	else
 	{
 		//The current RACP transfer is finished
+		osal_stop_timerEx(cgmTaskId, RACP_IND_SEND_EVT);
 		cgmRACPRsp.len=4;
 		cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
 		cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
@@ -1566,7 +1595,6 @@ static void cgmRACPSendNextMeas(){
 		cgmRACPRsp.value[3]=CTL_PNT_RSP_SUCCESS;
 		CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
 		CGM_SetSendState(false);
-		osal_stop_timerEx(cgmTaskId, RACP_IND_SEND_EVT);
 	}
 
 }
