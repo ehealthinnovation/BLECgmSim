@@ -768,7 +768,7 @@ static void cgmGapStateCB( gaprole_States_t newState )
     uint8 advState = TRUE;
 
     // stop notification timer
-    osal_stop_timerEx(cgmTaskId, NOTI_TIMEOUT_EVT);
+    //osal_stop_timerEx(cgmTaskId, NOTI_TIMEOUT_EVT);
 
     if ( newState == GAPROLE_WAITING_AFTER_TIMEOUT )
     {
