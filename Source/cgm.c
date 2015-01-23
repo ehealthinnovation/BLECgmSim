@@ -1499,21 +1499,24 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 	{
 		case CTL_PNT_OP_REQ:
 		case CTL_PNT_OP_GET_NUM:
-//			if ( (filter=pMsg->data[2]) != 0x01)
-//			{
-//				cgmRACPRsp.value[3]=CTL_PNT_RSP_FILTER_NOT_SUPPORTED;
-//				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
-//				cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
-//				cgmRACPRsp.value[2]=opcode;
-	//			cgmRACPRsp.len=4;
-  	//			CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
-	//l			return;
-	//		}
 
 			if (operator==CTL_PNT_OPER_LESS_EQUAL 
 					|| operator==CTL_PNT_OPER_GREATER_EQUAL 
 					|| operator==CTL_PNT_OPER_RANGE)
+			{
+				
+				if ( (filter=pMsg->data[2]) != 0x01)
+				{
+				cgmRACPRsp.value[3]=CTL_PNT_RSP_FILTER_NOT_SUPPORTED;
+				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+				cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+				cgmRACPRsp.value[2]=opcode;
+				cgmRACPRsp.len=4;
+  				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+				return;
+				}
 				operand1=BUILD_UINT16(pMsg->data[3],pMsg->data[4]);
+			}
 			if (operator==CTL_PNT_OPER_RANGE)
 				operand2=BUILD_UINT16(pMsg->data[5],pMsg->data[6]);
 			if ((reopcode=cgmSearchMeasDB(operator,operand1,operand2))==RACP_SEARCH_RSP_SUCCESS)
