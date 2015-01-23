@@ -480,9 +480,22 @@ void CGM_Init( uint8 task_id )
 
   // Setup a delayed profile startup
   osal_set_event( cgmTaskId, START_DEVICE_EVT );
-  osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
-  cgmSessionStartIndicator=true;
-  
+ // osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
+ // cgmSessionStartIndicator=true;
+ 
+    //Generate New Measurement
+    cgmNewGlucoseMeas(&cgmCurrentMeas);
+    //Add the generated record to database
+    cgmAddRecord(&cgmCurrentMeas);
+    //Generate New Measurement
+    cgmNewGlucoseMeas(&cgmCurrentMeas);
+    //Add the generated record to database
+    cgmAddRecord(&cgmCurrentMeas);
+    //Generate New Measurement
+    cgmNewGlucoseMeas(&cgmCurrentMeas);
+    //Add the generated record to database
+    cgmAddRecord(&cgmCurrentMeas);
+   
 }
 
 /*********************************************************************
@@ -709,6 +722,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	  osal_stop_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT);
 	  //Change the sensor status
 	  cgmStatus.cgmStatus|= CGM_STATUS_ANNUNC_SES_STOP;
+	  cgmStartTimeConfigIndicator==false;
       	  cgmSessionStartIndicator=false;
           ropcode=CGM_SPEC_OP_RESP_CODE;
 	  roperand[0]=opcode;
@@ -1485,12 +1499,12 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 	{
 		case CTL_PNT_OP_REQ:
 		case CTL_PNT_OP_GET_NUM:
-	//		if ( filter=pMsg->data[2] != 0x01)
-	//		{
-	//			cgmRACPRsp.value[3]=CTL_PNT_RSP_OPER_NOT_SUPPORTED;
-	//			cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
-	//	 		cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
-	//			cgmRACPRsp.value[2]=opcode;
+//			if ( (filter=pMsg->data[2]) != 0x01)
+//			{
+//				cgmRACPRsp.value[3]=CTL_PNT_RSP_FILTER_NOT_SUPPORTED;
+//				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+//				cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+//				cgmRACPRsp.value[2]=opcode;
 	//			cgmRACPRsp.len=4;
   	//			CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
 	//l			return;
