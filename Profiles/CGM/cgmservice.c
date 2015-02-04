@@ -43,7 +43,6 @@ THE SOFTWARE.
 #include "gattservapp.h"
 #include "gapbondmgr.h"
 #include "cgmservice.h"
-#include "cgm_service_values.h"
 
 
 /*********************************************************************

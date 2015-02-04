@@ -52,7 +52,6 @@ THE SOFTWARE.
 #include "devinfoservice.h"
 #include "cgm.h"
 #include "OSAL_Clock.h"
-#include "CGM_Service_values.h"
 #include "battservice.h"
 #include "cgmsimdata.h"
 
