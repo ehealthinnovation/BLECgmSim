@@ -208,7 +208,6 @@ static uint8		cgmMeasDBSearchStart; 				///<The starting index records meeting t
 static uint8		cgmMeasDBSearchEnd;				///<The ending index of records meeting the search criterion.
 static uint16		cgmMeasDBSearchNum;   				///<The resulting record number that matches the criterion.
 static uint8		cgmMeasDBSendIndx;   				///<The index of the next record to be sent. It is used in RACP reporting record function.
-static bool		cgmRACPSendInProgress;				///<Indicate if the sensor is sending out data via RACP.
 
 
 /*********************************************************************
@@ -783,7 +782,7 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len
 	cgmCtlPntRsp.value[0]=opcode;
 	cgmCtlPntRsp.len=1+roperand_len;
 	osal_memcpy(cgmCtlPntRsp.value+1,roperand, roperand_len);
-	Glucose_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp, cgmTaskId);
+	CGM_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp, cgmTaskId);
 }
 
 
@@ -959,7 +958,7 @@ static uint8 cgmVerifyTimeZone( int8 input)
 {
 	if ( (input % 2) !=0)
 		return false;
-	if ( ((input > -48) && (input<56)) || (input==128))
+	if ( ((input > -48) && (input<56)) || (input==127))
 		return true;
 	return false;
 }
@@ -992,13 +991,12 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	uint8		flag=0;			//The flag field of the glucose measurement characteristic
 	uint8		size=6;			//The size field of the glucose measurement characteristic
 	uint16		trend;			//The trend field of the glucose measurement characteristic
-	uint16		quality;		//The quality field of the glucose measurement characteristic
+	uint16		quality=0;		//The quality field of the glucose measurement characteristic
 	uint32		annunciation=0;		//The annunciation field of the current glucose measurement characteristic
 	int32		currentGlucose_cal=0;	//The signed version of the current glucose value for caluculation of trend
 	int32		previousGlucose_cal=0;	//The signed version of the previous glucose value for calculation of trend 
 	uint16		offset_dif;		//The offset between current and previous record calculating trend 
 	int32		trend_cal;		//The signed version for trend calculation, which will be later converted to SFLOAT
-	UTCTime		currentTime, startTime; //The current time and the session start time
 
 	//Prepare the CGM measurement concentration value
 	glucosePreviousGen=glucoseGen;		// Store the current CGM measurement, which will be the previous value in the next call
@@ -1255,7 +1253,6 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 {
 	uint8 opcode=pMsg->data[0];
 	uint8 operator=pMsg->data[1];
-	uint8 filter;
 	uint16 operand1=0,operand2=0;
 	uint8 reopcode=0;
 
