@@ -178,15 +178,7 @@ static attHandleValueInd_t 	cgmRACPRsp;				///< Container for holding the RACP r
 static attHandleValueNoti_t   cgmRACPRspNoti;				///< Container for holding the RACP notification message, which would be passed down to the GATT service layer. The notification will appear as the CGM measurement notification.
 static bool cgmAdvCancelled = FALSE;					///< Denote the advertising state.
 //CGM Simulator configureation variables
-
-// ==================================START OF EXCERCISE REGION===============================================
-//EXERCISE STEP 1: Here we need to define a variable to store hyperglycemia glucose threshold. 
-//Also, we declare the hyperglycemia alert spport in the feature variable to inform collector about tha availability of hyperglycemia alert.
-// The feature bit value definition macros can be found in ./CGM_Service_values.h, under the comment "value for CGM feature flag".
 static cgmFeature_t             cgmFeature={ CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
-
-// ==================================END OF EXCERCISE REGION==================================================
-
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
 static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME};
@@ -583,15 +575,6 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
 			roperand_len=2;
 			break;
-
-// ==================================START OF EXCERCISE REGION===============================================
-//EXERCISE STEP (Optional): Implement the procedure for setting and getting the value of hyperglymecia threshold we previously declared.
-//Afterwards, prepare the response message (response opcode, response operand).
-//The response code value definition macros can be found in ./CGM_Service_values.h, under
-//comment "CGM specific op code - response codes"
-
-
-// ==================================END OF EXCERCISE REGION==================================================
 		//Other functions are not implemented
 		case  CGM_SPEC_OP_SET_CAL:			
 		case  CGM_SPEC_OP_GET_CAL:			
@@ -1028,19 +1011,6 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 				trend= (trend_cal & 0x0FFF) | 0xF000;
 		}
 	} 
-
-	//Prepare the measurement status annunication
-	//==================================START OF EXCERCISE REGION===============================================
-	//EXERCISE STEP 2: Here it is a good place to test whether the newly generated glucose value exceeds the 
-	//hyperglymecia threshold. Set the corresponding status annunciation field bit to indicate hyperglycemia
-	//condition. The bit definition can be found in the Bluetooth Continous Glucose Service websit. Additionally,
-	//the implementation bit value definition macros can be found in ./CGM_Service_values.h, under
-	//the comment "value for CGM status annunciation field"
-	
-
-
-	// ==================================END OF EXCERCISE REGION==================================================
-	
 	//update the annuciation field
 	pMeas->annunication=annunciation;
 	//Update the flag field

@@ -1,5 +1,5 @@
 /**************************************************************************************************
-  Filename:       glucservice.c
+  Filename:       cgmservice.c
   Revised:        3-Feb-2015
   Revision:       2
 
