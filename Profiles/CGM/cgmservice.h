@@ -47,11 +47,13 @@ extern "C"
  */
 // Glucose Service bit fields
 #define CGM_SERVICE				0x00000001	///< Flag identifier for CGM service
+
 // Characteristic Value sizes
 #define CGM_CTL_PNT_MIN_SIZE			1               ///< Minimum size of the CGM specific operation control point buffer
 #define CGM_CTL_PNT_MAX_SIZE			20              ///< Maximum size of the CGM specific operation control point buffer
 #define CGM_RACP_MIN_SIZE			2               ///< Minimum size of the RACP buffer
 #define CGM_RACP_MAX_SIZE			20              ///< Minimum size of the RACP buffer
+
 //CGM  Callback events
 #define CGM_MEAS_NTF_ENABLED			1               ///< Measurement Characteristic notification enabled
 #define CGM_MEAS_NTF_DISABLED			2               ///< Measurement Characteristic notification disabled
@@ -69,11 +71,14 @@ extern "C"
 #define CGM_START_TIME_WRITE_REQUEST		14              ///< Start time write request from the lower layer
 #define	CGM_RACP_IND_DISABLED			15              ///< RACP indication is disabled
 #define	CGM_RACP_IND_ENABLED			16              ///< RACP indication is enabled
+
 // ATT status values
 #define	CGM_ERR_IN_PROGRESS		     	0x80            ///< GATT error, transmission in progress
 #define CGM_ERR_CCC_CONFIG		     	0x81            ///< GATT error, incompatible CCC configuration
+
 // CGM Service UUID
 #define CGM_SERV_UUID				0x181F	///< GM service
+
 // CGM Service Characteristic UUID
 #define CGM_MEAS_UUID				0x2AA7	///< CGM Measurement
 #define CGM_FEATURE_UUID			0x2AA8	///< CGM Feature
@@ -82,12 +87,14 @@ extern "C"
 #define CGM_SES_RUN_TIME_UUID			0x2AAB	///< CGM Session Run Time
 #define REC_ACCESS_CTRL_PT_UUID			0x2A52	///< Record Access Control Point
 #define CGM_SPEC_OPS_CTRL_PT_UUID		0x2AAC	///< CGM Specific Ops Control Point
+
 // values for CGM meas flags
 #define	CGM_TREND_INFO_PRES			0x01	///< CGM Trend Information Present
 #define	CGM_QUALITY_PRES			0x02	///< CGM Quality Present
 #define	CGM_STATUS_ANNUNC_WARNING_OCT		0x20	///< Sensor Status Annuciation Field, Warning Octet present
 #define	CGM_STATUS_ANNUNC_CAL_TEMP_OCT		0x40	///< Sensor Status Annuciation Field, Cal/Temp-Octet present
 #define	CGM_STATUS_ANNUNC_STATUS_OCT		0x80	///< Sensor Status Annuciation Field, Status Octet present
+
 // value for CGM status annuciation field
 #define	CGM_STATUS_ANNUNC_SES_STOP		0x000001///< Session Stop
 #define	CGM_STATUS_ANNUNC_BAT_LOW		0x000002///< Device Battery Low
@@ -109,6 +116,7 @@ extern "C"
 #define	CGM_STATUS_ANNUNC_EXCEEDED_INCR_RATE	0x200000///< Sensor rate of increase exceeded
 #define	CGM_STATUS_ANNUNC_LOW_NIR		0x400000///< Sensor result lower than the device can process
 #define	CGM_STATUS_ANNUNC_HIGH_NIR		0x800000///< Sensor result higher than the device can process
+
 // value for CGM feature flag org.bluetooth.characteristic.cgm_feature.xml
 #define CGM_FEATURE_CAL				0x000001///< Calibration Support
 #define CGM_FEATURE_ALERTS_HIGH_LOW		0x000002///< Patient High/Low Alerts supported
@@ -127,6 +135,7 @@ extern "C"
 #define CGM_FEATURE_MULTI_SES			0x004000///< Multiple Sessions support
 #define CGM_FEATURE_TREND_INFO			0x008000///< CGM Trend information support
 #define CGM_FEATURE_QUALITY			0x010000///< CGM quality support
+
 // CGM Type-Sample byte
 // values for CGM type information flag 4 bit lower nimble 
 #define CGM_TYPE_CAPILLARY_WHOLE_BLOOD		0x01	///< Capillary whole blood
@@ -139,6 +148,7 @@ extern "C"
 #define CGM_TYPE_UNDET_PLASMA			0x08	///< Undetermined plasma
 #define CGM_TYPE_ISF				0x09	///< Interstitial fluid (ISF)
 #define CGM_TYPE_CTRL_SOLUTION			0x0A	///< Control solution
+
 // values for CGM sample location 4 bit higher nimble
 #define CGM_SAMPLE_LOC_FINGER			0x01	///< Sample location Finger
 #define CGM_SAMPLE_LOC_AST			0x02	///< Sample location Alternate Site Test (AST
@@ -146,6 +156,7 @@ extern "C"
 #define CGM_SAMPLE_LOC_CTRL_SOLUTION		0x04	///< Sample location Control solution
 #define CGM_SAMPLE_LOC_SUBCUT_TISSUE		0x05	///< Sample location Subcutaneous tissue
 #define CGM_SAMPLE_LOC_UNAVAIL			0x0F	///< Sample location not available
+
 // The time value for start time/ run time etc. is obviously implemented
 // https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.date_time.xml
 // Time Zone Infomation sint8
@@ -190,6 +201,7 @@ extern "C"
 #define TIME_ZONE_UTC_P13			52	///< TC+13:00
 #define TIME_ZONE_UTC_P14			56	///< TC+14:00
 #define TIME_ZONE_UNKNOWN			-128	///< nknown
+
 // DST Offset information uint8
 // https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.dst_offset.xml
 #define DST_STANDARD_TIME			0x00	///< Standard Time
@@ -197,6 +209,7 @@ extern "C"
 #define	DST_ONE_HOUR_DAYLIGHT			0x04	///< Daylight Time (+1h)
 #define	DST_DOUBLE_HOUR_DAYLIGHT		0x08	///< Double Daylight Time (+2h)
 #define	DST_UNKNOWN				0xFF	///< Daylight Time unknown
+
 // Record Control Access Point 
 //Record Control Point values OP Codes
 //https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.record_access_control_point.xml
@@ -206,6 +219,7 @@ extern "C"
 #define CTL_PNT_OP_GET_NUM                   	0x04	///< eport number of stored records (Operator: Value from Operator Table)
 #define CTL_PNT_OP_NUM_RSP                   	0x05	///< umber of stored records response (Operator: Null 'value of 0x00 from Operator Table')
 #define CTL_PNT_OP_REQ_RSP                   	0x06	///< esponse Code (Operator: Null 'value of 0x00 from Operator Table')
+
 //Record Control Point operator
 #define CTL_PNT_OPER_NULL                   	0x00	///< Null
 #define CTL_PNT_OPER_ALL                     	0x01  	///< All records
@@ -214,6 +228,7 @@ extern "C"
 #define CTL_PNT_OPER_RANGE                   	0x04	///< Within range of (inclusive)
 #define CTL_PNT_OPER_FIRST                   	0x05	///< First record(i.e. oldest record)
 #define CTL_PNT_OPER_LAST                    	0x06  	///< Last record (i.e. most recent record)
+
 //Record Control Point Response Codes
 #define CTL_PNT_RSP_SUCCESS                	0x01	///< Normal response for successful operation
 #define CTL_PNT_RSP_OPCODE_NOT_SUPPORTED     	0x02	///< Normal response if unsupported Op Code is received
@@ -224,8 +239,10 @@ extern "C"
 #define CTL_PNT_RSP_ABORT_FAILED             	0x07	///< Normal response if request for Abort cannot be completed
 #define CTL_PNT_RSP_PROC_NOT_CMPL            	0x08	///< Normal response if unable to complete a procedure for any reason
 #define CTL_PNT_RSP_FILTER_NOT_SUPPORTED     	0x09	///< Normal response if unsupported Operand is received
+
 //Record Control Point Resposne Filter
 #define CTL_PNT_FILTER_TIME_OFFSET             	0x01	///< Time Offset
+
 // CGM Specific operation codes
 #define CGM_SPEC_OP_SET_INTERVAL		1	///< Set CGM Communication Interval
 #define CGM_SPEC_OP_GET_INTERVAL		2	///< Get CGM Communication Interval
@@ -255,19 +272,23 @@ extern "C"
 #define CGM_SPEC_OP_START_SES			26	///< Start the Session
 #define CGM_SPEC_OP_STOP_SES			27	///< Stop the Session
 #define CGM_SPEC_OP_RESP_CODE			28	///< Response Code
+
 // CGM specific op code - resposne codes
 #define	CGM_SPEC_OP_RESP_SUCCESS		1	///< Success
 #define	CGM_SPEC_OP_RESP_OP_NOT_SUPPORT		2	///< Op Code not supported
 #define	CGM_SPEC_OP_RESP_OPERAND_INVALID	3	///< Invalid Operand
 #define	CGM_SPEC_OP_RESP_PROCEDURE_NOT_COMPLETE	4	///< Procedure not completed
 #define	CGM_SPEC_OP_RESP_PARAM_NIR		5	///< Parameter out of range
+
 // CGM Calibration Status
 #define	CGM_CALIBRATION_REJECT			0x01	///< Calibration Data rejected (Calibration failed)
 #define	CGM_CALIBRATION_NIR			0x02	///< Calibration Data out of range
 #define	CGM_CALIBRATION_PENDING			0x04	///< Calibration Process Pending
+
 // Unit UUID 
 #define UNIT_MASSDENSITY_MG_PER_DL		0x27B1	///< ass density (milligram per decilitre)
 #define UNIT_TIME_MIN				0x2760	///< ime (minute)
+
 // The following definition is inferred from the CGM profile specification
 #define CGM_CHAR_VAL_SIZE_FEATURE                   6              ///< he size of the feature characteristic without the CRC 
 #define CGM_CHAR_VAL_SIZE_STATUS                    5              ///< he size of the status characteristic without the CRC 

@@ -68,12 +68,11 @@ THE SOFTWARE.
 #define DEFAULT_FAST_ADV_DURATION             30	/// Duration of fast advertising duration in sec
 #define DEFAULT_SLOW_ADV_INTERVAL             1600	/// Slow advertising interval in 625us units
 #define DEFAULT_SLOW_ADV_DURATION             30	/// Duration of slow advertising duration in sec
-#define DEFAULT_ENABLE_UPDATE_REQUEST         FALSE	/// Whether to enable automatic parameter update request when a connection is formed
+#define DEFAULT_ENABLE_UPDATE_REQUEST         TRUE	/// Whether to enable automatic parameter update request when a connection is formed
 #define DEFAULT_DESIRED_MIN_CONN_INTERVAL     200	/// Minimum connection interval (units of 1.25ms) if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_MAX_CONN_INTERVAL     1600	/// Maximum connection interval (units of 1.25ms) if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_SLAVE_LATENCY         1		/// Slave latency to use if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_CONN_TIMEOUT          1000	/// Supervision timeout value (units of 10ms) if automatic parameter update request is enabled
-#define DEFAULT_ENABLE_UPDATE_REQUEST         FALSE	/// Whether to enable automatic parameter update request when a connection is formed
 #define DEFAULT_PASSCODE                      19655	/// Default passcode
 #define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_INITIATE
 #define DEFAULT_MITM_MODE                     TRUE	/// Default MITM mode (TRUE to require passcode or OOB when pairing)
@@ -272,7 +271,7 @@ void CGM_Init( uint8 task_id )
 	{
 #if defined( CC2540_MINIDK )
 		// For the CC2540DK-MINI keyfob, device doesn't start advertising until button is pressed
-		uint8 initial_advertising_enable = TRUE;
+		uint8 initial_advertising_enable = FALSE;
 #else
 		// For other hardware platforms, device starts advertising upon initialization
 		uint8 initial_advertising_enable = TRUE;
@@ -328,10 +327,11 @@ void CGM_Init( uint8 task_id )
 	
 	// Register for CGM application level service callback
 	CGM_Register ( cgmservice_cb);
-	// Register for all key events - This app will handle all key events
-	RegisterForKeys( cgmTaskId );
+
 
 #if defined( CC2540_MINIDK )
+        // Register for all key events - This app will handle all key events
+	RegisterForKeys( cgmTaskId );
 	// makes sure LEDs are off
 	HalLedSet( (HAL_LED_1 | HAL_LED_2), HAL_LED_MODE_OFF );
 	// For keyfob board set GPIO pins into a power-optimized state
