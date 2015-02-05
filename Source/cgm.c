@@ -1,42 +1,34 @@
 /**************************************************************************************************
 Filename:       cgm.c
 
-Revised:        $Date: $
-Revision:       $Revision:  $
+Revised:        Date: 2015-Feb-05
+Revision:       Revision:  2
 
 Description:    This file contains the CGM sensor simulator application
 for use with the CC2540 Bluetooth Low Energy Protocol Stack.
 
-Copyright 2011-2013 Texas Instruments Incorporated. All rights reserved.
+The MIT License (MIT)
 
-IMPORTANT: Your use of this Software is limited to those specific rights
-granted under the terms of a software license agreement between the user
-who downloaded the software, his/her employer (which must be your employer)
-and Texas Instruments Incorporated (the "License").  You may not use this
-Software unless you agree to abide by the terms of the License. The License
-limits your use, and you acknowledge, that the Software may not be modified,
-copied or distributed unless embedded on a Texas Instruments microcontroller
-or used solely and exclusively in conjunction with a Texas Instruments radio
-frequency transceiver, which is integrated into your product.  Other than for
-the foregoing purpose, you may not use, reproduce, copy, prepare derivative
-works of, modify, distribute, perform, display or sell this Software and/or
-its documentation for any purpose.
+Copyright (c) 2014-2015 Center for Global ehealthinnovation
 
-YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
-PROVIDED “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
-NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
-TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
-NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER
-LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
-INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE
-OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT
-OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
-(INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Should you have any questions regarding your right to use this Software,
-contact Texas Instruments Incorporated at www.TI.com.
- **************************************************************************************************/
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+**************************************************************************************************/
 
 /*********************************************************************
  * INCLUDES
@@ -60,7 +52,6 @@ contact Texas Instruments Incorporated at www.TI.com.
 #include "devinfoservice.h"
 #include "cgm.h"
 #include "OSAL_Clock.h"
-#include "CGM_Service_values.h"
 #include "battservice.h"
 #include "cgmsimdata.h"
 
@@ -77,12 +68,11 @@ contact Texas Instruments Incorporated at www.TI.com.
 #define DEFAULT_FAST_ADV_DURATION             30	/// Duration of fast advertising duration in sec
 #define DEFAULT_SLOW_ADV_INTERVAL             1600	/// Slow advertising interval in 625us units
 #define DEFAULT_SLOW_ADV_DURATION             30	/// Duration of slow advertising duration in sec
-#define DEFAULT_ENABLE_UPDATE_REQUEST         FALSE	/// Whether to enable automatic parameter update request when a connection is formed
+#define DEFAULT_ENABLE_UPDATE_REQUEST         TRUE	/// Whether to enable automatic parameter update request when a connection is formed
 #define DEFAULT_DESIRED_MIN_CONN_INTERVAL     200	/// Minimum connection interval (units of 1.25ms) if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_MAX_CONN_INTERVAL     1600	/// Maximum connection interval (units of 1.25ms) if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_SLAVE_LATENCY         1		/// Slave latency to use if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_CONN_TIMEOUT          1000	/// Supervision timeout value (units of 10ms) if automatic parameter update request is enabled
-#define DEFAULT_ENABLE_UPDATE_REQUEST         FALSE	/// Whether to enable automatic parameter update request when a connection is formed
 #define DEFAULT_PASSCODE                      19655	/// Default passcode
 #define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_INITIATE
 #define DEFAULT_MITM_MODE                     TRUE	/// Default MITM mode (TRUE to require passcode or OOB when pairing)
@@ -216,7 +206,6 @@ static uint8		cgmMeasDBSearchStart; 				///<The starting index records meeting t
 static uint8		cgmMeasDBSearchEnd;				///<The ending index of records meeting the search criterion.
 static uint16		cgmMeasDBSearchNum;   				///<The resulting record number that matches the criterion.
 static uint8		cgmMeasDBSendIndx;   				///<The index of the next record to be sent. It is used in RACP reporting record function.
-static bool		cgmRACPSendInProgress;				///<Indicate if the sensor is sending out data via RACP.
 
 
 /*********************************************************************
@@ -290,7 +279,7 @@ void CGM_Init( uint8 task_id )
 	{
 #if defined( CC2540_MINIDK )
 		// For the CC2540DK-MINI keyfob, device doesn't start advertising until button is pressed
-		uint8 initial_advertising_enable = TRUE;
+		uint8 initial_advertising_enable = FALSE;
 #else
 		// For other hardware platforms, device starts advertising upon initialization
 		uint8 initial_advertising_enable = TRUE;
@@ -343,13 +332,13 @@ void CGM_Init( uint8 task_id )
 	CGM_AddService(GATT_ALL_SERVICES);		// Add CGM service
 	DevInfo_AddService( );				// Add device information service
 	Batt_AddService();                              // Add battery Service
-	
 	// Register for CGM application level service callback
 	CGM_Register ( cgmservice_cb);
-	// Register for all key events - This app will handle all key events
-	RegisterForKeys( cgmTaskId );
 
 #if defined( CC2540_MINIDK )
+
+        // Register for all key events - This app will handle all key events
+	RegisterForKeys( cgmTaskId );
 	// makes sure LEDs are off
 	HalLedSet( (HAL_LED_1 | HAL_LED_2), HAL_LED_MODE_OFF );
 	// For keyfob board set GPIO pins into a power-optimized state
@@ -592,7 +581,6 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
 			roperand_len=2;
 			break;
-
 // ==================================START OF EXCERCISE REGION===============================================
 //EXERCISE STEP: Implement the procedure for setting and getting the value of hyperglymecia threshold we previously declared.
 //Afterwards, prepare the response message (response opcode, response operand).
@@ -811,7 +799,7 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len
 	cgmCtlPntRsp.value[0]=opcode;
 	cgmCtlPntRsp.len=1+roperand_len;
 	osal_memcpy(cgmCtlPntRsp.value+1,roperand, roperand_len);
-	Glucose_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp, cgmTaskId);
+	CGM_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp, cgmTaskId);
 }
 
 
@@ -987,7 +975,7 @@ static uint8 cgmVerifyTimeZone( int8 input)
 {
 	if ( (input % 2) !=0)
 		return false;
-	if ( ((input > -48) && (input<56)) || (input==128))
+	if ( ((input > -48) && (input<56)) || (input==127))
 		return true;
 	return false;
 }
@@ -1020,13 +1008,12 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	uint8		flag=0;			//The flag field of the glucose measurement characteristic
 	uint8		size=6;			//The size field of the glucose measurement characteristic
 	uint16		trend;			//The trend field of the glucose measurement characteristic
-	uint16		quality;		//The quality field of the glucose measurement characteristic
+	uint16		quality=0;		//The quality field of the glucose measurement characteristic
 	uint32		annunciation=0;		//The annunciation field of the current glucose measurement characteristic
 	int32		currentGlucose_cal=0;	//The signed version of the current glucose value for caluculation of trend
 	int32		previousGlucose_cal=0;	//The signed version of the previous glucose value for calculation of trend 
 	uint16		offset_dif;		//The offset between current and previous record calculating trend 
 	int32		trend_cal;		//The signed version for trend calculation, which will be later converted to SFLOAT
-	UTCTime		currentTime, startTime; //The current time and the session start time
 
 	//Prepare the CGM measurement concentration value
 	glucosePreviousGen=glucoseGen;		// Store the current CGM measurement, which will be the previous value in the next call
@@ -1058,7 +1045,6 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 				trend= (trend_cal & 0x0FFF) | 0xF000;
 		}
 	} 
-
 	//Prepare the measurement status annunication
 	//==================================START OF EXCERCISE REGION===============================================
 	//EXERCISE STEP: Here it is a good place to test whether the newly generated glucose value exceeds the 
@@ -1079,7 +1065,6 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 
 
 	// ==================================END OF EXCERCISE REGION==================================================
-	
 	//update the annuciation field
 	pMeas->annunication=annunciation;
 	//Update the flag field
@@ -1292,7 +1277,6 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 {
 	uint8 opcode=pMsg->data[0];
 	uint8 operator=pMsg->data[1];
-	uint8 filter;
 	uint16 operand1=0,operand2=0;
 	uint8 reopcode=0;
 
