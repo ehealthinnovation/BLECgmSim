@@ -28,7 +28,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- **************************************************************************************************/
+**************************************************************************************************/
 
 /*********************************************************************
  * INCLUDES
@@ -324,11 +324,8 @@ void CGM_Init( uint8 task_id )
 	CGM_AddService(GATT_ALL_SERVICES);		// Add CGM service
 	DevInfo_AddService( );				// Add device information service
 	Batt_AddService();                              // Add battery Service
-	
 	// Register for CGM application level service callback
 	CGM_Register ( cgmservice_cb);
-
-
 #if defined( CC2540_MINIDK )
         // Register for all key events - This app will handle all key events
 	RegisterForKeys( cgmTaskId );
