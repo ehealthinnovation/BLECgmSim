@@ -178,11 +178,10 @@ static bool cgmAdvCancelled = FALSE;					///< Denote the advertising state.
 //CGM Simulator configureation variables
 
 // ==================================START OF EXCERCISE REGION===============================================
-//EXERCISE STEP: Here we need to define a variable for to store hyperglycemia glucose threshold. Also, the declare the hyperglycemia alert spport
-//in the feature variable. The feature bit value definition macros can be found in ./CGM_Service_values.h, under
-//the comment "value for CGM feature flag"
-static cgmFeature_t             cgmFeature={ CGM_FEATURE_TREND_INFO|CGM_FEATURE_ALERTS_HYPER, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
-static uint16			cgmHyperThreshold=0x00FF;		//the initial hyperglycemia threshold value is 255 mg/dL
+//EXERCISE STEP 1: Here we need to define a variable to store hyperglycemia glucose threshold. 
+//Also, we declare the hyperglycemia alert spport in the feature variable to inform collector about tha availability of hyperglycemia alert.
+// The feature bit value definition macros can be found in ./CGM_Service_values.h, under the comment "value for CGM feature flag".
+static cgmFeature_t             cgmFeature={ CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
 // ==================================END OF EXCERCISE REGION==================================================
 
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
@@ -274,12 +273,11 @@ static const gapBondCBs_t cgmBondCB =
 void CGM_Init( uint8 task_id )
 {
 	cgmTaskId = task_id;
-
 	// Setup the GAP Peripheral Role Profile
 	{
 #if defined( CC2540_MINIDK )
 		// For the CC2540DK-MINI keyfob, device doesn't start advertising until button is pressed
-		uint8 initial_advertising_enable = FALSE;
+		uint8 initial_advertising_enable = TRUE;
 #else
 		// For other hardware platforms, device starts advertising upon initialization
 		uint8 initial_advertising_enable = TRUE;
@@ -332,13 +330,13 @@ void CGM_Init( uint8 task_id )
 	CGM_AddService(GATT_ALL_SERVICES);		// Add CGM service
 	DevInfo_AddService( );				// Add device information service
 	Batt_AddService();                              // Add battery Service
+	
 	// Register for CGM application level service callback
 	CGM_Register ( cgmservice_cb);
+	// Register for all key events - This app will handle all key events
+	RegisterForKeys( cgmTaskId );
 
 #if defined( CC2540_MINIDK )
-
-        // Register for all key events - This app will handle all key events
-	RegisterForKeys( cgmTaskId );
 	// makes sure LEDs are off
 	HalLedSet( (HAL_LED_1 | HAL_LED_2), HAL_LED_MODE_OFF );
 	// For keyfob board set GPIO pins into a power-optimized state
@@ -360,7 +358,8 @@ void CGM_Init( uint8 task_id )
 	cgmSimulationAppInit();
 	// Setup a delayed profile startup
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
- 	//this command starts the CGM measurement record generation right after device reset
+
+	//this command starts the CGM measurement record generation right after device reset
 	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
 	cgmSessionStartIndicator=true;
 }
@@ -581,31 +580,10 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			roperand_len=2;
 			break;
 // ==================================START OF EXCERCISE REGION===============================================
-//EXERCISE STEP: Implement the procedure for setting and getting the value of hyperglymecia threshold we previously declared.
+//EXERCISE STEP (Optional): Implement the procedure for setting and getting the value of hyperglymecia threshold we previously declared.
 //Afterwards, prepare the response message (response opcode, response operand).
 //The response code value definition macros can be found in ./CGM_Service_values.h, under
 //comment "CGM specific op code - response codes"
-//
-		case  CGM_SPEC_OP_SET_ALERT_HYPER:
-			//Get the input value
-			operand=pMsg->data+1;
-			operand_len=pMsg->len-1;
-			//Set the local variable
-			cgmHyperThreshold=BUILD_UINT16(operand[0],operand[1]);
-			//Prepare the response message
-			ropcode=CGM_SPEC_OP_RESP_CODE;
-			roperand[0]=opcode;
-			roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
-			roperand_len=2;
-			break;
-
-		case  CGM_SPEC_OP_GET_ALERT_HYPER:		
-			//Get the local hyperglycemia threshold value and load it into the response message buffer
-			ropcode=CGM_SPEC_OP_RESP_ALERT_HYPER;
-			roperand[0]=LO_UINT16(cgmHyperThreshold);
-			roperand[1]=HI_UINT16(cgmHyperThreshold);
-			roperand_len=2;
-			break;
 
 // ==================================END OF EXCERCISE REGION==================================================
 		//Other functions are not implemented
@@ -1045,24 +1023,14 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	} 
 	//Prepare the measurement status annunication
 	//==================================START OF EXCERCISE REGION===============================================
-	//EXERCISE STEP: Here it is a good place to test whether the newly generated glucose value exceeds the 
+	//EXERCISE STEP 2: Here it is a good place to test whether the newly generated glucose value exceeds the 
 	//hyperglymecia threshold. Set the corresponding status annunciation field bit to indicate hyperglycemia
 	//condition. The bit definition can be found in the Bluetooth Continous Glucose Service websit. Additionally,
 	//the implementation bit value definition macros can be found in ./CGM_Service_values.h, under
 	//the comment "value for CGM status annunciation field"
-	
-	//Make sure the hyperglycemia value is positive
-	//Also when it is interpreted as SFLOAT, the exponent is 0.
-	int32 hyperthreshold_cal = cgmHyperThreshold & (0x07FF);
-	if (hyperthreshold_cal <= currentGlucose_cal)
-		{
-			annunciation |= CGM_STATUS_ANNUNC_HIGH_HYPER;
-			flag |= CGM_STATUS_ANNUNC_WARNING_OCT;
-		}
-		
-
 
 	// ==================================END OF EXCERCISE REGION==================================================
+	
 	//update the annuciation field
 	pMeas->annunication=annunciation;
 	//Update the flag field

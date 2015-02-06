@@ -242,7 +242,6 @@ extern "C"
 
 //Record Control Point Resposne Filter
 #define CTL_PNT_FILTER_TIME_OFFSET             	0x01	///< Time Offset
-
 // CGM Specific operation codes
 #define CGM_SPEC_OP_SET_INTERVAL		1	///< Set CGM Communication Interval
 #define CGM_SPEC_OP_GET_INTERVAL		2	///< Get CGM Communication Interval

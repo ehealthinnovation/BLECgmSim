@@ -44,7 +44,6 @@ THE SOFTWARE.
 #include "gapbondmgr.h"
 #include "cgmservice.h"
 
-
 /*********************************************************************
  * MACROS
  */
