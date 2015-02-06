@@ -1277,6 +1277,7 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 	uint8 operator=pMsg->data[1];
 	uint16 operand1=0,operand2=0;
 	uint8 reopcode=0;
+        uint8 filter=0;
 
 	switch (opcode)
 	{
