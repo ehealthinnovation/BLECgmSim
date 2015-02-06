@@ -274,7 +274,7 @@
           <state>xPLUS_BROADCASTER</state>
           <state>HAL_LCD=FALSE</state>
           <state>HAL_LED=TRUE</state>
-          <state>CC2540_MINIDK</state>
+          <state>CC2541_MINIDK</state>
           <state>DC_DC_P0_7</state>
         </option>
         <option>
@@ -726,7 +726,7 @@
         <debug>1</debug>
         <option>
           <name>XOutOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OutputFile</name>
@@ -932,7 +932,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>GlucoseSensor.hex</state>
+          <state>CGMSim.hex</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
