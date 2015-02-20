@@ -145,13 +145,13 @@ Components Requirement</h2>
 <tr>
 <td align="center">TI BLE Stack</td><td align="center">The software kit provided by TI. The stack consists of software libraries for the CC2541MiniDK, including hardware configuration files, a quasi-OS, BLE stack libraries and some application projects.</td><td align="center"><a href="http://www.ti.com/tool/ble-stack">Link</a> </td></tr>
 <tr>
-<td align="center">IAR Embedded Workbench for 8051 v8.2</td><td align="center">An IDE for embedded software development. It provides the emebedded C code compilation tool chain. This version is recommended because of official support from TI and our CGM service was developped in IAR v8.2. Newer version of IAR Embedded Workbench is available from the IAR website, but the project needed to be configured to work with newer version of IAR (<a class="el" href="index.html#installationneweriar">Working with IAR Embedded Workbench v8.3 or Newer</a> see here).</td><td align="center"><a href="http://supp.iar.com/Download/SW/?item=EW8051-EVAL">Link (v9.1)</a> </td></tr>
+<td align="center">IAR Embedded Workbench for 8051 v8.20.2</td><td align="center">An IDE for embedded software development. It provides the emebedded C code compilation tool chain. This version is recommended because of official support from TI and our CGM service was developped in IAR v8.20.2. Newer version of IAR Embedded Workbench is available from the IAR website, but the project needed to be configured to work with newer version of IAR (<a class="el" href="index.html#installationneweriar">Working with IAR Embedded Workbench v8.3 or Newer</a> see here).</td><td align="center"><a href="http://supp.iar.com/Download/SW/?item=EW8051-EVAL">Link (v9.1)</a> </td></tr>
 </table>
 <h2><a class="anchor" id="installationbrief"></a>
 Brief Installation Guide</h2>
 <ol>
 <li>
-Download and install the IAR Embedded Workbench v8.2, TI BLE Stack, TI Smart RF Programmer. For repeatable results, install the TI BLE stack in its default location. (<em>i.e.</em>"C:\\Texas Instruments" for windows users).  </li>
+Download and install the IAR Embedded Workbench v8.20.2, TI BLE Stack, TI Smart RF Programmer. For repeatable results, install the TI BLE stack in its default location. (<em>i.e.</em>"C:\\Texas Instruments" for windows users).  </li>
 <li>
 Clone source code from this repository into a directory (say, $PROJECT_DIR) located at the same level as the BLE stack files (<em>i.e.</em>the "C:\\" if the TI BLE stack is installed to default location).  </li>
 <li>
@@ -159,7 +159,7 @@ In the IAR IDE, open the project work place file (<em>i.e.</em>$PROJECT_DIR\CC25
 </ol>
 <h2><a class="anchor" id="installationneweriar"></a>
 Working with IAR Embedded Workbench v8.3 or Newer</h2>
-<p>As the project was developed in IAR for 8051 v8.2, opening the project with newer IDEs will raise compatibility issues.</p>
+<p>As the project was developed in IAR for 8051 v8.20.2, opening the project with newer IDEs will raise compatibility issues.</p>
 <p>First of all, the IDE will prompt to convert the project files into newer versions (<a class="el" href="installationprocedure.html#pic_convert">figure</a>). Click "yes" to confirm the conversion. The project configuration will be updated to the newer IDE.</p>
 <p>The second issue occurs when the project is compiled. The console ouptut an error stating "Error[e16]: Segment ISTACK (size: 0xc0 align: 0) is too long for segment definition. At least 0xe more bytes needed." (<a class="el" href="installationprocedure.html#pic_compile">figure</a>). To fix the problem, remove the "_NR_OF_VIRTUAL_REGISTERS" from the linker file (<em>i.e.</em>"C:\\Texas Instruments\\BLE-CC254x-1.4.0\\Projects\\ble\\common\\cc2540\\ti_51ew_cc2540b.xcl", if the BLE stack files are installed in the default location), the example code is highted in <a class="el" href="installationprocedure.html#pic_linkrepair">this figure</a>.</p>
 <p>Tackling the above two issues should allow code compilation.</p>
@@ -174,19 +174,19 @@ Procedure for Functional Implementation</h1>
 <p>In the case of set hyper alert threshold, the write request to COCP exists in the cgmservice_cb as, </p>
 <pre class="fragment">switch (event)
     {
-            case CGM_CTL_PNT_CMD:
-                {
-                    cgmCtlPntMsg_t* msgPtr;
-                    msgPtr = (cgmCtlPntMsg_t *)osal_msg_allocate( sizeof(cgmCtlPntMsg_t) );
+    case CGM_CTL_PNT_CMD:
+            {
+            cgmCtlPntMsg_t* msgPtr;
+            msgPtr = (cgmCtlPntMsg_t *)osal_msg_allocate( sizeof(cgmCtlPntMsg_t) );
             if ( msgPtr )
             {
-                msgPtr-&gt;hdr.event = CTL_PNT_MSG;
-                msgPtr-&gt;len = len;
-                osal_memcpy(msgPtr-&gt;data, valueP, len);
-                osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
+            msgPtr-&gt;hdr.event = CTL_PNT_MSG;
+            msgPtr-&gt;len = len;
+            osal_memcpy(msgPtr-&gt;data, valueP, len);
+            osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
             }
             }
-        break;
+    break;
     }
 </pre><p>As we see that the callback sends out an OS message to place a COCP event processing request. As the logic behind COCP command can be potentially large, it is better to leverage the task scheduler of the TI OS to guarantee that time critical tasks have a chance to access the MCU.</p>
 <p>Periodically, the function cgm_ProcessOSALMsg will be called by the OS to process pending messages. An excerpt of the function is shown below, and it invokes the cgmProcessingCtlPntMsg to process the message. </p>
@@ -203,11 +203,11 @@ Procedure for Functional Implementation</h1>
 <pre class="fragment">    switch(opcode)
     {   \/\/Implement the set/get communication interval        
         ....
-    case  CGM_SPEC_OP_SET_ALERT_HIGH:       
+        case  CGM_SPEC_OP_SET_ALERT_HIGH:       
         \/\*Application logic for processing the set command goes here\*\/ 
         break;
         ....
-}
+    }
 </pre><p class="endli"></p>
 </li>
 <li>
@@ -220,8 +220,17 @@ Procedure for Functional Implementation</h1>
         \/\/Get the input value
         operand=pMsg-&gt;data+1;
         operand_len=pMsg-&gt;len-1;
-</pre><p> Set the local variable cgmHyperThreshold=BUILD_UINT16(operand[0],operand[1]); \/\/Prepare the response message ropcode=CGM_SPEC_OP_RESP_CODE; roperand[0]=opcode; roperand[1]=CGM_SPEC_OP_RESP_SUCCESS; roperand_len=2; break; .... }</p>
-<p>In the above code segment, the operand within the COCP write request is extracted. Afterwards, the local variable storing hyperglycemia alert threshold is set with the input value. There are associated logic added in the glucose reporting function, which sets the hyperglycemia alert flag when the most current glucose estimate exceeds the threshold; but it is trivial and outside the scope of this instruction.</p>
+        \/\/Set the local variable
+        cgmHyperThreshold=BUILD_UINT16(operand[0],operand[1]);
+        \/\/Prepare the response message
+        ropcode=CGM_SPEC_OP_RESP_CODE;
+        roperand[0]=opcode;
+        roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
+        roperand_len=2;
+        break;
+        ....
+    }
+</pre><p>In the above code segment, the operand within the COCP write request is extracted. Afterwards, the local variable storing hyperglycemia alert threshold is set with the input value. There are associated logic added in the glucose reporting function, which sets the hyperglycemia alert flag when the most current glucose estimate exceeds the threshold; but it is trivial and outside the scope of this instruction.</p>
 <p class="endli">It worths mentioning that the above code is for demonstration purpose, it is not yet perfect. A possible improvement is testing the input threshold value before storing it into a local variable. The details are up to the implementation of the glucose monitor.  </p>
 </li>
 <li>
@@ -253,14 +262,12 @@ Future Implementations</h1>
 Floating Point Operation Library </li>
 <li>
 Set Calibration Value </li>
-<li>
-Authorization Service </li>
 </ol>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 20 2015 12:45:06 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 20 2015 13:47:33 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
