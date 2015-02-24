@@ -14,5 +14,10 @@ var searchData=
   ['default_5fpairing_5fmode',['DEFAULT_PAIRING_MODE',['../cgm_8c.html#afd72a5ce31b4d3265c44d4ea3709c71a',1,'cgm.c']]],
   ['default_5fpasscode',['DEFAULT_PASSCODE',['../cgm_8c.html#ae1e63bb29703c2f4bda0bc4519dee173',1,'cgm.c']]],
   ['default_5fslow_5fadv_5fduration',['DEFAULT_SLOW_ADV_DURATION',['../cgm_8c.html#a5deef528bf3975f909872aa8132dd895',1,'cgm.c']]],
-  ['default_5fslow_5fadv_5finterval',['DEFAULT_SLOW_ADV_INTERVAL',['../cgm_8c.html#a3567e69ad54f594a4b32b23eb02ed0c9',1,'cgm.c']]]
+  ['default_5fslow_5fadv_5finterval',['DEFAULT_SLOW_ADV_INTERVAL',['../cgm_8c.html#a3567e69ad54f594a4b32b23eb02ed0c9',1,'cgm.c']]],
+  ['dst_5fdouble_5fhour_5fdaylight',['DST_DOUBLE_HOUR_DAYLIGHT',['../cgmservice_8h.html#abdec0a2932b508c9acb3f52f49fd9b6d',1,'cgmservice.h']]],
+  ['dst_5fhalf_5fhour_5fdaylight',['DST_HALF_HOUR_DAYLIGHT',['../cgmservice_8h.html#a8acdb6bdd82be73ffdff8971653f13f1',1,'cgmservice.h']]],
+  ['dst_5fone_5fhour_5fdaylight',['DST_ONE_HOUR_DAYLIGHT',['../cgmservice_8h.html#a5dad8a3ca06f560884df88099c5483b4',1,'cgmservice.h']]],
+  ['dst_5fstandard_5ftime',['DST_STANDARD_TIME',['../cgmservice_8h.html#a728e42300b315d7c66f17a75c657ac16',1,'cgmservice.h']]],
+  ['dst_5funknown',['DST_UNKNOWN',['../cgmservice_8h.html#a18f4226676827492dd6fe45eea40a9e5',1,'cgmservice.h']]]
 ];

@@ -67,7 +67,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -115,7 +115,7 @@ Mapping of Functional Blocks to Source Code</div></div>
 <p>The above diagram shows the one to one mapping of the software source files with the CGM simulator architecture. The file hierarchy on the right will appear in the workplace of the IAR workbench when opening the project file ($PROJECT_DIR/CC254XDB/CGMSimultor.eww).</p>
 <p>Starting from the bottom, <b>HAL</b> (Hardware Abstract Layer) implements the drivers for the peripheral modules on the chip and the circuit board. These files are hardware dependent.</p>
 <p><b>LIB</b> (CC2541-BLE-peri.lib) implements the Bluetooth LE stack. This library is supplied in a closed source form by TI. The functions inside the library can be called by the upper layers through the exposed APIs defined under <b>INCLUDE</b> (exposed APIs).</p>
-<p><b>PROFILES</b> configure those services that the current Bluetooth LE device supports. In the CGM simulator, the profile consists of CGM service (cgmservice.c), Bond Management Service (gapbondmgr.c), Battery Service etc. These files define the characteristics to be included in the service. The implementation of service should be in compliant with the BLE service specifications.</p>
+<p><b>PROFILES</b> configure those services that the current Bluetooth LE device supports. In the CGM simulator, the profile consists of CGM service (<a class="el" href="cgmservice_8c.html" title="This file contains the CGM sample service for use with the CGM sample application. ">cgmservice.c</a>), Bond Management Service (gapbondmgr.c), Battery Service etc. These files define the characteristics to be included in the service. The implementation of service should be in compliant with the BLE service specifications.</p>
 <p><b>APP</b> (application layer) folder contains implementation of the behavioral logic behind each of those characteristics defined in the profile. They surround the CGM sensor functions, such as sampling the glucose estimate values, setting the session start time, storing glucose measurement records and later retrieving them via record access control point (RACP).</p>
 <h2><a class="anchor" id="copyright"></a>
 Copyright Disclaim</h2>
@@ -267,7 +267,7 @@ Set Calibration Value </li>
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 20 2015 13:47:33 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

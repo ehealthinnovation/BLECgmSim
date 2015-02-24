@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -114,7 +114,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;linkdb.h&quot;</code><br/>
 <code>#include &quot;peripheral.h&quot;</code><br/>
 <code>#include &quot;gapbondmgr.h&quot;</code><br/>
-<code>#include &quot;cgmservice.h&quot;</code><br/>
+<code>#include &quot;<a class="el" href="cgmservice_8h_source.html">cgmservice.h</a>&quot;</code><br/>
 <code>#include &quot;devinfoservice.h&quot;</code><br/>
 <code>#include &quot;<a class="el" href="cgm_8h_source.html">cgm.h</a>&quot;</code><br/>
 <code>#include &quot;OSAL_Clock.h&quot;</code><br/>
@@ -125,7 +125,7 @@ Include dependency graph for cgm.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="cgm_8c__incl.png" border="0" usemap="#cgm_8c" alt=""/></div>
 <map name="cgm_8c" id="cgm_8c">
-<area shape="rect" id="node37" href="cgm_8h.html" title="This file contains the CGM simulator function, variable and constant declaration. ..." alt="" coords="1915,83,1973,112"/><area shape="rect" id="node43" href="cgmsimdata_8h.html" title="This file contains the CGM sensor simulator data generating functions declarations (headers) ..." alt="" coords="2251,83,2355,112"/></map>
+<area shape="rect" id="node33" href="cgmservice_8h.html" title="This file contains the CGM service definitions and prototypes. " alt="" coords="1651,83,1749,112"/><area shape="rect" id="node39" href="cgm_8h.html" title="This file contains the CGM simulator function, variable and constant declaration. ..." alt="" coords="1915,83,1973,112"/><area shape="rect" id="node45" href="cgmsimdata_8h.html" title="This file contains the CGM sensor simulator data generating functions declarations (headers) ..." alt="" coords="2251,83,2355,112"/></map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -302,7 +302,7 @@ Variables</h2></td></tr>
 <tr class="memitem:ac1dc08560a5ccac8e4685aa59093f0b3"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#ac1dc08560a5ccac8e4685aa59093f0b3">cgmAdvCancelled</a> = FALSE</td></tr>
 <tr class="memdesc:ac1dc08560a5ccac8e4685aa59093f0b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Denote the advertising state.  <a href="#ac1dc08560a5ccac8e4685aa59093f0b3">More...</a><br/></td></tr>
 <tr class="separator:ac1dc08560a5ccac8e4685aa59093f0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af019f74880b435218d9a0801dade8604"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structcgmFeature__t.html">cgmFeature_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#af019f74880b435218d9a0801dade8604">cgmFeature</a> ={ CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)}</td></tr>
+<tr class="memitem:af019f74880b435218d9a0801dade8604"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structcgmFeature__t.html">cgmFeature_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#af019f74880b435218d9a0801dade8604">cgmFeature</a> ={ <a class="el" href="cgmservice_8h.html#a2ff6b459d72b2c50be56e81c19519703">CGM_FEATURE_TREND_INFO</a>, BUILD_UINT8(<a class="el" href="cgmservice_8h.html#ae5d415a25e2af635942d053c008745c1">CGM_TYPE_ISF</a>,<a class="el" href="cgmservice_8h.html#a7da1f1f05e3d8fe38a98aab49adadb6d">CGM_SAMPLE_LOC_SUBCUT_TISSUE</a>)}</td></tr>
 <tr class="memdesc:af019f74880b435218d9a0801dade8604"><td class="mdescLeft">&#160;</td><td class="mdescRight">The features supported by the CGM simulator.  <a href="#af019f74880b435218d9a0801dade8604">More...</a><br/></td></tr>
 <tr class="separator:af019f74880b435218d9a0801dade8604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad453ed779b8de795f34ade951bf28061"><td class="memItemLeft" align="right" valign="top">static uint16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#ad453ed779b8de795f34ade951bf28061">cgmCommInterval</a> =1000</td></tr>
@@ -311,7 +311,7 @@ Variables</h2></td></tr>
 <tr class="memitem:aa8fe0d985084f73c822b29bc210c7514"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structcgmStatus__t.html">cgmStatus_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#aa8fe0d985084f73c822b29bc210c7514">cgmStatus</a> ={0x1234,0x567890}</td></tr>
 <tr class="memdesc:aa8fe0d985084f73c822b29bc210c7514"><td class="mdescLeft">&#160;</td><td class="mdescRight">The status of the CGM simulator. Default value is for testing purpose.  <a href="#aa8fe0d985084f73c822b29bc210c7514">More...</a><br/></td></tr>
 <tr class="separator:aa8fe0d985084f73c822b29bc210c7514"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fc8137cd59dc58a4022e737f28a80a9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structcgmSessionStartTime__t.html">cgmSessionStartTime_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#a4fc8137cd59dc58a4022e737f28a80a9">cgmStartTime</a> ={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}</td></tr>
+<tr class="memitem:a4fc8137cd59dc58a4022e737f28a80a9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structcgmSessionStartTime__t.html">cgmSessionStartTime_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#a4fc8137cd59dc58a4022e737f28a80a9">cgmStartTime</a> ={{0,0,0,0,0,2000},<a class="el" href="cgmservice_8h.html#a1f3615e32a69bd3765c5fc49bbe337fd">TIME_ZONE_UTC_M5</a>,<a class="el" href="cgmservice_8h.html#a728e42300b315d7c66f17a75c657ac16">DST_STANDARD_TIME</a>}</td></tr>
 <tr class="memdesc:a4fc8137cd59dc58a4022e737f28a80a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The start time of the current session. The default value is.  <a href="#a4fc8137cd59dc58a4022e737f28a80a9">More...</a><br/></td></tr>
 <tr class="separator:a4fc8137cd59dc58a4022e737f28a80a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b774c25e31f51c6938acb819488f6ec"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structcgmMeasC__t.html">cgmMeasC_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgm_8c.html#a4b774c25e31f51c6938acb819488f6ec">cgmCurrentMeas</a></td></tr>
@@ -1213,7 +1213,7 @@ Variables</h2></td></tr>
 <p>The callback function in the application layer when the GATT service layer receives read/write operation to one of the CGM service characteristic. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">event</td><td>- service event. Enumeration can be found in cgmservice.h </td></tr>
+    <tr><td class="paramname">event</td><td>- service event. Enumeration can be found in <a class="el" href="cgmservice_8h.html" title="This file contains the CGM service definitions and prototypes. ">cgmservice.h</a> </td></tr>
     <tr><td class="paramname">valueP</td><td>- data value past from the GATT layer to the Application Layer, or vice versa. </td></tr>
     <tr><td class="paramname">result</td><td>- the address to the memory to pass the processing result back to the GATT layer </td></tr>
     <tr><td class="paramname">len</td><td>- the length of the data residing in valueP </td></tr>
@@ -1376,11 +1376,12 @@ Variables</h2></td></tr>
 <div class="line">    </div>
 <div class="line">    0x05,</div>
 <div class="line">    GAP_ADTYPE_16BIT_MORE,</div>
-<div class="line">    LO_UINT16(CGM_SERV_UUID),                       </div>
-<div class="line">    HI_UINT16(CGM_SERV_UUID),                       </div>
+<div class="line">    LO_UINT16(<a class="code" href="cgmservice_8h.html#a2c6a7bae073c8f1579a1f64197b7acf9">CGM_SERV_UUID</a>),                       </div>
+<div class="line">    HI_UINT16(<a class="code" href="cgmservice_8h.html#a2c6a7bae073c8f1579a1f64197b7acf9">CGM_SERV_UUID</a>),                       </div>
 <div class="line">    LO_UINT16(DEVINFO_SERV_UUID),</div>
 <div class="line"></div>
 <div class="line">}</div>
+<div class="ttc" id="cgmservice_8h_html_a2c6a7bae073c8f1579a1f64197b7acf9"><div class="ttname"><a href="cgmservice_8h.html#a2c6a7bae073c8f1579a1f64197b7acf9">CGM_SERV_UUID</a></div><div class="ttdeci">#define CGM_SERV_UUID</div><div class="ttdoc">GM service. </div><div class="ttdef"><b>Definition:</b> cgmservice.h:64</div></div>
 </div><!-- fragment -->
 <p>Define the Advertizing data. </p>
 
@@ -1627,7 +1628,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structcgmFeature__t.html">cgmFeature_t</a> cgmFeature ={ CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)}</td>
+          <td class="memname"><a class="el" href="structcgmFeature__t.html">cgmFeature_t</a> cgmFeature ={ <a class="el" href="cgmservice_8h.html#a2ff6b459d72b2c50be56e81c19519703">CGM_FEATURE_TREND_INFO</a>, BUILD_UINT8(<a class="el" href="cgmservice_8h.html#ae5d415a25e2af635942d053c008745c1">CGM_TYPE_ISF</a>,<a class="el" href="cgmservice_8h.html#a7da1f1f05e3d8fe38a98aab49adadb6d">CGM_SAMPLE_LOC_SUBCUT_TISSUE</a>)}</td>
         </tr>
       </table>
   </td>
@@ -1935,7 +1936,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structcgmSessionStartTime__t.html">cgmSessionStartTime_t</a> cgmStartTime ={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME}</td>
+          <td class="memname"><a class="el" href="structcgmSessionStartTime__t.html">cgmSessionStartTime_t</a> cgmStartTime ={{0,0,0,0,0,2000},<a class="el" href="cgmservice_8h.html#a1f3615e32a69bd3765c5fc49bbe337fd">TIME_ZONE_UTC_M5</a>,<a class="el" href="cgmservice_8h.html#a728e42300b315d7c66f17a75c657ac16">DST_STANDARD_TIME</a>}</td>
         </tr>
       </table>
   </td>
@@ -2119,7 +2120,7 @@ Variables</h2></td></tr>
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 20 2015 13:47:33 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 24 2015 00:32:03 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
