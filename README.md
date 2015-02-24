@@ -1,4 +1,4 @@
-Logan_hardware
+BLECgmSim
 ==============
 
 ##Description
