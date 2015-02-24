@@ -13,7 +13,7 @@ For the details, please refer to the documentation section.
 The documentation of this software library is available in two ways,
 
 - It is accessible in the `gh-pages` branch
-- The same content is host in https://#GitHubHost#/pages/BLECgmSim/
+- The same content is host in http://uhnmdi.github.io/BLECgmSim
 
 ##Author
 
