@@ -1,35 +1,21 @@
-/**************************************************************************************************
-Filename:       cgm.c
-Revised:        Date: 2015-Feb-05
-Revision:       Revision:  2
+/*!
+\file		cgm.c
+\brief		This file contains the CGM sensor simulator application for use with the CC2540 Bluetooth Low Energy Protocol Stack.
+\author		Harry Qiu
+\version        2
+\date		2015-Feb-12
+\version        2
+\copyright	MIT License (MIT)\n
+ Copyright (c) 2014-2015 Center for Global ehealthinnovation
 
-Description:    This file contains the CGM sensor simulator application
-for use with the CC2540 Bluetooth Low Energy Protocol Stack.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-The MIT License (MIT)
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 
-Copyright (c) 2014-2015 Center for Global ehealthinnovation
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-**************************************************************************************************/
-
-/*********************************************************************
+/*
  * INCLUDES
  */
 #include "bcomdef.h"
@@ -55,35 +41,48 @@ THE SOFTWARE.
 #include "cgmsimdata.h"
 
 
-/*********************************************************************
+/*
  * MACROS
  */
+#define	SFLOAT	uint16	///< Using a unsigned 16bit integer to store a SFLOAT
 
-
-/*********************************************************************
+/// \defgroup featureactivation Feature Activation Macros
+#define FEATURE_GLUCOSE_CALIBRATION 1	///< The glucose calibration feature
+/*
  * CONSTANTS
  */
-#define DEFAULT_FAST_ADV_INTERVAL             32 	/// Fast advertising interval in 625us units
-#define DEFAULT_FAST_ADV_DURATION             30	/// Duration of fast advertising duration in sec
-#define DEFAULT_SLOW_ADV_INTERVAL             1600	/// Slow advertising interval in 625us units
-#define DEFAULT_SLOW_ADV_DURATION             30	/// Duration of slow advertising duration in sec
-#define DEFAULT_ENABLE_UPDATE_REQUEST         TRUE	/// Whether to enable automatic parameter update request when a connection is formed
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     200	/// Minimum connection interval (units of 1.25ms) if automatic parameter update request is enabled
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     1600	/// Maximum connection interval (units of 1.25ms) if automatic parameter update request is enabled
-#define DEFAULT_DESIRED_SLAVE_LATENCY         1		/// Slave latency to use if automatic parameter update request is enabled
-#define DEFAULT_DESIRED_CONN_TIMEOUT          1000	/// Supervision timeout value (units of 10ms) if automatic parameter update request is enabled
-#define DEFAULT_PASSCODE                      19655	/// Default passcode
+#define DEFAULT_FAST_ADV_INTERVAL             32 	///< Fast advertising interval in 625us units
+#define DEFAULT_FAST_ADV_DURATION             30	///< Duration of fast advertising duration in sec
+#define DEFAULT_SLOW_ADV_INTERVAL             1600	///< Slow advertising interval in 625us units
+#define DEFAULT_SLOW_ADV_DURATION             30	///< Duration of slow advertising duration in sec
+#define DEFAULT_ENABLE_UPDATE_REQUEST         TRUE	///< Whether to enable automatic parameter update request when a connection is formed
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     200	///< Minimum connection interval (units of 1.25ms) if automatic parameter update request is enabled
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     1600	///< Maximum connection interval (units of 1.25ms) if automatic parameter update request is enabled
+#define DEFAULT_DESIRED_SLAVE_LATENCY         1		///< Slave latency to use if automatic parameter update request is enabled
+#define DEFAULT_DESIRED_CONN_TIMEOUT          1000	///< Supervision timeout value (units of 10ms) if automatic parameter update request is enabled
+#define DEFAULT_PASSCODE                      19655	///< Default passcode
 #define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_INITIATE
-#define DEFAULT_MITM_MODE                     TRUE	/// Default MITM mode (TRUE to require passcode or OOB when pairing)
-#define DEFAULT_BONDING_MODE                  TRUE	/// Default bonding mode, TRUE to bond
-#define DEFAULT_IO_CAPABILITIES               GAPBOND_IO_CAP_DISPLAY_ONLY	/// Default GAP bonding I/O capabilities
-#define DEFAULT_NOTI_PERIOD                   1000	/// Notification period in ms
+#define DEFAULT_MITM_MODE                     TRUE	///< Default MITM mode (TRUE to require passcode or OOB when pairing)
+#define DEFAULT_BONDING_MODE                  TRUE	///< Default bonding mode, TRUE to bond
+#define DEFAULT_IO_CAPABILITIES               GAPBOND_IO_CAP_DISPLAY_ONLY	///< Default GAP bonding I/O capabilities
+#define DEFAULT_NOTI_PERIOD                   1000	///< Notification period in ms
+/// \defgroup calibrationgrp
+/// @{
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+#define CALIBRATION_CONCENTRATION_MAX		300	///< The maximal value of input calibration concentration value
+#define CALIBRATION_CONCENTRATION_MIN		100	///< The minimal value of input calibration concentration value
+#define CALIBRATION_DATABASE_SIZE		10	///< The size of the circular database to store the calibration records.
+#define	CALIBRATION_INTERVAL			360	///< The recommended duration between calibrations. The default value is 360 min (6 hrs)
+#define CALIBRATION_TIME_TOLERANCE		60	///< The tolerance of time when the calibration data is deemed as acceptable. The default value is 60 min (1 hr) 
+#endif /* FEATURE_GLUCOSE_CALIBRATION==1 */
+/// @}
+// end of calibrationgrp
 
 
 /*********************************************************************
  * TYPEDEFS
  */
-///Container for CGM measurement result data
+/// \brief Container for CGM measurement result data
 typedef struct {
 	uint8         size;				///<The number of bytes inside the CGM measrement entries. This is not the size of the structure itself.
 	uint8         flags;				///<Indicates the presene of optional data fields.  						
@@ -93,70 +92,86 @@ typedef struct {
 	uint16        trend;				///<The rate of increase or decrease, in the SFLOAT data type. It has the unit of mg/dL/min
 	uint16        quality;				///<The quality of the CGM measurement,
 } cgmMeasC_t;
-///Container for the CGM support feature characteristic
+/// \brief Container for the CGM support feature characteristic
 typedef struct {
 	uint24 cgmFeature;				///<The CGM supported features
 	uint8  cgmTypeSample;				///<The measurement sample type and location
 } cgmFeature_t;
-///Container for the CGM sensor status characteristic
+/// \brief Container for the CGM sensor status characteristic
 typedef struct {
 	uint16 timeOffset;				///<The time offset from the session start time.
 	uint24 cgmStatus;				///<The CGM sensor status.
 } cgmStatus_t;
-///Container for the CGM session start time characteristic
+/// \brief Container for the CGM session start time characteristic
 typedef struct {
 	UTCTimeStruct startTime;			///<The date-time of the start time
-	int8         timeZone;			///<The time zone associated with the current start time
+	int8         timeZone;				///<The time zone associated with the current start time
 	uint8         dstOffset;			///<The daylight saving time status associated with the current start time
 } cgmSessionStartTime_t;
-///The container for receiving CGMCP data message from the CGM service layer
+/// \brief The container for receiving CGMCP data message from the CGM service layer
 typedef struct {
-	osal_event_hdr_t hdr; 			///< MSG_EVENT and status from the CGM service layer
+	osal_event_hdr_t hdr; 				///< MSG_EVENT and status from the CGM service layer
 	uint8 len;					///< The length of the data being passed
 	uint8 data[CGM_CTL_PNT_MAX_SIZE];		///< The value of the data being passed
 } cgmCtlPntMsg_t;
-///The container for receiving RACP data message from the CGM service layer
+/// \brief The container for receiving RACP data message from the CGM service layer
 typedef struct {
 	osal_event_hdr_t hdr; 			///< MSG_EVENT and status
-	uint8 len;					///< The length of the data being passed
+	uint8 len;				///< The length of the data being passed
 	uint8 data[CGM_RACP_MAX_SIZE];		///< The value of the data being passed
 } cgmRACPMsg_t;				
+/// \
+/// \brief The container for holding a glucose calibration structure
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+typedef struct {
+	SFLOAT		concentration;		///< Glucose Concentration of Calibration
+	uint16		calibrationTime;	///< The time the calibration value has been measured as relative offset to the Session Start Time in minutes.
+	uint8 		cgmTypeSample;		///< The measurement sample type and location
+	uint16		nextCalibrationTime;	///< The relative offset to the Session Start Time when the next calibration is required by the Server. A value of 0x0000 means that a calibration is required instantly.
+	uint16		recordNumber;		///< The calibration data record number. \detail Each Calibration record is identified by a number. A get operation with an operand of 0xFFFF in this field will return the last Calibration Data stored. A value of ¡°0¡± in this field represents no calibration value is stored. This field is ignored during a Set Glucose Calibration value procedure.
+	uint8		status;			///< Representing the status of the calibration procedure of the Server related to the Calibration Data Record. \detail This field is ignored during the Set Glucose Calibration value procedure. The value of this field represents the status of the calibration process of the Server.
+} cgmCalibrationDataRecord_t;
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1*/
 
-/*********************************************************************
+
+
+
+
+/*
  * GLOBAL VARIABLES
  */
 uint8 cgmTaskId;				///< The task ID associated with the CGM simulator application. It is used to schedule task in the OS layer.
 uint16 gapConnHandle;				///< The handle for the current GAP connection.
 
-/*********************************************************************
+/*
  * EXTERNAL VARIABLES
  */
 
 
-/*********************************************************************
+/*
  * EXTERNAL FUNCTIONS
  */
 
 
-/*********************************************************************
+/*
  * LOCAL VARIABLES
  */
 static gaprole_States_t gapProfileState = GAPROLE_INIT;			///< The connection state of the GAP layer
-/// GAP Profile - Name attribute for SCAN RSP data
+/// \brief GAP Profile - Name attribute for SCAN RSP data
 static uint8 scanData[] =
 {
 	0x08,   ///< length of this data
 	0x09,   ///< AD Type = Complete local name
 	'C',  'G',  'M',  ' ',  'S',  'i',  'm'
 };
-/// Define the Advertizing data
+/// \brief Define the Advertizing data
 static uint8 advertData[] =
 {
-	// flags
+	/// \note flags
 	0x02,
 	GAP_ADTYPE_FLAGS,
 	GAP_ADTYPE_FLAGS_LIMITED | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
-	// service UUIDs
+	/// \note service UUIDs
 	0x05,
 	GAP_ADTYPE_16BIT_MORE,
 	LO_UINT16(CGM_SERV_UUID),						
@@ -164,7 +179,7 @@ static uint8 advertData[] =
 	LO_UINT16(DEVINFO_SERV_UUID),
 	HI_UINT16(DEVINFO_SERV_UUID)
 };
-static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "CGM Simulator";
+static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "CGM Simulator";	///< The device name variable.
 static bool cgmBonded = FALSE;						///< Local variable storing the current bonding stage of the sensor.
 static uint8 cgmBondedAddr[B_ADDR_LEN];					///< Local variable storing the address of the bonded peer.
 static uint16 gapConnHandle;						///< Local version of the GAP connection handle.
@@ -175,7 +190,11 @@ static attHandleValueInd_t 	cgmRACPRsp;				///< Container for holding the RACP r
 static attHandleValueNoti_t   cgmRACPRspNoti;				///< Container for holding the RACP notification message, which would be passed down to the GATT service layer. The notification will appear as the CGM measurement notification.
 static bool cgmAdvCancelled = FALSE;					///< Denote the advertising state.
 //CGM Simulator configureation variables
-static cgmFeature_t             cgmFeature={ CGM_FEATURE_TREND_INFO, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
+static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
+						#if (FEATURE_GLUCOSE_CALIBRATION==1)
+						| CGM_FEATURE_CAL
+						#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
+						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
 static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME};
@@ -197,7 +216,18 @@ static uint8		cgmMeasDBSearchStart; 				///<The starting index records meeting t
 static uint8		cgmMeasDBSearchEnd;				///<The ending index of records meeting the search criterion.
 static uint16		cgmMeasDBSearchNum;   				///<The resulting record number that matches the criterion.
 static uint8		cgmMeasDBSendIndx;   				///<The index of the next record to be sent. It is used in RACP reporting record function.
-
+/// \ingroup calibrationgrp
+///@{
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+cgmCalibrationDataRecord_t * cgmCaliDB;					///< Pointer to the calibration record database.
+cgmCalibrationDataRecord_t cgmCaliTmpRecord;				///< Temporary record for holding a calibration record.
+static uint8		cgmCaliDBCount;					///< The number of records being stored into the database
+static uint8		cgmCaliDBOldestIndx;				///< Pointing to the oldest records in the circular buffer
+static uint8		cgmCaliDBWriteIndx;				///< Pointing to the next calibration record to write
+static uint8		cgmCaliDBRecordNum;				///< The record number of the most recently stored calibration data record.
+static SFLOAT		cgmCalibration;					///< The most current calibration value.
+#endif /* FEATURE_GLUCOSE_CALIBRATION==1*/
+///@} end of calibrationgrp
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -227,18 +257,25 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);
 static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result);
 static void cgmSimulationAppInit();
 static void cgm_ProcessOSALMsg( osal_event_hdr_t *pMsg );
-
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+static int8 cgmCaliAddRecord(cgmCalibrationDataRecord_t *inputrecord);
+static void cgmCaliVerifyInput(cgmCalibrationDataRecord_t *inputrecord, uint8 *result);
+static int8 cgmCaliProcessCalibration(void);
+static int32 cgmCaliTestCalibration(SFLOAT currentConcentration);
+static int16 cgmCaliDBSearch(uint16 recordnum);
+static void cgmResetCaliDB(void);
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
 
 /*********************************************************************
  * PROFILE CALLBACKS
  */
-///Variable for registerint the  GAP Role Callbacks
+/// \brief Variable for registerint the  GAP Role Callbacks
 static gapRolesCBs_t cgm_PeripheralCBs =
 {
 	cgmGapStateCB,  	///< Profile State Change Callbacks
 	NULL                	///< When a valid RSSI is read from controller
 };
-///Bond Manager Callbacks
+/// \brief Bond Manager Callbacks
 static const gapBondCBs_t cgmBondCB =
 {
 	cgmPasscodeCB,		///< Call back when passcode is entered from the lower level
@@ -248,20 +285,15 @@ static const gapBondCBs_t cgmBondCB =
 /*********************************************************************
  * PUBLIC FUNCTIONS
  */
-/*********************************************************************
- * @fn      CGM_Init
- *
- * @brief   Initialization function for the CGM App Task.
- *          This is called during initialization and should contain
- *          any application specific initialization (ie. hardware
- *          initialization/setup, table initialization, power up
- *          notificaiton ... ).
- *
- * @param   task_id - the ID assigned by OSAL.  This ID should be
- *                    used to send messages and set timers.
- *
- * @return  none
- */
+
+/*!
+   \brief   Initialization function for the CGM App Task.
+   \details  This is called during initialization and should contain
+            any application specific initialization (ie. hardware
+            initialization/setup, table initialization, power up
+            notificaiton ... ).
+   \param[in] task_id the ID assigned by OSAL.  This ID should be used to send messages and set timers.
+   \return  none */
 void CGM_Init( uint8 task_id )
 {
 	cgmTaskId = task_id;
@@ -350,23 +382,21 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
         cgmSessionStartIndicator=true;
 }
 
-/*********************************************************************
- * @fn      CGM_ProcessEvent
- * @brief   CGM Application Task event processor.  This function
- *          is called to process all events for the task.  Events
- *          include timers, messages and any other user defined events.
- * @details This function is registered into the OS task scheduler.
- *	    It will be run periodically. If System message arrives, it will
- *	    be fed into this function for processing. 
- * @param   task_id  - The OSAL assigned task ID.
- * @param   events - events to process.  This is a bit map and can
- *                   contain more than one event.
- * @return  events not processed
- */
+/**
+  @brief   CGM Application Task event processor.  This function
+           is called to process all events for the task.  Events
+           include timers, messages and any other user defined events.
+  @details This function is registered into the OS task scheduler.
+ 	    It will be run periodically. If System message arrives, it will
+ 	    be fed into this function for processing. 
+  @param[in]   task_id  - The OSAL assigned task ID.
+  @param[in]   events - events to process.  This is a bit map and can
+                    contain more than one event.
+  @return  events not processed*/
 uint16 CGM_ProcessEvent( uint8 task_id, uint16 events )
 {
 
@@ -418,12 +448,10 @@ uint16 CGM_ProcessEvent( uint8 task_id, uint16 events )
 	return 0;
 }
 
-/*********************************************************************
- * @fn      cgm_ProcessOSALMsg
- * @brief   Process an incoming task message.
- * @param   pMsg - message to process
- * @return  none
- */
+/**
+    @brief   Process an incoming task message.
+  @param   pMsg - message to process
+  @return  none*/
 static void cgm_ProcessOSALMsg( osal_event_hdr_t *pMsg )
 {
 	switch ( pMsg->event )
@@ -442,18 +470,16 @@ static void cgm_ProcessOSALMsg( osal_event_hdr_t *pMsg )
 	}
 }
 
-/*********************************************************************
- * @fn      cgm_HandleKeys
- *
- * @brief   Handles all key events for this device.
- *
- * @param   shift - true if in shift/alt.
- * @param   keys - bit field for key events. Valid entries:
- *                 HAL_KEY_SW_2
- *                 HAL_KEY_SW_1
- *
- * @return  none
- */
+/**
+   
+  @brief   Handles all key events for this device.
+ 
+  @param   shift - true if in shift/alt.
+  @param   keys - bit field for key events. Valid entries:
+                  HAL_KEY_SW_2
+                  HAL_KEY_SW_1
+ 
+  @return  none*/
 static void cgm_HandleKeys( uint8 shift, uint8 keys )
 {
 	if ( keys & HAL_KEY_SW_1 )
@@ -485,18 +511,16 @@ static void cgm_HandleKeys( uint8 shift, uint8 keys )
 }
 
 
-/*********************************************************************
- * @fn      cgmProcessCtlPntMsg
- * @brief   Process Control Point messages
- * @param   pMsg - The input CGM control point message data structure
- * @return  none
- */
+/**
+    @brief   Process Control Point messages
+  @param   pMsg - The input CGM control point message data structure
+  @return  none*/
 static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 {
 	//Variables for holding the input control point message
 	uint8 opcode = pMsg->data[0];
 	uint8 *operand; //the operand from the input
-	uint8 operand_len; // the operand length
+	uint8 operand_len=pMsg->len-1; // the operand length
 	//Variables for holding the responding control point message
 	uint8 ropcode; //the op code in the return char value
 	uint8 roperand[CGM_CTL_PNT_MAX_SIZE];//the operand in reuturn char value
@@ -547,6 +571,9 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			//EXTRA if RACP is in transfer, this command is invalid
 			//Reset the sensor state
 			cgmResetMeasDB();
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+			cgmResetCaliDB();
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
 			cgmSessionStartIndicator=true;
 			cgmStatus.cgmStatus &= (~CGM_STATUS_ANNUNC_SES_STOP);
 			cgmTimeOffset=0;
@@ -569,9 +596,74 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
 			roperand_len=2;
 			break;
+		//Implement the set calibration function
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+		case CGM_SPEC_OP_SET_CAL:
+			//Get the calibration value from the COCP request
+			if (operand_len!=10)
+			{
+				ropcode = CGM_SPEC_OP_RESP_CODE ;
+				roperand[0] = CGM_SPEC_OP_SET_CAL;
+				roperand[1] = CGM_SPEC_OP_RESP_OPERAND_INVALID;
+				break;
+			}
+			cgmCaliTmpRecord.concentration = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
+			cgmCaliTmpRecord.calibrationTime = BUILD_UINT16(pMsg->data[3],pMsg->data[4]);
+                       	cgmCaliTmpRecord.cgmTypeSample = pMsg->data[5];
+                        cgmCaliTmpRecord.nextCalibrationTime = BUILD_UINT16(pMsg->data[6],pMsg->data[7]);
+                       
+                        cgmCaliTmpRecord.recordNumber = BUILD_UINT16(pMsg->data[8], pMsg->data[9]);
+			 cgmCaliTmpRecord.status = pMsg->data[10];
+                        //Call the funcion to set the calibration value and prepare the operation response data
+			cgmCaliVerifyInput(&cgmCaliTmpRecord,roperand+1);
+			cgmCaliAddRecord(&cgmCaliTmpRecord);
+			if ( roperand[1] == CGM_SPEC_OP_RESP_SUCCESS )
+				cgmCaliProcessCalibration();
+			//Load the response data into response structure
+			ropcode = CGM_SPEC_OP_RESP_CODE;
+			roperand[0] = CGM_SPEC_OP_SET_CAL;
+			roperand_len=2;
+			break;
+		
+		case  CGM_SPEC_OP_GET_CAL:
+                  {     int16 tmpindx=0;
+                        uint16 recordnumber=0;
+			cgmCalibrationDataRecord_t *target;
+			if (operand_len != 2)
+			{
+				ropcode = CGM_SPEC_OP_RESP_CODE ;
+				roperand[0] = CGM_SPEC_OP_GET_CAL;
+				roperand[1] = CGM_SPEC_OP_RESP_OPERAND_INVALID;
+				break;
+			}
+			recordnumber=BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
+			tmpindx=cgmCaliDBSearch(recordnumber);
+			if (tmpindx==-1)
+                        {
+                          ropcode = CGM_SPEC_OP_RESP_CODE;
+                          roperand[0] = CGM_SPEC_OP_GET_CAL;
+                          roperand[1] = CGM_SPEC_OP_RESP_PARAM_NIR;
+                          roperand_len = 2;
+                          break;
+                        }
+                        target=cgmCaliDB+tmpindx;
+			ropcode = CGM_SPEC_OP_RESP_CAL;
+			roperand[0]=LO_UINT16(target->concentration);
+			roperand[1]=HI_UINT16(target->concentration);
+			roperand[2]=LO_UINT16(target->calibrationTime);
+			roperand[3]=HI_UINT16(target->calibrationTime);
+		        roperand[4]=target->cgmTypeSample;
+                	roperand[5]=LO_UINT16(target->nextCalibrationTime);
+			roperand[6]=HI_UINT16(target->nextCalibrationTime);
+                        roperand[7]=LO_UINT16(target->recordNumber);
+			roperand[8]=HI_UINT16(target->recordNumber);
+                        roperand[9]=target->status;
+			
+                        roperand_len=10;
+			break;
+                  }
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1*/
 		//Other functions are not implemented
-		case  CGM_SPEC_OP_SET_CAL:			
-		case  CGM_SPEC_OP_GET_CAL:			
 		case  CGM_SPEC_OP_SET_ALERT_HIGH:		
 		case  CGM_SPEC_OP_GET_ALERT_HIGH:		
 		case  CGM_SPEC_OP_SET_ALERT_LOW:		
@@ -597,12 +689,10 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 }
 
 
-/*********************************************************************
- * @fn      cgmGapStateCB
- * @brief   Notification from the profile of a state change.
- * @param   newState - new state
- * @return  none
- */
+/**
+    @brief   Notification from the profile of a state change.
+  @param   newState - new state
+  @return  none*/
 static void cgmGapStateCB( gaprole_States_t newState )
 {
 	// if connected
@@ -668,13 +758,11 @@ static void cgmGapStateCB( gaprole_States_t newState )
 	gapProfileState = newState;
 }
 
-/*********************************************************************
- * @fn      cgmPairStateCB
- *
- * @brief   Pairing state callback.
- *
- * @return  none
- */
+/**
+   
+  @brief   Pairing state callback.
+ 
+  @return  none*/
 static void cgmPairStateCB( uint16 connHandle, uint8 state, uint8 status )
 {
 	if ( state == GAPBOND_PAIRING_STATE_COMPLETE )
@@ -695,22 +783,19 @@ static void cgmPairStateCB( uint16 connHandle, uint8 state, uint8 status )
 	}
 }
 
-/*********************************************************************
- * @fn      cgmPasscodeCB
- * @brief   Passcode callback.
- * @return  none
- */
+/**
+    @brief   Passcode callback.
+  @return  none
+*/
 static void cgmPasscodeCB( uint8 *deviceAddr, uint16 connectionHandle, uint8 uiInputs, uint8 uiOutputs )
 {
 	// Send passcode response
 	GAPBondMgr_PasscodeRsp( connectionHandle, SUCCESS, DEFAULT_PASSCODE );
 }
 
-/*********************************************************************
- * @fn      CGMMeasSend
- * @brief   Send the most current record stored in cgmCurrentMeas as a GATT notification to the CGM measurement characteristic.
- * @return  none
- */
+/**
+ *   @brief   Send the most current record stored in cgmCurrentMeas as a GATT notification to the CGM measurement characteristic.
+  @return  none*/
 static void cgmMeasSend(void)
 {
 	//att value notification structure
@@ -745,14 +830,12 @@ static void cgmMeasSend(void)
 	osal_start_timerEx(cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
 }
 
-/*********************************************************************
- * @fn      cgmCtlPntResponse
- * @brief   Send a record control point response
- * @param   opcode - response opcode 
- * @param   roperand - address of the array storing the response operand
- * @param   roperand_len - the length of the response operand array
- * @return  none
- */
+/**
+    @brief   Send a record control point response
+  @param   opcode - response opcode 
+  @param   roperand - address of the array storing the response operand
+  @param   roperand_len - the length of the response operand array
+  @return  none*/
 static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len)
 {
 	cgmCtlPntRsp.value[0]=opcode;
@@ -762,15 +845,14 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len
 }
 
 
-/*********************************************************************
- * @fn      cgmservice_cb
- * @brief   The callback function in the application layer when the GATT service layer receives
- * 	    read/write operation to one of the CGM service characteristic
- * @param   event - service event. Enumeration can be found in cgmservice.h  
- * @param   valueP - data value past from the GATT layer to the Application Layer, or vice versa.
- * @param   result - the address to the memory to pass the processing result back to the GATT layer
- * @return  none
- */
+/**
+    @brief   The callback function in the application layer when the GATT service layer receives
+  	    read/write operation to one of the CGM service characteristic
+  @param   event - service event. Enumeration can be found in cgmservice.h  
+  @param   valueP - data value past from the GATT layer to the Application Layer, or vice versa.
+  @param   result - the address to the memory to pass the processing result back to the GATT layer
+  @param   len - the length of the data residing in valueP
+  @return  none */
 static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 {
 	switch (event)
@@ -896,12 +978,10 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 	}
 }
 
-/*********************************************************************
- * @fn cgmVerifyTime
- * @brief Verify time values are suitable for filtering
- * @param pTime - UTC time struct
- * @return true if time is ok, false otherwise
- */
+/**
+    @brief Verify time values are suitable for filtering
+  @param pTime - UTC time struct
+  @return true if time is ok, false otherwise*/
 static uint8 cgmVerifyTime(UTCTimeStruct* pTime)
 {
 	// sanity check year
@@ -925,12 +1005,10 @@ static uint8 cgmVerifyTime(UTCTimeStruct* pTime)
 	return true;
 }
 
-/*********************************************************************
- * @fn cgmVerifyTimeZone	
- * @brief Verify time zone values are compliant to the standard.
- * @param input - the time zone code to be tested
- * @return true if time is ok, false otherwise
- */
+/**
+    @brief Verify time zone values are compliant to the standard.
+  @param input - the time zone code to be tested
+  @return true if time is ok, false otherwise*/
 static uint8 cgmVerifyTimeZone( int8 input)
 {
 	if ( (input % 2) !=0)
@@ -940,12 +1018,10 @@ static uint8 cgmVerifyTimeZone( int8 input)
 	return false;
 }
 
-/*********************************************************************
- * @fn cgmVerifyDSTOffset
- * @brief Verify the daylight saving time input is compliant to the standard.
- * @param input - the dayligt saving code to be tested
- * @return true if time is ok, false otherwise
- */
+/**
+    @brief Verify the daylight saving time input is compliant to the standard.
+  @param input - the dayligt saving code to be tested
+  @return true if time is ok, false otherwise*/
 static uint8 cgmVerifyDSTOffset( uint8 input)
 {
 	if ( input==0x02 || input==0x04 || input==0x00 || input==0x08 || input==0xFF)
@@ -953,13 +1029,10 @@ static uint8 cgmVerifyDSTOffset( uint8 input)
 	return false;
 }
 
-/*********************************************************************
- * @fn      cgmNewGlucoseMeas
- *
- * @brief   Update with the lastest reading while updating the internal database
- * @param   pMeas - address to store the generated cgm measurement.
- * @return  none
- */
+/**
+    @brief   Update with the lastest reading while updating the internal database
+  @param   pMeas - address to store the generated cgm measurement.
+  @return  none*/
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 {
 	//generate the glucose reading.
@@ -985,6 +1058,11 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	pMeas->timeoffset=cgmTimeOffset & 0xFFFF;
 	cgmTimeOffset += cgmCommInterval/1000;	//Update the time offset for the next call. 
 
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
+	annunciation |= cgmCaliTestCalibration(glucoseGen);
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
+
 	//Prepare the flag
 	flag |= CGM_TREND_INFO_PRES;
 
@@ -1007,6 +1085,15 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	} 
 	//update the annuciation field
 	pMeas->annunication=annunciation;
+
+	//Update the flag bits corresponding to each annunciation
+	if((annunciation & 0x0000FF)!=0)
+		flag|=CGM_STATUS_ANNUNC_STATUS_OCT;
+	if((annunciation & 0x00FF00)!=0)
+		flag|=CGM_STATUS_ANNUNC_CAL_TEMP_OCT;
+	if((annunciation & 0xFF0000)!=0)
+		flag|=CGM_STATUS_ANNUNC_WARNING_OCT;
+
 	//Update the flag field
 	if (flag & CGM_TREND_INFO_PRES)
 	{
@@ -1028,11 +1115,9 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	pMeas->flags= (flag);  
 }
 
-/*********************************************************************
- * @fn      cgmSimulationAppInit
- * @brief   Initialize the CGM simulator application. Reset the historical database
- * @return  none
- */
+/**
+    @brief   Initialize the CGM simulator application. Reset the historical database
+  @return  none*/
 static void cgmSimulationAppInit()				
 {
 	cgmMeasDB=(cgmMeasC_t *)osal_mem_alloc(CGM_MEAS_DB_SIZE*sizeof(cgmMeasC_t));
@@ -1041,19 +1126,25 @@ static void cgmSimulationAppInit()
 	cgmMeasDBOldestIndx=0;
 	cgmStartTimeConfigIndicator=false;
 	cgmSimDataReset();
+	cgmResetCaliDB();
+        //-----------PTS Specific Code------------------
+        //For the PTS Test, introduce an initial record.
+        cgmCaliDB[0].recordNumber=0;
+        cgmCaliDBOldestIndx=0;
+        cgmCaliDBCount=1;
+        cgmCaliDBWriteIndx=1;
+        //----End of PTS Specific Code------------------
 }	
 
-/*********************************************************************
- * @fn      cgmSearchMeasDB
- * @brief   This function implements the search function for the gluocose measurement. 
- * 	    It assumes the measurement database consists of continous records arranged in ascending order.
- * 	    The current version is based on the sequential search for demo purpose. Therefore, we assume
- * 	    records are arranged in ascending order based on offset time.
- * @param   filter - the filter type in searching
- * @param   operand1 - the primary operand to the search operation.
- * @param   operand2 - the scrondary operand to the search operation, it is currently used only in searching for a range of record.
- * @return  the result code
- */
+/**
+  @brief   This function implements the search function for the gluocose measurement. 
+  @details It assumes the measurement database consists of continous records arranged in ascending order.
+  	    The current version is based on the sequential search for demo purpose. Therefore, we assume
+  	    records are arranged in ascending order based on offset time.
+  @param   filter - the filter type in searching
+  @param   operand1 - the primary operand to the search operation.
+  @param   operand2 - the scrondary operand to the search operation, it is currently used only in searching for a range of record.
+  @return  the result code*/
 static uint8 cgmSearchMeasDB(uint8 filter,uint16 operand1, uint16 operand2)
 {
 	uint8 i=0;
@@ -1191,11 +1282,9 @@ static uint8 cgmSearchMeasDB(uint8 filter,uint16 operand1, uint16 operand2)
 	return RACP_SEARCH_RSP_NOT_COMPLETE;	
 }
 
-/*********************************************************************
- * @fn     cgmAddRecord 
- * @brief  Add record to the database 
- * @param   cgmCurrentMeas - the add of the current measurement to be added to the database.
- */
+/**
+    @brief  Add record to the database 
+  @param   cgmCurrentMeas - the add of the current measurement to be added to the database.*/
 static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas)
 {
 	cgmMeasDBWriteIndx=(cgmMeasDBOldestIndx+cgmMeasDBCount)%CGM_MEAS_DB_SIZE;
@@ -1207,12 +1296,10 @@ static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas)
 		cgmMeasDBCount=CGM_MEAS_DB_SIZE;
 }	
 
-/*********************************************************************
- * @fn      cgmProcessRACPMsg
- * @brief   Record Access Control Point messages processing
- * @param   pMsg - The input RACP message data structure
- * @return  none
- */
+/**
+    @brief   Record Access Control Point messages processing
+  @param   pMsg - The input RACP message data structure
+  @return  none*/
 static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 {
 	uint8 opcode=pMsg->data[0];
@@ -1303,15 +1390,12 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 }	
 
 
-/*********************************************************************
- * @fn      cgmRACPSendNextMeas
- * @brief   As part of the RACP operation, this function sends the set of historical
- * 	    measurement data to the collector APP sequencially. The resulting record
- * 	    would be received by the collector through the glucose measurement characteristic
- * 	    notification.
- * @param   pMsg - The input RACP message data structure
- * @return  none
- */
+/**
+    @brief   As part of the RACP operation, this function sends the set of historical
+  	    measurement data to the collector APP sequencially. The resulting record
+  	    would be received by the collector through the glucose measurement characteristic
+  	    notification.
+  @return  none*/
 static void cgmRACPSendNextMeas(){
 
 	if (cgmMeasDBSendIndx < cgmMeasDBSearchNum)
@@ -1366,16 +1450,191 @@ static void cgmRACPSendNextMeas(){
 }
 
 
-/*********************************************************************
- * @fn      cgmResetMeasDB
- * @brief   Reset the cgm measurement history database.
- * @return  none
- */
+/**
+    @brief   Reset the cgm measurement history database.
+  @return  none */
 static void cgmResetMeasDB()
 {
 	cgmMeasDBOldestIndx=0;
 	cgmMeasDBCount=0;
 }
 
-/*********************************************************************
- *********************************************************************/
+/// \ingroup calibrationgrp
+/// @{
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+/**
+ * @brief Add the input record to the calibration data record database ( cgmCaliDB )
+ * @param [in] inputrecord - the input record to be added
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
+static int8 cgmCaliAddRecord(cgmCalibrationDataRecord_t *inputrecord){
+	cgmCalibrationDataRecord_t *target;
+	//Update the data fields of the record
+	target=(cgmCaliDB+cgmCaliDBWriteIndx);	
+	target->concentration=inputrecord->concentration;
+	target->calibrationTime=inputrecord->calibrationTime;
+	target->cgmTypeSample=inputrecord->cgmTypeSample;
+        target->nextCalibrationTime=inputrecord->nextCalibrationTime;
+	//Set the new record number
+	cgmCaliDBRecordNum++;
+        target->recordNumber=cgmCaliDBRecordNum;
+        
+	//Other fields are ignored by the sensor.
+	
+	//Update the indexes
+	cgmCaliDBWriteIndx=(cgmCaliDBWriteIndx+1)%CALIBRATION_DATABASE_SIZE;
+	if (cgmCaliDBCount<CALIBRATION_DATABASE_SIZE)
+		cgmCaliDBCount+=1;
+	else
+	{	
+		cgmCaliDBOldestIndx=(cgmCaliDBOldestIndx+1)%CALIBRATION_DATABASE_SIZE;}
+	return 0;
+}
+/**
+ * @brief Verify the input calibration record values.
+ * @detail Upon successful execution of the function, if the input record does not pass the verification, the corresponding flag in the calibration status field will be set. The field values are reproduced as follow.<br>
+ * 	   <table>
+ * 	   <tr><th>bit</th><th>meaning</th></tr>
+ * 	   <tr><td>0</td><td>Calibration Data rejected (Calibration failed)</td></tr>
+ * 	   <tr><td>1</td><td>Calibration Data out of range</td></tr>
+ * 	   <tr><td>2</td><td>Calibration Process Pending</td></tr>
+ * 	   <tr><td>3-7</td><td>Reserved</td></tr>
+ * 	   </table><br>
+ * 	   At the same time, the <tt>result</tt> parameter forms a response to the COCP request, whose value is documented in the following table.
+ * 	   <tr><th>Value</th><th>Meaning</th></tr>
+ * 	   <tr><td>1</td><td>Success</td></tr>
+ * 	   <tr><td>2</td><td>Opcode not supported</td></tr>
+ * 	   <tr><td>3</td><td>Invalid operand</td></tr>
+ * 	   <tr><td>4</td><td>Procedure not completed</td></tr>
+ * 	   <tr><td>5</td><td>Parameter out of range</td></tr>
+ * 	   </table>
+ * 	   Currently, the function only takes in calibration data whose calibration time is before the current CGM Simulator time. Also a <tt>Calibration Data reject</tt> is set when the age of calibration data is beyond the tolerance.
+ * @note The function assumes that the glucose concentration value has zero exponent
+ * @param [in] *inputrecord - a pointer to the record to be verified
+ * @param [in] *result	- a pointer to the an unsigned integer to hold the result of verification <br> The result should be compliant to the COCP result code values.
+ * @return none*/
+static void cgmCaliVerifyInput(cgmCalibrationDataRecord_t *inputrecord, uint8 *result){
+	uint8 res=CGM_CALIBRATION_PENDING;
+	SFLOAT concentration=0;
+	UTCTime calitime=0;
+	//Verify the value is within range
+	concentration = inputrecord->concentration ;
+/*
+	if(concentration < CALIBRATION_CONCENTRATION_MIN || concentration > CALIBRATION_CONCENTRATION_MAX)
+		{res= CGM_CALIBRATION_NIR;
+		 *result = CGM_SPEC_OP_RESP_OPERAND_INVALID;
+		 inputrecord->status = res;
+		 return;
+		}
+	//Verify the time is within range
+	cgmCurrentTime_UTC = osal_getClock();
+	calitime=inputrecord->calibrationTime;
+	if (calitime > cgmCurrentTime_UTC || calitime < cgmCurrentTime_UTC - CALIBRATION_TIME_TOLERANCE)
+	{
+		res= CGM_CALIBRATION_REJECT;
+		*result = CGM_SPEC_OP_RESP_OPERAND_INVALID;
+		inputrecord->status = res;
+		return;
+	}
+*/
+	inputrecord->status = res;
+	*result=CGM_SPEC_OP_RESP_SUCCESS;
+}
+
+/**
+ * @brief Process the calibration data. This is a place holder for implementing the actual calibration procedure of the sensor device.
+ * @detail When this function is called, it always process the most recent calibration record.
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> 
+ * @note This function assumes the presence of the local cgmCaliDB database variables.*/
+static int8 cgmCaliProcessCalibration(void){
+	cgmCalibrationDataRecord_t *target;
+	//Load the correct record
+	if( cgmCaliDBCount == 0 )
+		return 0;
+	else
+	{
+		target=cgmCaliDB+(cgmCaliDBOldestIndx+cgmCaliDBCount-1)%CALIBRATION_DATABASE_SIZE;
+	}	
+	// Call the function to perform hardware/software calibration. As a demo we just set the internal calibration variable to an input value.
+	cgmCalibration= target->concentration;
+        cgmCalibration; //To avoid warning of the variable is never
+	// Update the calibration record.
+	/* This method of recommending a new next calibration time by the sensor is application dependent. 
+           However, the PTS tool expect the most basic store-as-it-is method. Therefore, the method is commented here.
+        cgmCurrentTime_UTC= osal_getClock();
+	target->nextCalibrationTime= (uint16)cgmCurrentTime_UTC + CALIBRATION_INTERVAL;
+        */
+	target->status=CGM_CALIBRATION_CLEAR;
+	return 0;
+}
+
+/**
+ * @brief This function tests whether the CGM needs calibration.
+ * @detail This function is called in the cgmNewGlucoseMeas(). If the method determines that calibration is needed, then the corresponding flag is set. 
+ * @return <table><tr><td>0</td><td>Success with no recommendation</td></tr>
+ * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>0x000000</td><td>Success with calibration not required</td></tr></table>
+ * 		  <tr><td>0x000200</td><td>Success with calibration required</td></tr></table>
+ * 		  <tr><td>0x000400</td><td>Success with calibration recommended</td></tr></table>
+ * 		  <tr><td>0x000800</td><td>Success with calibration is not allowed</td></tr></table>
+ * @note This function assumes the presence of the local cgmCaliDB database variables. At the same time, the exponent of glucose concentration is 0*/
+static int32 cgmCaliTestCalibration(SFLOAT currentConcentration){
+	cgmCalibrationDataRecord_t *target=NULL;
+	//Load the most recent calibration record
+	if (cgmCaliDBCount>0)
+	target = cgmCaliDB+ (cgmCaliDBOldestIndx+cgmCaliDBCount-1)%CALIBRATION_DATABASE_SIZE;
+	//Manufacturer dependent algorithm to test if calibration is required.
+	//As demonstration purpose, here a recommended calibration signal is returned when glucose concentration is higher than 300.
+	//When the glucose concentration is higher than 400, a calibration is required.
+	if (currentConcentration > 400)
+	{
+		return CGM_STATUS_ANNUNC_REQ_CAL;
+	}
+	if ( currentConcentration > 300 )
+	{
+		if (target != NULL)
+			target->nextCalibrationTime = 0;
+		return CGM_STATUS_ANNUNC_RECOM_CAL;
+	}
+	return 0;
+}
+
+/**
+ * @brief Reset the calibration data record database.
+ * @return None */
+static void cgmResetCaliDB(void){
+	cgmCaliDBOldestIndx=0;
+	cgmCaliDBWriteIndx=0;
+	cgmCaliDBCount=0;
+	cgmCaliDBRecordNum=0;
+}
+
+/**
+ * @brief Search the calibration record according to the record number
+ * @param [in] recordnum - the input record number to search
+ * @return The index pointing to the resulting record, which ranges from 1 to CALIBRATION_DATABASE_SIZE. 0 if no record is found.*/
+static int16 cgmCaliDBSearch(uint16 recordnum){
+	cgmCalibrationDataRecord_t * target=NULL;
+	uint16 i=0, testindx;
+	
+	if (cgmCaliDBCount == 0 )
+	{
+          //If there is no record in the database. The simulator will return the a calibration data record with record number being 0.
+            target=cgmCaliDB+cgmCaliDBOldestIndx;
+            target->recordNumber=0;
+            return 0;
+        }
+	if (recordnum == 0xFFFF)
+		return (cgmCaliDBOldestIndx+cgmCaliDBCount-1)%CALIBRATION_DATABASE_SIZE;
+	do{
+		testindx= (cgmCaliDBOldestIndx+i)%CALIBRATION_DATABASE_SIZE;	
+		target = cgmCaliDB+ testindx;	
+		if ( target->recordNumber == recordnum)
+		{
+			return  testindx;
+		}
+		i++;
+	}while (i<cgmCaliDBCount);
+	return -1;
+}
+#endif /* FEATURE_GLUCOSE_CALIBRATION ==1*/
+/// @}

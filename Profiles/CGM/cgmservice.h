@@ -1,34 +1,18 @@
-/**************************************************************************************************
-  Filename:       cgmservice.h
-  Revised:        $Date: 2015-02-03$
-  Revision:       $Revision: 59 $
+/**
+@file cgmservice.h
+@brief This file contains the CGM service definitions and prototypes.
+@date 2015-Feb-3
+@version 2
 
-  Description:    This file contains the CGM service definitions and
-                  prototypes.
-
-The MIT License (MIT)
-
+@copyright The MIT License (MIT)
 Copyright (c) 2014-2015 Center for Global ehealthinnovation
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-**************************************************************************************************/
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 
 #ifndef CGMSERVICE_H
 #define CGMSERVICE_H
@@ -37,12 +21,12 @@ extern "C"
 {
 #endif
 
-/*********************************************************************
+/*
  * INCLUDES
  */
 #include "OSAL_clock.h"
   
-/*********************************************************************
+/*
  * CONSTANTS
  */
 // Glucose Service bit fields
@@ -283,6 +267,7 @@ extern "C"
 #define	CGM_CALIBRATION_REJECT			0x01	///< Calibration Data rejected (Calibration failed)
 #define	CGM_CALIBRATION_NIR			0x02	///< Calibration Data out of range
 #define	CGM_CALIBRATION_PENDING			0x04	///< Calibration Process Pending
+#define CGM_CALIBRATION_CLEAR			0x00	///< Reset all bits back to 0
 
 // Unit UUID 
 #define UNIT_MASSDENSITY_MG_PER_DL		0x27B1	///< ass density (milligram per decilitre)
@@ -294,40 +279,29 @@ extern "C"
 #define CGM_CHAR_VAL_SIZE_START_TIME                9              ///< he size of the start time characteristic without the CRC 
 #define CGM_CHAR_VAL_SIZE_RUN_TIME                  2              ///< he size of the run time characteristic without the CRC 
 
-/*********************************************************************
+/*
  * TYPEDEFS
  */
 // Glucose Service callback function
 typedef void (*CGMServiceCB_t)(uint8 event, uint8* data, uint8 dataLen,uint8 *result);
 
-/*********************************************************************
+/*
  * MACROS
  */
 
-/*********************************************************************
+/*
  * Profile Callbacks
  */
 
-/*********************************************************************
+/*
  * API FUNCTIONS 
  */
 
-/*
- * CGM_AddService- Initializes the CGM service by registering
- *          GATT attributes with the GATT server.
- * @param   services - services to add. This is a bit map and can
- *                     contain more than one service.
- */
 extern bStatus_t CGM_AddService( uint32 services );
 
-/*
- * CGM_Register - Register a callback function with the
- *          CGM Service
- * @param   pfnServiceCB - Callback function.
- */
 extern void CGM_Register( CGMServiceCB_t pfnServiceCB);
 
-/*********************************************************************
+/**
  * @fn          CGM_MeasSend
  * @brief       Send a CGM measurement.
  * @param       connHandle - connection handle
@@ -336,45 +310,42 @@ extern void CGM_Register( CGMServiceCB_t pfnServiceCB);
  */
 extern bStatus_t CGM_MeasSend( uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId );
 
-/*********************************************************************
- * @fn          CGM_ContextSend
+/**
  * @brief       Send a CGM measurement context.
  * @param       connHandle - connection handle
  * @param       pNoti - pointer to notification structure
+ * @param	taskId - the task id of the CGM application
  * @return      Success or Failure
  */
 extern bStatus_t CGM_ContextSend( uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId );
 
-/*********************************************************************
- * @fn          CGM_CtlPntIndicate
+/**
  * @brief       Send an indication containing a CGM
  *              measurement.
  * @param       connHandle - connection handle
  * @param       pInd - pointer to indication structure
+ * @param	taskId - the taskId of the CGM application
  * @return      Success or Failure
  */
 extern bStatus_t CGM_CtlPntIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId );
 
-/*********************************************************************
+/**
  * @fn          CGM_RACPIndicate
  * @brief       Send an indication containing RACP operation result to RACP characteristic.
  * @param       connHandle - connection handle
  * @param       pInd - pointer to indication structure
+ * @param	taskId - the taskId of teh CGM application
  * @return      Success or Failure
  */
 extern bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId );
 
-/*********************************************************************
- * @fn          CGM_SetSendState
+/**
  * @brief       Set the state of the CGM database transmission indicator
- * @param       connHandle - connection handle
- * @param       changeType - type of change
- * @return      none
- */
+ * @param       input - the state of the transmission
+ *		<table><TR><TD>0</TD><TD>data transmission is not in progress</TD></TR><TR><TD>1</TD><TD>data transmission is in progress</TD></TR></table>
+ * @return      none*/
 extern bool CGM_SetSendState(bool input);
 
-/*********************************************************************
-*********************************************************************/
 #ifdef __cplusplus
 }
 #endif

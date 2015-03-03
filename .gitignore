@@ -3,3 +3,5 @@
 **/List
 **/*.tmp
 **/*~
+**/doxygen
+**/ctags

@@ -1,36 +1,20 @@
-/**************************************************************************************************
-  Filename:       cgmservice.c
-  Revised:        3-Feb-2015
-  Revision:       2
+/**
+@file cgmservice.c
+@brief This file contains the CGM sample service for use with the CGM sample application.
+@date 2015-Feb-3
+@version 2
 
-  Description:    This file contains the CGM sample service
-                  for use with the CGM sample application.
-
-The MIT License (MIT)
-
+@copyright The MIT License (MIT)
 Copyright (c) 2014-2015 Center for Global ehealthinnovation
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-**************************************************************************************************/
-
-/*********************************************************************
+/*
  * INCLUDES
  */
 #include "bcomdef.h"
@@ -44,11 +28,11 @@ THE SOFTWARE.
 #include "gapbondmgr.h"
 #include "cgmservice.h"
 
-/*********************************************************************
+/*
  * MACROS
  */
 
-/*********************************************************************
+/*
  * CONSTANTS
  */
 // Position of glucose measurement value in attribute array
@@ -63,37 +47,37 @@ THE SOFTWARE.
 #define CGM_CGM_OPCP_VALUE_POS                 16   		///<The position of the value of the CGM Specific Operation Control Point (OPCP) charateristic in the attribute array
 #define CGM_CGM_OPCP_CONFIG_POS                17		///<The position of the Client Configuration of the CGM Specific Operation Control Point OPCP) charateristic in the attribute array
 
-/*********************************************************************
+/*
  * TYPEDEFS
  */
    
-/*********************************************************************
+/*
  * GLOBAL VARIABLES
  */
-CONST uint8 CGMServiceUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SERV_UUID), HI_UINT16(CGM_SERV_UUID)};				///< CGM service UUID Stored as a constant variable
-CONST uint8 CGMMeasUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_MEAS_UUID), HI_UINT16(CGM_MEAS_UUID)};				///< CGM Measurement characteristic UUID stored as a constant variable
-CONST uint8 CGMFeatureUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_FEATURE_UUID), HI_UINT16(CGM_FEATURE_UUID)};			///< CGM Feature UUID stored as a constant
-CONST uint8 CGMStatusUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_STATUS_UUID), HI_UINT16(CGM_STATUS_UUID)};				///< CGM Status UUID stored as a constant
-CONST uint8 CGMSessionStartTimeUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SES_START_TIME_UUID), HI_UINT16(CGM_SES_START_TIME_UUID)};		///<CGM Session Start stored as a constant
-CONST uint8 CGMSessionRunTimeUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SES_RUN_TIME_UUID), HI_UINT16(CGM_SES_RUN_TIME_UUID)};			///<CGM Session Run stored as a constant
-CONST uint8 recordControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(REC_ACCESS_CTRL_PT_UUID), HI_UINT16(REC_ACCESS_CTRL_PT_UUID)};		///<Record Control Point stored as a constant
-CONST uint8 CGMSpecificOpsControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SPEC_OPS_CTRL_PT_UUID), HI_UINT16(CGM_SPEC_OPS_CTRL_PT_UUID)};	///<CGM Specific Ops Control Point stored as a constant
+CONST uint8 CGMServiceUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SERV_UUID), HI_UINT16(CGM_SERV_UUID)};///< CGM service UUID Stored as a constant variable
+CONST uint8 CGMMeasUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_MEAS_UUID), HI_UINT16(CGM_MEAS_UUID)};///< CGM Measurement characteristic UUID stored as a constant variable
+CONST uint8 CGMFeatureUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_FEATURE_UUID), HI_UINT16(CGM_FEATURE_UUID)};///< CGM Feature UUID stored as a constant
+CONST uint8 CGMStatusUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_STATUS_UUID), HI_UINT16(CGM_STATUS_UUID)};///< CGM Status UUID stored as a constant
+CONST uint8 CGMSessionStartTimeUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SES_START_TIME_UUID), HI_UINT16(CGM_SES_START_TIME_UUID)};///<CGM Session Start stored as a constant
+CONST uint8 CGMSessionRunTimeUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SES_RUN_TIME_UUID), HI_UINT16(CGM_SES_RUN_TIME_UUID)};///<CGM Session Run stored as a constant
+CONST uint8 recordControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(REC_ACCESS_CTRL_PT_UUID), HI_UINT16(REC_ACCESS_CTRL_PT_UUID)};///<Record Control Point stored as a constant
+CONST uint8 CGMSpecificOpsControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SPEC_OPS_CTRL_PT_UUID), HI_UINT16(CGM_SPEC_OPS_CTRL_PT_UUID)};///<CGM Specific Ops Control Point stored as a constant
 
-/*********************************************************************
+/*
  * EXTERNAL VARIABLES
  */
 
-/*********************************************************************
+/*
  * EXTERNAL FUNCTIONS
  */
 
-/*********************************************************************
+/*
  * LOCAL VARIABLES
  */
 static CGMServiceCB_t CGMServiceCB;		///< The variable to register the CGM service callback function
 static bool	      cgmMeasDBSendInProgress;	///< An variable to indicate whether the RACP transmission is in progress. 
 
-/*********************************************************************
+/*
  * Profile Attributes - variables
  */
 // CGM Service attribute
@@ -123,23 +107,21 @@ static uint8 CGMControlProps = GATT_PROP_WRITE|GATT_PROP_INDICATE;			///< Variab
 static gattCharCfg_t    CGMControlConfig[GATT_MAX_NUM_CONN];				///< Variable for storing the client configuration OPCP Characteristic
 static uint8 CGMControlDummy=0;								///< This is a dummy variable to register the CGM OPCP characteristic to the ATT server. The actual variable for receiving the CGM measurement is defined in cgm.c
 
-///******************************************************
-/// Profile Attributes - Table 
-///******************************************************
+/*
+/ Profile Attributes - Table 
+*/
 
 /// This variable is used to define the attributes of the CGM service
 static gattAttribute_t CGMAttrTbl[] =
 {
-  // CGM Service
   {
-    { ATT_BT_UUID_SIZE, primaryServiceUUID }, /* type */
-    GATT_PERMIT_READ,                         /* permissions */
-    0,                                        /* handle */
-    (uint8 *)&CGMService                      /* pValue */
-  },
-    //////////////////////////////////////////////
+    { ATT_BT_UUID_SIZE, primaryServiceUUID }, ///< type */
+    GATT_PERMIT_READ,                         ///< permissions */
+    0,                                        ///< handle */
+    (uint8 *)&CGMService                      ///< pValue */
+  }///<CGM Service
+  ,
     // CGM MEASUREMENT Charaacteristic
-    //////////////////////////////////////////////
     
     /// 1. Characteristic Declaration
     {
@@ -166,9 +148,7 @@ static gattAttribute_t CGMAttrTbl[] =
       (uint8 *)&CGMMeasConfig
     },
 
-    //////////////////////////////////////////////
     // CGM Feature
-    //////////////////////////////////////////////
 
     /// 4.Characteristic Declaration
     {
@@ -186,9 +166,7 @@ static gattAttribute_t CGMAttrTbl[] =
       &CGMFeatureDummy
     },
 
-    //////////////////////////////////////////////
     // CGM STATUS
-    //////////////////////////////////////////////
 
     /// 6.Characteristic Declaration
     {
@@ -206,9 +184,7 @@ static gattAttribute_t CGMAttrTbl[] =
       &CGMStatusDummy
     },
 
-    //////////////////////////////////////////////
     // CGM Session Start Time
-    //////////////////////////////////////////////
 
     /// 8.Characteristic Declaration
     {
@@ -227,9 +203,7 @@ static gattAttribute_t CGMAttrTbl[] =
       &CGMSessionStartTimeDummy
     },
 
-    //////////////////////////////////////////////
     // CGM Session Run Time
-    //////////////////////////////////////////////
 
     /// 10.Characteristic Declaration
     {
@@ -247,9 +221,7 @@ static gattAttribute_t CGMAttrTbl[] =
       (uint8 *)&CGMSessionRunTimeDummy
     },
 
-    //////////////////////////////////////////////
     // RACP Charateristic
-    //////////////////////////////////////////////
 
     /// 12.Characteristic Declaration
     {
@@ -276,9 +248,7 @@ static gattAttribute_t CGMAttrTbl[] =
       (uint8 *)&CGMRacpConfig
     },
 
-    //////////////////////////////////////////////
     // CGM Specific Operation Control Point Charateristic
-    //////////////////////////////////////////////
 
     /// 15.Characteristic Declaration
     {
@@ -308,7 +278,7 @@ static gattAttribute_t CGMAttrTbl[] =
 
 };
 
-/*********************************************************************
+/*
  * LOCAL FUNCTIONS
  */
 static uint8 CGM_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,uint8 *pValue, uint8 *pLen, uint16 offset, uint8 maxLen );
@@ -316,7 +286,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,uint
 static void CGM_HandleConnStatusCB( uint16 connHandle, uint8 changeType );
 bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId );
 
-/*********************************************************************
+/*
  * PROFILE CALLBACKS
  */
 /// Service Callbacks
@@ -328,12 +298,11 @@ CONST gattServiceCBs_t  CGMCBs =
 };
 
 
-/*********************************************************************
+/*
  * PUBLIC FUNCTIONS
  */
 
-/*********************************************************************
- * @fn      CGM_AddService
+/**
  * @brief   Initializes the CGM service by registering
  *          GATT attributes with the GATT server.
  * @param   services - services to add. This is a bit map and can
@@ -357,23 +326,20 @@ bStatus_t CGM_AddService( uint32 services )
   return ( status );
 }
 
-/*********************************************************************
- * @fn      CGM_Register
+/**
  * @brief   Register a callback function with the CGM Service.
  * @param   pfnServiceCB - Callback function.
- *          pfnCtlPntCB - Callback for control point
- * @return  None.
- */
+ * @return  None.*/
 extern void CGM_Register( CGMServiceCB_t pfnServiceCB)
 {
   CGMServiceCB = pfnServiceCB;
 }
 
-/*********************************************************************
- * @fn          CGM_MeasSend
+/**
  * @brief       Send a CGM measurement via the CGM measurement notification
  * @param       connHandle - connection handle
  * @param       pNoti - pointer to notification structure
+ * @param	taskId - the task id of the CGM application
  * @return      Success or Failure
  */
 bStatus_t CGM_MeasSend( uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId )
@@ -390,12 +356,13 @@ bStatus_t CGM_MeasSend( uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 ta
   return bleNotReady;
 }
 
-/*********************************************************************
+/**
  * @fn          CGM_CtlPntIndicate
  * @brief       Send an indication containing a control point
  *              message.
  * @param       connHandle - connection handle
  * @param       pInd - pointer to indication structure
+ * @param	taskid - the task id of the CGM application
  * @return      Success or Failure
  */
 bStatus_t CGM_CtlPntIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId )
@@ -412,13 +379,12 @@ bStatus_t CGM_CtlPntIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint
   return bleNotReady;
 }
 
-/*********************************************************************
- * @fn          CGM_RACPIndicate
+/**
  * @brief       Send an indication to the RACP characteristic.
  * @param       connHandle - connection handle
  * @param       pInd - pointer to indication structure
- * @return      Success or Failure
- */
+ * @param	taskId - the task id of the CGM application
+ * @return      Success or Failure*/
 bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId )
 {
   uint16 value = GATTServApp_ReadCharCfg( connHandle, CGMRacpConfig );
@@ -433,8 +399,7 @@ bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 
   return bleNotReady;
 }
 
-/*********************************************************************
- * @fn          CGM_ReadAttrCB
+/**
  * @brief       The callback function when an attribute is being read by a collector.
  * @param       connHandle - connection message was received on
  * @param       pAttr - pointer to attribute
@@ -488,8 +453,7 @@ static uint8 CGM_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
   return ( status );
 }
 
-/*********************************************************************
- * @fn      CGM_WriteAttrCB
+/**
  * @brief   The CGM service layer callback function when an attribute is being written to by the collector.
  * @param   connHandle - connection message was received on
  * @param   pAttr - pointer to attribute
@@ -607,8 +571,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
   return ( status );
 }
 
-/*********************************************************************
- * @fn          glucose_HandleConnStatusCB
+/**
  * @brief       Simple Profile link status change handler function.
  * @param       connHandle - connection handle
  * @param       changeType - type of change
@@ -631,11 +594,9 @@ static void CGM_HandleConnStatusCB( uint16 connHandle, uint8 changeType )
   }
 }
 
-/*********************************************************************
- * @fn          CGM_SetSendState
+/**
  * @brief       Set the state of the CGM database transmission indicator
- * @param       connHandle - connection handle
- * @param       changeType - type of change
+ * @param       input - 
  * @return      none
  */
 bool CGM_SetSendState(bool input)
@@ -644,5 +605,3 @@ bool CGM_SetSendState(bool input)
 	return cgmMeasDBSendInProgress;
 }
 
-/*********************************************************************
-*********************************************************************/
