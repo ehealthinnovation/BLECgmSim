@@ -47,7 +47,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define	SFLOAT	uint16	///< Using a unsigned 16bit integer to store a SFLOAT
 
 /// \defgroup featureactivation Feature Activation Macros
-#define FEATURE_GLUCOSE_CALIBRATION 1	///< The glucose calibration feature
+///@{
+#define FEATURE_GLUCOSE_CALIBRATION		0   ///< The glucose calibration feature
+#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0   ///< The patient high feature
+#define FEATURE_GLUCOSE_HYPERALERT		1   ///< The patient high feature
+#define FEATURE_GLUCOSE_HYPOALERT		1   ///< The patient high feature
+///@}
+// End of featureactivation 
+
 /*
  * CONSTANTS
  */
@@ -77,6 +84,37 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #endif /* FEATURE_GLUCOSE_CALIBRATION==1 */
 /// @}
 // end of calibrationgrp
+/// \defgroup patienthighlowgrp
+/// This is a group of constants, variables, functions related to the patient defined high value alert.
+/// @{
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+#define PATIENTHIGH_CONCENTRATION_MAX		600	///< The maximal value of the input concentration to set the patient defined glucose high level alert.
+#define PATIENTHIGH_CONCENTRATION_MIN		10	///< The minimal value of the input concentration to set the patient defined glucose high level alert.
+#define PATIENTHIGH_CONCENTRATION_DEFAULT	500 ///< The default value of the glucose high level alert is set to the maximal value allowed by the system.
+#define PATIENTLOW_CONCENTRATION_MAX		500	///< The maximal value of the input concentration to set the patient defined glucose low level alert.
+#define PATIENTLOW_CONCENTRATION_MIN		10	///< The minimal value of the input concentration to set the patient defined glucose low level alert.
+#define PATIENTLOW_CONCENTRATION_DEFAULT	100 ///< The default value of the glucose high level alert is set to the maximal value allowed by the system.
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+/// @}
+/// \defgroup hyperalertgrp
+/// This is a group of constants, variables, functions related to the patient defined hyperglycemia alert.
+///@{
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+#define HYPERALERT_CONCENTRATION_MAX		600	///< The maximal value of the input concentration to set the patient defined hyperglycemia alert
+#define HYPERALERT_CONCENTRATION_MIN		10	///< The minimal value of the input concentration to set the patient defined hyperglycemia alert
+#define HYPERALERT_CONCENTRATION_DEFAULT	500 	///< The default value of the hyperglycemia alert.
+#endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
+/// @}
+/// \defgroup hypoalertgrp
+/// This is a group of constants, variables, functions related to the patient defined hypoglycemia alert.
+///@{
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+#define HYPOALERT_CONCENTRATION_MAX		600	///< The maximal value of the input concentration to set the patient defined hypoglycemia alert
+#define HYPOALERT_CONCENTRATION_MIN		10	///< The minimal value of the input concentration to set the patient defined hypoglycemia alert
+#define HYPOALERT_CONCENTRATION_DEFAULT	50 	///< The default value of the hypoglycemia alert.
+#endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
+/// @}
+
 
 
 /*********************************************************************
@@ -120,7 +158,7 @@ typedef struct {
 	uint8 len;				///< The length of the data being passed
 	uint8 data[CGM_RACP_MAX_SIZE];		///< The value of the data being passed
 } cgmRACPMsg_t;				
-/// \
+/// \ingroup calibrationgrp
 /// \brief The container for holding a glucose calibration structure
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 typedef struct {
@@ -191,9 +229,18 @@ static attHandleValueNoti_t   cgmRACPRspNoti;				///< Container for holding the 
 static bool cgmAdvCancelled = FALSE;					///< Denote the advertising state.
 //CGM Simulator configureation variables
 static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
-						#if (FEATURE_GLUCOSE_CALIBRATION==1)
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
 						| CGM_FEATURE_CAL
-						#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+						| CGM_FEATURE_ALERTS_HIGH_LOW
+#endif /*FEATURE_GLUCOSE_PATIENT_HIGH_LOW==1*/
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+						| CGM_FEATURE_ALERTS_HYPER
+#endif
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+						| CGM_FEATURE_ALERTS_HYPO
+#endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
 						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
@@ -228,7 +275,24 @@ static uint8		cgmCaliDBRecordNum;				///< The record number of the most recently
 static SFLOAT		cgmCalibration;					///< The most current calibration value.
 #endif /* FEATURE_GLUCOSE_CALIBRATION==1*/
 ///@} end of calibrationgrp
-
+/// \ingroup patienthighlowgrp
+///@{
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+static SFLOAT		cgmPatientHigh;					///< The patient high glucose set level.
+static SFLOAT		cgmPatientLow;					///< The patient low glucose set level. 
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+///@}
+/// \ingroup hyperalertgrp
+/// @{
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+static SFLOAT		cgmHyperThreshold;				///< The hyperglycemia alert threshold.
+#endif /*FEATURE_GLUCOSE_HYPERALERT*/
+/// \ingroup hypoalertgrp
+///@{
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+static SFLOAT		cgmHypoThreshold;				///< The hypoglycemia alert threshold.
+#endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
+///@}
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
@@ -265,6 +329,28 @@ static int32 cgmCaliTestCalibration(SFLOAT currentConcentration);
 static int16 cgmCaliDBSearch(uint16 recordnum);
 static void cgmResetCaliDB(void);
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+static void cgmPHighVerifyInput(SFLOAT input, uint8 *result);
+static int8 cgmPHighProcessInput(SFLOAT input);
+static void cgmPHighReset(void);
+static int32 cgmPHighTest(SFLOAT currentConcentration);
+static void cgmPLowVerifyInput(SFLOAT input, uint8 *result);
+static int8 cgmPLowProcessInput(SFLOAT input);
+static void cgmPLowReset(void);
+static int32 cgmPLowTest(SFLOAT currentConcentration);
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+static int32 cgmAHyperTest(SFLOAT currentConcentration);
+static void cgmAHyperVerifyInput(SFLOAT input, uint8 *result);
+static int8 cgmAHyperProcessInput(SFLOAT input);
+static void cgmAHyperReset(void);
+#endif /*FEATURE_GLUCOSE_HYPERALERT*/
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+static int32 cgmAHypoTest(SFLOAT currentConcentration);
+static void cgmAHypoVerifyInput(SFLOAT input, uint8 *result);
+static int8 cgmAHypoProcessInput(SFLOAT input);
+static void cgmAHypoReset(void);
+#endif /*FEATURE_GLUCOSE_HYPOALERT*/
 
 /*********************************************************************
  * PROFILE CALLBACKS
@@ -382,7 +468,7 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
         cgmSessionStartIndicator=true;
 }
 
@@ -525,6 +611,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 	uint8 ropcode; //the op code in the return char value
 	uint8 roperand[CGM_CTL_PNT_MAX_SIZE];//the operand in reuturn char value
 	uint8 roperand_len;//length of the response operand
+	SFLOAT sftemp;//temporary variable to hold a SFLOAT
 
 	switch(opcode)
 	{ 	//Implement the set/get communication interval
@@ -658,18 +745,102 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
                         roperand[7]=LO_UINT16(target->recordNumber);
 			roperand[8]=HI_UINT16(target->recordNumber);
                         roperand[9]=target->status;
-			
                         roperand_len=10;
 			break;
                   }
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1*/
-		//Other functions are not implemented
-		case  CGM_SPEC_OP_SET_ALERT_HIGH:		
-		case  CGM_SPEC_OP_GET_ALERT_HIGH:		
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+		case  CGM_SPEC_OP_SET_ALERT_HIGH:
+		  	
+		  	//Extract the input value.
+			cgmPatientHigh = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
+			//Test the input value.
+			cgmPHighVerifyInput(cgmPatientHigh,roperand+1);
+			//Process the input value.
+			if(roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
+			{
+				cgmPHighProcessInput(cgmPatientHigh);
+			}
+			//Prepare the response message.
+			ropcode = CGM_SPEC_OP_RESP_CODE;
+			roperand[0] = CGM_SPEC_OP_SET_ALERT_HIGH;
+			roperand_len = 2;
+			break;
+		case  CGM_SPEC_OP_GET_ALERT_HIGH:
+			//Prepare the response message.		  
+			ropcode = CGM_SPEC_OP_RESP_ALERT_HIGH;
+			roperand[0]=LO_UINT16(cgmPatientHigh);
+			roperand[1]=HI_UINT16(cgmPatientHigh);
+			roperand_len = 2;
+			break;
 		case  CGM_SPEC_OP_SET_ALERT_LOW:		
+		  	//Extract the input value.
+			cgmPatientLow = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
+			//Test the input value.
+			cgmPLowVerifyInput(cgmPatientLow,roperand+1);
+			//Process the input value.
+			if(roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
+			{
+				cgmPLowProcessInput(cgmPatientLow);
+			}
+			//Prepare the response message.
+			ropcode = CGM_SPEC_OP_RESP_CODE;
+			roperand[0] = CGM_SPEC_OP_SET_ALERT_LOW;
+			roperand_len = 2;
+			break;
 		case  CGM_SPEC_OP_GET_ALERT_LOW:		
-		case  CGM_SPEC_OP_SET_ALERT_HYPO:		
+			//Prepare the response message.		  
+			ropcode = CGM_SPEC_OP_RESP_ALERT_LOW;
+			roperand[0]=LO_UINT16(cgmPatientLow);
+			roperand[1]=HI_UINT16(cgmPatientLow);
+			roperand_len = 2;
+			break;
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+		case  CGM_SPEC_OP_SET_ALERT_HYPER:
+			//Get the input value
+			operand=pMsg->data+1;
+			//Set the local variable
+			sftemp=BUILD_UINT16(operand[0],operand[1]);
+			cgmAHyperVerifyInput(sftemp,roperand+1);
+			if( roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
+				cgmAHyperProcessInput(sftemp);
+			//Prepare the response message
+			ropcode=CGM_SPEC_OP_RESP_CODE;
+			roperand[0]=opcode;
+			roperand_len=2;
+			break;
+		case  CGM_SPEC_OP_GET_ALERT_HYPER:		
+			//Get the local hyperglycemia threshold value and load it into the response message buffer
+			ropcode=CGM_SPEC_OP_RESP_ALERT_HYPER;
+			roperand[0]=LO_UINT16(cgmHyperThreshold);
+			roperand[1]=HI_UINT16(cgmHyperThreshold);
+			roperand_len=2;
+			break;
+#endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+		case  CGM_SPEC_OP_SET_ALERT_HYPO:
+			//Get the input value
+			operand=pMsg->data+1;
+			//Set the local variable
+			sftemp=BUILD_UINT16(operand[0],operand[1]);
+			cgmAHypoVerifyInput(sftemp,roperand+1);
+			if( roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
+				cgmAHypoProcessInput(sftemp);
+			//Prepare the response message
+			ropcode=CGM_SPEC_OP_RESP_CODE;
+			roperand[0]=opcode;
+			roperand_len=2;
+			break;
 		case  CGM_SPEC_OP_GET_ALERT_HYPO:		
+			//Get the local hypoglycemia threshold value and load it into the response message buffer
+			ropcode=CGM_SPEC_OP_RESP_ALERT_HYPO;
+			roperand[0]=LO_UINT16(cgmHypoThreshold);
+			roperand[1]=HI_UINT16(cgmHypoThreshold);
+			roperand_len=2;
+			break;
+#endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
+		//Other functions are not implemented
 		case  CGM_SPEC_OP_SET_ALERT_RATE_DECREASE:	
 		case  CGM_SPEC_OP_GET_ALERT_RATE_DECREASE:	
 		case  CGM_SPEC_OP_SET_ALERT_RATE_INCREASE:	
@@ -1062,7 +1233,17 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
 	annunciation |= cgmCaliTestCalibration(glucoseGen);
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
-
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+	//If the patient high/low feature is enabled. The newly generated glucose reading will be read to determine if the reading exceeds normal range.
+	annunciation |= cgmPHighTest(glucoseGen);
+	annunciation |= cgmPLowTest(glucoseGen);
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+	annunciation |= cgmAHyperTest(glucoseGen);
+#endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+	annunciation |= cgmAHypoTest(glucoseGen);
+#endif /*FEATURE_GLUCOSE_HYOALERT==1*/
 	//Prepare the flag
 	flag |= CGM_TREND_INFO_PRES;
 
@@ -1126,13 +1307,26 @@ static void cgmSimulationAppInit()
 	cgmMeasDBOldestIndx=0;
 	cgmStartTimeConfigIndicator=false;
 	cgmSimDataReset();
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
 	cgmResetCaliDB();
+#endif
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+        cgmPHighReset();
+        cgmPLowReset();
+#endif
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+	cgmAHyperReset();
+#endif
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+	cgmAHypoReset();
+#endif
+        
         //-----------PTS Specific Code------------------
         //For the PTS Test, introduce an initial record.
-        cgmCaliDB[0].recordNumber=0;
-        cgmCaliDBOldestIndx=0;
-        cgmCaliDBCount=1;
-        cgmCaliDBWriteIndx=1;
+        //cgmCaliDB[0].recordNumber=0;
+        //cgmCaliDBOldestIndx=0;
+        //cgmCaliDBCount=1;
+        //cgmCaliDBWriteIndx=1;
         //----End of PTS Specific Code------------------
 }	
 
@@ -1637,4 +1831,239 @@ static int16 cgmCaliDBSearch(uint16 recordnum){
 	return -1;
 }
 #endif /* FEATURE_GLUCOSE_CALIBRATION ==1*/
+/// @}
+
+/// \ingroup patienthighlowgrp
+/// @{
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+/**
+ * @brief Verify the input value of patient high setting fall into the server allowable range.
+ * @param [in] input - the input patient defined glucose high value.
+ * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
+ <table>
+ <th><td>Value</td><td>Meaning</td></th>
+ <tr><td>1</td><td>Success</td></tr>
+ <tr><td>2</td><td>Op Code not supported</td></tr>
+ <tr><td>3</td><td>Invalid Operand</td></tr>
+ <tr><td>4</td><td>Procedure not completed</td></tr>
+ <tr><td>5</td><td>Parameter out of range</td></tr>
+ </table>*/
+static void cgmPHighVerifyInput(SFLOAT input, uint8 *result){
+	*result=CGM_SPEC_OP_RESP_SUCCESS;
+	if ( input > PATIENTHIGH_CONCENTRATION_MAX || input < PATIENTHIGH_CONCENTRATION_MIN)
+		*result = CGM_SPEC_OP_RESP_PARAM_NIR;	
+	return;
+}
+
+/**
+ * @brief Configure the patient defined glucose high alert of the sensor device.
+ * @param [in] input - the input patient defined glucose high value.
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
+static int8 cgmPHighProcessInput(SFLOAT input){
+	int8 res = 0;
+	/* Implementation specific set patient defined glucose high value goes here*/
+	cgmPatientHigh=input;	//Currently we just change the internal variable to the input value. For custom implementations, we can develop more rigorous procedure.
+	/* End of configuration function.*/
+	return res;
+}
+
+/**
+ * @brief Reset the variables related to patient defined glucose high alert of the sensor device.
+ * @return none*/
+static void cgmPHighReset(void){
+	cgmPatientHigh=PATIENTHIGH_CONCENTRATION_DEFAULT;
+
+}
+/**
+ * @brief This function tests whether the CGM measure exceeds the patient set glucose high level
+ * @detail This function is called in the cgmNewGlucoseMeas(). If the method determines that current measurement exceeds the patient defined high level, then the corresponding flag is set. 
+ * @return <table><tr><td>0</td><td>Success with no alert set</td></tr>
+ * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>0x010000</td><td>Success patient high alert set</td></tr></table>*/
+static int32 cgmPHighTest(SFLOAT currentConcentration){
+	if (currentConcentration > cgmPatientHigh)
+	{
+		return CGM_STATUS_ANNUNC_HIGH_PATIRNT;
+	}
+	return 0;
+}
+
+/**
+ * @brief Verify the input value of patient low setting fall into the server allowable range.
+ * @param [in] input - the input patient defined glucose low value.
+ * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
+ <table>
+ <th><td>Value</td><td>Meaning</td></th>
+ <tr><td>1</td><td>Success</td></tr>
+ <tr><td>2</td><td>Op Code not supported</td></tr>
+ <tr><td>3</td><td>Invalid Operand</td></tr>
+ <tr><td>4</td><td>Procedure not completed</td></tr>
+ <tr><td>5</td><td>Parameter out of range</td></tr>
+ </table>*/
+static void cgmPLowVerifyInput(SFLOAT input, uint8 *result){
+	*result=CGM_SPEC_OP_RESP_SUCCESS;
+	if ( input > PATIENTLOW_CONCENTRATION_MAX || input < PATIENTLOW_CONCENTRATION_MIN)
+		*result = CGM_SPEC_OP_RESP_PARAM_NIR;	
+	return;
+}
+
+/**
+ * @brief Configure the patient defined glucose low alert of the sensor device.
+ * @param [in] input - the input patient defined glucose low value.
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
+static int8 cgmPLowProcessInput(SFLOAT input){
+	int8 res = 0;
+	/* Implementation specific set patient defined glucose low value goes here*/
+	cgmPatientLow=input;	//Currently we just change the internal variable to the input value. For custom implementations, we can develop more rigorous procedure.
+	/* End of configuration function.*/
+	return res;
+}
+
+/**
+ * @brief Reset the variables related to patient defined glucose low alert of the sensor device.
+ * @return none*/
+static void cgmPLowReset(void){
+	cgmPatientLow=PATIENTLOW_CONCENTRATION_DEFAULT;
+
+}
+
+/**
+ * @brief This function tests whether the CGM measure exceeds the patient set glucose low level
+ * @detail This function is called in the cgmNewGlucoseMeas(). If the method determines that current measurement exceeds the patient defined low level, then the corresponding flag is set. 
+ * @return <table><tr><td>0</td><td>Success with no alert set</td></tr>
+ * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>0x0800000</td><td>Success patient low alert set</td></tr></table>*/
+static int32 cgmPLowTest(SFLOAT currentConcentration){
+	if (currentConcentration < cgmPatientLow)
+	{
+		return CGM_STATUS_ANNUNC_LOW_PATIENT;
+	}
+	return 0;
+}
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+/// @}
+
+/// \ingroup hyperalertgrp
+/// @{
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+/**
+ * @brief Test whether the input CGM measure exceeds the hyperglycemia level.
+ * @param [in] currentConcentration - the glucose concentration to be tested.
+ * @return The result of the test, which is compatible with the input. 
+ * 		<table><tr><td>0</td><td>Success with no alert set</td></tr>
+ * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>0x080000</td><td>Success patient low alert set</td></tr></table>*/
+static int32 cgmAHyperTest(SFLOAT currentConcentration){
+	//Make sure the hyperglycemia value is positive
+	//Also when it is interpreted as SFLOAT, the exponent is 0.
+	int32 hyperthreshold_cal = cgmHyperThreshold & (0x07FF);
+	if (hyperthreshold_cal <= currentConcentration)
+	{
+		return CGM_STATUS_ANNUNC_HIGH_HYPER;
+	}
+	return 0;
+}
+
+/**
+ * @brief Verify the input hyperglycemia threshold is within allowable range of the system
+ * @param [in] input -  the input threshold value
+ * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
+ <table>
+ <th><td>Value</td><td>Meaning</td></th>
+ <tr><td>1</td><td>Success</td></tr>
+ <tr><td>2</td><td>Op Code not supported</td></tr>
+ <tr><td>3</td><td>Invalid Operand</td></tr>
+ <tr><td>4</td><td>Procedure not completed</td></tr>
+ <tr><td>5</td><td>Parameter out of range</td></tr>
+ </table>
+ * @return none */
+static void cgmAHyperVerifyInput(SFLOAT input, uint8 *result){
+	*result=CGM_SPEC_OP_RESP_SUCCESS;
+	if ( input > HYPERALERT_CONCENTRATION_MAX || input < HYPERALERT_CONCENTRATION_MIN)
+		*result = CGM_SPEC_OP_RESP_PARAM_NIR;	
+	return;
+}
+
+/**
+ * @brief Configure the hyperglycemia alert threshold of the sensor device.
+ * @param [in] input - the input hyperglycemia threshold in mg/dL.
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
+static int8 cgmAHyperProcessInput(SFLOAT input){
+	int8 res = 0;
+	/* Implementation specific set hyperglycemia alert threshold value goes here*/
+	cgmHyperThreshold=input;	//Currently we just change the internal variable to the input value. For custom implementations, we can develop more rigorous procedure.
+	/* End of configuration function.*/
+	return res;
+}
+
+/**
+ * @brief Reset the variables related to patient defined glucose hyperglycemia alert of the sensor device.
+ * @return none*/
+static void cgmAHyperReset(void){
+	cgmHyperThreshold=HYPERALERT_CONCENTRATION_DEFAULT;
+
+}
+#endif /* FEATURE_GLUCOSE_HYPERALERT*/
+/// @}
+
+/// \ingroup hypoalertgrp
+/// @{
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+/**
+ * @brief Test whether the input CGM measure exceeds the hypoglycemia level.
+ * @param [in] currentConcentration - the glucose concentration to be tested.
+ * @return The result of the test, which is compatible with the input. 
+ * 		<table><tr><td>0</td><td>Success with no alert set</td></tr>
+ * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>0x080000</td><td>Success patient low alert set</td></tr></table>*/
+static int32 cgmAHypoTest(SFLOAT currentConcentration){
+	//Make sure the hypoglycemia value is positive
+	//Also when it is interpreted as SFLOAT, the exponent is 0.
+	int32 hypothreshold_cal = cgmHypoThreshold & (0x07FF);
+	if (hypothreshold_cal >= currentConcentration)
+	{
+		return CGM_STATUS_ANNUNC_LOW_HYPO;
+	}
+	return 0;
+}
+
+/**
+ * @brief Verify the input hypoglycemia threshold is within allowable range of the system
+ * @param [in] input -  the input threshold value
+ * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
+ <table>
+ <th><td>Value</td><td>Meaning</td></th>
+ <tr><td>1</td><td>Success</td></tr>
+ <tr><td>2</td><td>Op Code not supported</td></tr>
+ <tr><td>3</td><td>Invalid Operand</td></tr>
+ <tr><td>4</td><td>Procedure not completed</td></tr>
+ <tr><td>5</td><td>Parameter out of range</td></tr>
+ </table>
+ * @return none */
+static void cgmAHypoVerifyInput(SFLOAT input, uint8 *result){
+	*result=CGM_SPEC_OP_RESP_SUCCESS;
+	if ( input > HYPOALERT_CONCENTRATION_MAX || input < HYPOALERT_CONCENTRATION_MIN)
+		*result = CGM_SPEC_OP_RESP_PARAM_NIR;	
+	return;
+}
+
+/**
+ * @brief Configure the hypoglycemia alert threshold of the sensor device.
+ * @param [in] input - the input hypoglycemia threshold in mg/dL.
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
+static int8 cgmAHypoProcessInput(SFLOAT input){
+	int8 res = 0;
+	/* Implementation specific set hypoglycemia alert threshold value goes here*/
+	cgmHypoThreshold=input;	//Currently we just change the internal variable to the input value. For custom implementations, we can develop more rigorous procedure.
+	/* End of configuration function.*/
+	return res;
+}
+
+/**
+ * @brief Reset the variables related to patient defined glucose hypoglycemia alert of the sensor device.
+ * @return none*/
+static void cgmAHypoReset(void){
+	cgmHypoThreshold=HYPOALERT_CONCENTRATION_DEFAULT;
+}
+#endif /* FEATURE_GLUCOSE_HYPOALERT*/
 /// @}
