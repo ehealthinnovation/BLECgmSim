@@ -48,10 +48,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /// \defgroup featureactivation Feature Activation Macros
 ///@{
-#define FEATURE_GLUCOSE_CALIBRATION		0   ///< The glucose calibration feature
-#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0   ///< The patient high feature
-#define FEATURE_GLUCOSE_HYPERALERT		1   ///< The patient high feature
-#define FEATURE_GLUCOSE_HYPOALERT		1   ///< The patient high feature
+#define FEATURE_GLUCOSE_CALIBRATION		0	///< The glucose calibration feature
+#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0	///< The patient high feature
+#define FEATURE_GLUCOSE_HYPERALERT		0	///< The patient high feature
+#define FEATURE_GLUCOSE_HYPOALERT		0	///< The patient high feature
+#define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
 ///@}
 // End of featureactivation 
 
@@ -115,6 +116,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
 /// @}
 
+/// \defgroup ratealertgrp
+/// This is a group of constants, variables, functions related to the rate of increase/ decrease alert.
+///@{
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+#define RATEALERT_INCREASE_MAX			0xF7FD	///< The maximal rate of increase allowed by the system, which is 204.5 in decimal
+#define RATEALERT_INCREASE_MIN			0xF000	///< The minimal rate of increase allowed by the system, which is 0.0 in decimal
+#define RATEALERT_DECREASE_MIN			0xFFFF  ///< The minimal rate of decrease allowed by the system, which is -0.1 in decimal
+#define RATEALERT_DECREASE_MAX			0xF803  ///< The maximal rate of decrease allowed by the system, which is -204.5 in decimal			
+#define RATEALERT_INCREASE_DEFAULT		0xF00A	///< The minimal rate of increase allowed by the system, which is 10.0 in decimal
+#define RATEALERT_DECREASE_DEFAULT		0xFFF6  ///< The minimal rate of decrease allowed by the system, which is -10.0 in decimal
+#endif /*FEATURE_GLUCOSE_RATEALERT==1*/
+///@}
 
 
 /*********************************************************************
@@ -241,6 +254,9 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
 						| CGM_FEATURE_ALERTS_HYPO
 #endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+						| CGM_FEATURE_ALERTS_INC_DEC
+#endif /* FEATURE_GLUCOSE_RATEALERT==1*/
 						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
@@ -292,6 +308,13 @@ static SFLOAT		cgmHyperThreshold;				///< The hyperglycemia alert threshold.
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
 static SFLOAT		cgmHypoThreshold;				///< The hypoglycemia alert threshold.
 #endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
+///@}
+/// \defgroup ratealertgrp
+///@{
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+static SFLOAT		cgmIncreaseThreshold;				///< The rate of increase alert threshold.
+static SFLOAT		cgmDecreaseThreshold;				///< The rate of decrease alert threshold.
+#endif /*FEATURE_GLUCOSE_RATEALERT==1*/
 ///@}
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -351,7 +374,12 @@ static void cgmAHypoVerifyInput(SFLOAT input, uint8 *result);
 static int8 cgmAHypoProcessInput(SFLOAT input);
 static void cgmAHypoReset(void);
 #endif /*FEATURE_GLUCOSE_HYPOALERT*/
-
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+static void cgmARateReset(void);
+static int8 cgmARateProcessInput(SFLOAT input, uint8 opcode);
+static void cgmARateVerifyInput(SFLOAT input, uint8 *result);
+static int32 cgmARateTest(SFLOAT currentRate);
+#endif /*FEATURE_GLUCOSE_RATEALERT*/
 /*********************************************************************
  * PROFILE CALLBACKS
  */
@@ -753,13 +781,13 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 		case  CGM_SPEC_OP_SET_ALERT_HIGH:
 		  	
 		  	//Extract the input value.
-			cgmPatientHigh = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
+			sftemp = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
 			//Test the input value.
-			cgmPHighVerifyInput(cgmPatientHigh,roperand+1);
+			cgmPHighVerifyInput(sftemp,roperand+1);
 			//Process the input value.
 			if(roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
 			{
-				cgmPHighProcessInput(cgmPatientHigh);
+				cgmPHighProcessInput(sftemp);
 			}
 			//Prepare the response message.
 			ropcode = CGM_SPEC_OP_RESP_CODE;
@@ -775,13 +803,13 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			break;
 		case  CGM_SPEC_OP_SET_ALERT_LOW:		
 		  	//Extract the input value.
-			cgmPatientLow = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
+			sftemp = BUILD_UINT16(pMsg->data[1],pMsg->data[2]);
 			//Test the input value.
-			cgmPLowVerifyInput(cgmPatientLow,roperand+1);
+			cgmPLowVerifyInput(sftemp,roperand+1);
 			//Process the input value.
 			if(roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
 			{
-				cgmPLowProcessInput(cgmPatientLow);
+				cgmPLowProcessInput(sftemp);
 			}
 			//Prepare the response message.
 			ropcode = CGM_SPEC_OP_RESP_CODE;
@@ -840,11 +868,32 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			roperand_len=2;
 			break;
 #endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
-		//Other functions are not implemented
+#if (FEATURE_GLUCOSE_RATEALERT==1)
 		case  CGM_SPEC_OP_SET_ALERT_RATE_DECREASE:	
-		case  CGM_SPEC_OP_GET_ALERT_RATE_DECREASE:	
 		case  CGM_SPEC_OP_SET_ALERT_RATE_INCREASE:	
-		case  CGM_SPEC_OP_GET_ALERT_RATE_INCREASE:	
+			operand=pMsg->data+1;
+			sftemp=BUILD_UINT16(operand[0],operand[1]);
+			cgmARateVerifyInput(sftemp,roperand+1);
+			if( roperand[1]==CGM_SPEC_OP_RESP_SUCCESS)
+				cgmARateProcessInput(sftemp, opcode);
+			ropcode=CGM_SPEC_OP_RESP_CODE;
+			roperand[0]=opcode;
+			roperand_len=2;
+			break;
+		case  CGM_SPEC_OP_GET_ALERT_RATE_DECREASE:		
+			ropcode=CGM_SPEC_OP_RESP_ALERT_RATE_DECREASE;
+			roperand[0]=LO_UINT16(cgmDecreaseThreshold);
+			roperand[1]=HI_UINT16(cgmDecreaseThreshold);
+			roperand_len=2;
+			break;
+                case  CGM_SPEC_OP_GET_ALERT_RATE_INCREASE:
+                  	ropcode=CGM_SPEC_OP_RESP_ALERT_RATE_INCREASE;
+			roperand[0]=LO_UINT16(cgmIncreaseThreshold);
+			roperand[1]=HI_UINT16(cgmIncreaseThreshold);
+			roperand_len=2;
+                        break;
+#endif /*FEATURE_GLUCOSE_RATEALERT==1*/
+		//Other functions are not implemented
 			roperand[0]=CGM_SPEC_OP_RESP_CODE;
 			roperand[1]=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
 			roperand_len=2;
@@ -1228,25 +1277,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	//Prepare the time offset 
 	pMeas->timeoffset=cgmTimeOffset & 0xFFFF;
 	cgmTimeOffset += cgmCommInterval/1000;	//Update the time offset for the next call. 
-
-#if (FEATURE_GLUCOSE_CALIBRATION==1)
-	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
-	annunciation |= cgmCaliTestCalibration(glucoseGen);
-#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
-#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
-	//If the patient high/low feature is enabled. The newly generated glucose reading will be read to determine if the reading exceeds normal range.
-	annunciation |= cgmPHighTest(glucoseGen);
-	annunciation |= cgmPLowTest(glucoseGen);
-#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
-#if (FEATURE_GLUCOSE_HYPERALERT==1)
-	annunciation |= cgmAHyperTest(glucoseGen);
-#endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
-#if (FEATURE_GLUCOSE_HYPOALERT==1)
-	annunciation |= cgmAHypoTest(glucoseGen);
-#endif /*FEATURE_GLUCOSE_HYOALERT==1*/
-	//Prepare the flag
-	flag |= CGM_TREND_INFO_PRES;
-
+	
 	//Prepare the trend field
 	if(cgmTimeOffset!=0)
 	{
@@ -1264,9 +1295,30 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 				trend= (trend_cal & 0x0FFF) | 0xF000;
 		}
 	} 
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
+	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
+	annunciation |= cgmCaliTestCalibration(glucoseGen);
+#endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
+#if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
+	//If the patient high/low feature is enabled. The newly generated glucose reading will be read to determine if the reading exceeds normal range.
+	annunciation |= cgmPHighTest(glucoseGen);
+	annunciation |= cgmPLowTest(glucoseGen);
+#endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
+#if (FEATURE_GLUCOSE_HYPERALERT==1)
+	annunciation |= cgmAHyperTest(glucoseGen);
+#endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
+#if (FEATURE_GLUCOSE_HYPOALERT==1)
+	annunciation |= cgmAHypoTest(glucoseGen);
+#endif /*FEATURE_GLUCOSE_HYOALERT==1*/
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+	annunciation |= cgmARateTest(trend);
+#endif /*FEATURE_GLUCOSE_RATEALERT==1*/
+
 	//update the annuciation field
 	pMeas->annunication=annunciation;
 
+	//Prepare the flag
+	flag |= CGM_TREND_INFO_PRES;
 	//Update the flag bits corresponding to each annunciation
 	if((annunciation & 0x0000FF)!=0)
 		flag|=CGM_STATUS_ANNUNC_STATUS_OCT;
@@ -1319,6 +1371,9 @@ static void cgmSimulationAppInit()
 #endif
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
 	cgmAHypoReset();
+#endif
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+	cgmARateReset();
 #endif
         
         //-----------PTS Specific Code------------------
@@ -2067,3 +2122,96 @@ static void cgmAHypoReset(void){
 }
 #endif /* FEATURE_GLUCOSE_HYPOALERT*/
 /// @}
+
+
+/// \defgroup ratealertgrp
+///@{
+#if (FEATURE_GLUCOSE_RATEALERT==1)
+/**
+ * @brief Test whether the input CGM measure exceeds the normal rate of change range.
+ * @param [in] currentRate - the rate of change to be tested.
+ * @return The result of the test, which is compatible with the input. 
+ * 		<table><tr><td>0</td><td>Success with no alert set</td></tr>
+ * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>0x100000</td><td>Success , reading exceeds decrease rate range</td></tr>
+ * 		  <tr><td>0x200000</td><td>Success , reading exceeds increase rate range</td></tr></table>
+ * @note This function assume the input SFLOAT has one decimal number. Currently it is unable to perform comparison between SFLOATS with different decimal digit numbers. The program will ignore the input when the most significant nibble of the input is not F.*/
+static int32 cgmARateTest(SFLOAT currentRate)
+{
+	if ( (currentRate & 0x0800)==0){
+		//Currently only the threshold with 1 decimal is supported.
+		if ( (cgmIncreaseThreshold & 0xF000) == 0xF000){
+		if ( (currentRate & 0x07FF) > (cgmIncreaseThreshold & 0x07FF))
+			return CGM_STATUS_ANNUNC_EXCEEDED_INCR_RATE;
+		}
+	}
+	else{
+		//Currently only the threshold with 1 decimal is supported.
+		if ( (cgmDecreaseThreshold & 0xF000) == 0xF000){
+		if ( (currentRate & 0x07FF) < ( cgmDecreaseThreshold & 0x07FF))
+			return CGM_STATUS_ANNUNC_EXCEEDED_DESC_RATE;
+		}
+	}
+	return 0;
+
+
+}
+
+
+/**
+ * @brief Verify the input parameter meets the requirements.
+ * @param [in] input -  the input threshold value
+ * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
+ <table>
+ <th><td>Value</td><td>Meaning</td></th>
+ <tr><td>1</td><td>Success</td></tr>
+ <tr><td>2</td><td>Op Code not supported</td></tr>
+ <tr><td>3</td><td>Invalid Operand</td></tr>
+ <tr><td>4</td><td>Procedure not completed</td></tr>
+ <tr><td>5</td><td>Parameter out of range</td></tr>
+ </table>
+  @note This function assume the input SFLOAT has one decimal number. Currently it is unable to perform comparison between SFLOATS with different decimal digit numbers. The program will ignore the input when the most significant nibble of the input is not F.*/
+static void cgmARateVerifyInput(SFLOAT input, uint8 *result)
+{
+	*result = CGM_SPEC_OP_RESP_SUCCESS;
+	/* For PTS, the following is commented, because it will inject a data with no decimal digit to the system.
+        if ( (input & 0xF000) != 0xF000)
+		return;
+        */
+	//If it is a negative number, then use the decrease rate criterion
+	if( (input & 0x0800) !=0 ){
+		if ( (input & 0x07FF) < (RATEALERT_DECREASE_MAX & 0x07FF) || (input & 0x07FF) > (RATEALERT_DECREASE_MIN & 0x7FF))
+			*result = CGM_SPEC_OP_RESP_PARAM_NIR;
+	}
+	//If it is a positive number, then use the increase rate criterion
+	else{
+		if ( (input & 0x07FF) > (RATEALERT_INCREASE_MAX & 0x07FF) || (input & 0x07FF) < (RATEALERT_INCREASE_MIN & 0x07FF))
+			*result = CGM_SPEC_OP_RESP_PARAM_NIR;
+	}
+}
+
+/**
+ * @brief Configure the rate of increase/decrease alert of the sensoe.
+ * @param [in] input - the input rate of change thresdhold in mg/dL/min
+ * @param [in] opcode - the opcode of the caller operation. It is used to differentiate increase or decrease rate.
+ * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
+static int8 cgmARateProcessInput(SFLOAT input, uint8 opcode)
+{
+	// If the input is a negative number.
+	if ( opcode == CGM_SPEC_OP_SET_ALERT_RATE_INCREASE)
+	cgmIncreaseThreshold = input;
+	else
+	cgmDecreaseThreshold = input;
+	return 0;
+}
+
+/**
+ *  @brief Reset the variables related to the rate alert of the sensor device.
+ *  @return none.*/
+static void cgmARateReset(void)
+{
+		cgmIncreaseThreshold=RATEALERT_INCREASE_DEFAULT;
+		cgmDecreaseThreshold=RATEALERT_DECREASE_DEFAULT;				
+}
+#endif /*FEATURE_GLUCOSE_RATEALERT==1*/
+///@}
