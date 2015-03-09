@@ -48,10 +48,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /// \defgroup featureactivation Feature Activation Macros
 ///@{
-#define FEATURE_GLUCOSE_CALIBRATION		0	///< The glucose calibration feature
-#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0	///< The patient high feature
-#define FEATURE_GLUCOSE_HYPERALERT		0	///< The patient high feature
-#define FEATURE_GLUCOSE_HYPOALERT		0	///< The patient high feature
+#define FEATURE_GLUCOSE_CALIBRATION		1	///< The glucose calibration feature
+#define FEATURE_GLUCOSE_PATIENTHIGHLOW		1	///< The patient high feature
+#define FEATURE_GLUCOSE_HYPERALERT		1	///< The patient high feature
+#define FEATURE_GLUCOSE_HYPOALERT		1	///< The patient high feature
 #define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
 ///@}
 // End of featureactivation 
@@ -498,6 +498,7 @@ void CGM_Init( uint8 task_id )
 	//this command starts the CGM measurement record generation right after device reset
 	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
         cgmSessionStartIndicator=true;
+        
 }
 
 /**
@@ -662,6 +663,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 				if ((*operand)==0) //input value being 0x00 would stop the timer.
 				{
 					osal_stop_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT);
+                                        cgmCommInterval=0; //PTS TP/CGMCP/BV-05-C requires setting the interval to 0.
 				}
 				else if((*operand)==0xFF)
 				{
@@ -684,6 +686,22 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 		//Implement the start/stop session command
 		case CGM_SPEC_OP_START_SES:
 			//EXTRA if RACP is in transfer, this command is invalid
+			//If the session is started, response with operation not completed.
+			if (cgmSessionStartIndicator==true){
+                                ropcode=CGM_SPEC_OP_RESP_CODE;
+				roperand[0]=opcode;
+				roperand[1]=CGM_SPEC_OP_RESP_PROCEDURE_NOT_COMPLETE;
+				roperand_len=2;
+                                break;
+			}
+                        //If the communication interval is disabled
+                        if (cgmCommInterval==0){
+                          ropcode=CGM_SPEC_OP_RESP_CODE;
+                          roperand[0]=opcode;
+                          roperand[1]=CGM_SPEC_OP_RESP_PROCEDURE_NOT_COMPLETE;
+                          roperand_len=2;
+                          break;
+                        }
 			//Reset the sensor state
 			cgmResetMeasDB();
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
@@ -695,8 +713,8 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			if(cgmStartTimeConfigIndicator==false)
 				cgmStartTime_UTC=0;
 			osal_setClock(0);
-			osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
-			ropcode=CGM_SPEC_OP_RESP_CODE;
+                        osal_start_timerEx(cgmTaskId,NOTI_TIMEOUT_EVT,cgmCommInterval);
+                 	ropcode=CGM_SPEC_OP_RESP_CODE;
 			roperand[0]=opcode;
 			roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
 			roperand_len=2;
