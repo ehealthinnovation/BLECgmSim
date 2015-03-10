@@ -53,6 +53,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define FEATURE_GLUCOSE_HYPERALERT		1	///< The patient high feature
 #define FEATURE_GLUCOSE_HYPOALERT		1	///< The patient high feature
 #define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
+#define FEATURE_GLUCOSE_QUALITY			1	///< The CGM support quality indication
 ///@}
 // End of featureactivation 
 
@@ -380,6 +381,9 @@ static int8 cgmARateProcessInput(SFLOAT input, uint8 opcode);
 static void cgmARateVerifyInput(SFLOAT input, uint8 *result);
 static int32 cgmARateTest(SFLOAT currentRate);
 #endif /*FEATURE_GLUCOSE_RATEALERT*/
+#if (FEATURE_GLUCOSE_QUALITY==1)
+static SFLOAT cgmGQuality(SFLOAT input);
+#endif
 /*********************************************************************
  * PROFILE CALLBACKS
  */
@@ -496,8 +500,8 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
-        cgmSessionStartIndicator=true;
+	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+        cgmSessionStartIndicator=false;
         
 }
 
@@ -1313,6 +1317,10 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 				trend= (trend_cal & 0x0FFF) | 0xF000;
 		}
 	} 
+#if (FEATURE_GLUCOSE_QUALITY==1)
+	//Prepare the quality field
+	pMeas->quality=cgmGQuality(glucoseGen);
+#endif
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
 	annunciation |= cgmCaliTestCalibration(glucoseGen);
@@ -1337,6 +1345,9 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 
 	//Prepare the flag
 	flag |= CGM_TREND_INFO_PRES;
+#if (FEATURE_GLUCOSE_QUALITY==1)
+	flag |= CGM_QUALITY_PRES;
+#endif
 	//Update the flag bits corresponding to each annunciation
 	if((annunciation & 0x0000FF)!=0)
 		flag|=CGM_STATUS_ANNUNC_STATUS_OCT;
@@ -1400,6 +1411,16 @@ static void cgmSimulationAppInit()
         //cgmCaliDBOldestIndx=0;
         //cgmCaliDBCount=1;
         //cgmCaliDBWriteIndx=1;
+	
+	//Introduce 4 records to test the RACP
+	cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
+	cgmAddRecord(&pts_measure);
+	pts_measure.timeoffset=0x0028;
+	cgmAddRecord(&pts_measure);
+	pts_measure.timeoffset=0x0029;
+	cgmAddRecord(&pts_measure);
+        
+	
         //----End of PTS Specific Code------------------
 }	
 
@@ -1581,6 +1602,29 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 		case CTL_PNT_OP_REQ:
 		case CTL_PNT_OP_GET_NUM:
 			//Parse the input command operand bease on the filter requirement
+			//If the operator is not valid
+			if (operator==0){
+					cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+					cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+					cgmRACPRsp.value[2]=opcode;
+					cgmRACPRsp.value[3]=CTL_PNT_RSP_OPER_INVALID;
+					cgmRACPRsp.len=4;
+					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+					break;
+			}
+			
+			//Unsupported operators
+			if (operator>=7){
+					cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+					cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+					cgmRACPRsp.value[2]=opcode;
+					cgmRACPRsp.value[3]=CTL_PNT_RSP_OPER_NOT_SUPPORTED;
+					cgmRACPRsp.len=4;
+					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+					break;
+			}
+
+			//Other operators
 			if (operator==CTL_PNT_OPER_LESS_EQUAL 
 					|| operator==CTL_PNT_OPER_GREATER_EQUAL 
 					|| operator==CTL_PNT_OPER_RANGE)
@@ -1600,6 +1644,19 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 			}
 			if (operator==CTL_PNT_OPER_RANGE)
 				operand2=BUILD_UINT16(pMsg->data[5],pMsg->data[6]);
+
+			//Test the operands are valid
+			if ((operator==CTL_PNT_OPER_ALL && pMsg->len>2) ||
+					(operator==CTL_PNT_OPER_RANGE && operand1 > operand2)){
+				cgmRACPRsp.value[3]=CTL_PNT_RSP_OPERAND_INVALID;
+				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+				cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+				cgmRACPRsp.value[2]=opcode;
+				cgmRACPRsp.len=4;
+  				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+				return;
+			}
+				
 			//Get the starting and ending index of the record meeting requriement  
 			if ((reopcode=cgmSearchMeasDB(operator,operand1,operand2))==RACP_SEARCH_RSP_SUCCESS)
 			{
@@ -1650,8 +1707,15 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 				cgmRACPRsp.value[3]=CTL_PNT_RSP_SUCCESS;	
 				cgmRACPRsp.len=4;
 				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
+				break;
 			}
 		default:
+				cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+				cgmRACPRsp.value[1]=CTL_PNT_OPER_NULL;
+				cgmRACPRsp.value[2]=opcode;
+				cgmRACPRsp.value[3]=CTL_PNT_RSP_OPCODE_NOT_SUPPORTED;	
+				cgmRACPRsp.len=4;
+				CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp,  cgmTaskId);
 			break;
 	}
 }	
@@ -2233,3 +2297,17 @@ static void cgmARateReset(void)
 }
 #endif /*FEATURE_GLUCOSE_RATEALERT==1*/
 ///@}
+
+/// @addtogroup qualitygrp
+/// This is a group of constants, variables, functions related to the glucose measurement quality estimation
+#if (FEATURE_GLUCOSE_QUALITY==1)
+/**
+ * \brief The function to determine the glucose measurement quality and set the value in the corresponding output variable.
+ * \detail The exact decision of the quality is implementation specific. For demonstration purpose, the quality is hardcoded to be 90%. Any other calculation algorithm should be implemented here.
+ * \param [in] input -  the input glucose concentration
+ * \return The quality value.*/
+static SFLOAT cgmGQuality(SFLOAT input)
+{
+	return 0x005A;
+}
+#endif
