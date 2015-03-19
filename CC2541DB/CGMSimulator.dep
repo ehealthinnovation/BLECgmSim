@@ -2,303 +2,257 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>3600296711</fileChecksum>
+  <fileChecksum>1551853738</fileChecksum>
   <configuration>
     <name>CC2541DK-MINI Keyfob Slave</name>
     <outputs>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\battservice.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmservice.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmservice.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gatt_profile_uuid.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_sleep.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgm.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\devinfoservice.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_types.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_bufmgr.pbi</file>
+      <file>$PROJ_DIR$\..\Profiles\Batt\battservice.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_dma.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\l2cap.h</file>
+      <file>$PROJ_DIR$\..\Profiles\CGM\cgmservice.c</file>
+      <file>$PROJ_DIR$\buildConfig.cfg</file>
       <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gap.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_led.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_sleep.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_bufmgr.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\Cgm_Main.pbi</file>
       <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_adc.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_timer2.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_drivers.pbi</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_data.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gap.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_lcd.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\hci.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_key.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt_uuid.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt_uuid.h</file>
+      <file>$PROJ_DIR$\..\Profiles\DevInfo\devinfoservice.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\config\buildComponents.cfg</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Cgm.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\linkdb.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_timer.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_math.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_flash.pbi</file>
+      <file>$PROJ_DIR$\..\Profiles\CGM\cgmservice.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_ClockBLE.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_key.r51</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\services\saddr\saddr.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\Cgm_Main.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_clock.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_sleep.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_timer2.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_uart.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\hci.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gapbondmgr.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Timers.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_cbtimer.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_PwrMgr.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_sleep.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_cbTimer.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_startup.pbi</file>
+      <file>$PROJ_DIR$\..\Profiles\Batt\battservice.c</file>
+      <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_snv.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Memory.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Timers.pbi</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_sleep.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_PwrMgr.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gapbondmgr.r51</file>
+      <file>$TOOLKIT_DIR$\inc\clib\limits.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_cbtimer.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OnBoard.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_led.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\battservice.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\devinfoservice.r51</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_mcu.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_led.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_math.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\HIDDev\hiddev.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\HIDDev\hiddev.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\bcomdef.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_startup.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\ti_51ew_cc2540b.xcl</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_uart.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_sleep.c</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Timers.r51</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Tasks.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\crc.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\peripheral.r51</file>
+      <file>$PROJ_DIR$\..\Profiles\DevInfo\devinfoservice.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Memory.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_defs.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Timers.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmSimData.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_led.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Memory.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_dma.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gatt_uuid.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_aes.pbi</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_bufmgr.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gatt_profile_uuid.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_flash.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gapgattserver.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_sleep.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gapbondmgr.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\mcu\cc2540\osal_snv.c</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\CGMSimulator.pbd</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_defs.h</file>
+      <file>$PROJ_DIR$\..\Source\cgm.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Cgm.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gap.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_types.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Libraries\CC2541DB\bin\CC2541_BLE_peri.lib</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_board.h</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdlib.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_led.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gap.c</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_uart.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_lcd.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\bcomdef.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\comdef.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Exe\CGMSimulator.d51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_adc.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\npi.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\devinfoservice.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\ioCC2541.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_assert.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Exe\CGMSim.hex</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_snv.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\npi\npi_np\npi.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_board.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_drivers.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\npi\npi_np\npi.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gatt_uuid.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_event.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_key.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_timer.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\List\CGMSimulator.map</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\services\saddr\saddr.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gatt_profile_uuid.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_types.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_lcd.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgm.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gap.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\gatt_uuid.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_key.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\sm.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_startup.c</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_cbtimer.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_mcu.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_data.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_tl.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Libraries\Common\bin\CC254x_BLE_HCI_TL_None.lib</file>
+      <file>$PROJ_DIR$\..\Source\cgm.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_snv.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.h</file>
       <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_timer.c</file>
       <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\att.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gap.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gap.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\npi.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_cbtimer.h</file>
-      <file>$TOOLKIT_DIR$\inc\ioCC2541.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_cbtimer.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_mcu.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\npi\npi_np\npi.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_snv.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_aes.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Exe\CGMSim.hex</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_bufmgr.h</file>
-      <file>$TOOLKIT_DIR$\inc\clib\limits.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt_uuid.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\services\saddr\saddr.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Timers.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_PwrMgr.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_key.r51</file>
-      <file>$PROJ_DIR$\..\Source\OSAL_Cgm.c</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_lcd.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_ClockBLE.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_sleep.r51</file>
-      <file>$PROJ_DIR$\..\Profiles\DevInfo\devinfoservice.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_startup.r51</file>
-      <file>$TOOLKIT_DIR$\lib\clib\cl-pli-blxd-1e16x01.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_assert.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_flash.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.h</file>
-      <file>$PROJ_DIR$\..\Source\cgmsimdata.h</file>
-      <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_adc.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Memory.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gattservapp.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\CGMSimulator.pbd</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\services\saddr\saddr.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gap.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgm.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_lcd.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_timer.r51</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gattservapp.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gapgattserver.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_assert.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_drivers.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_key.pbi</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_timer2.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_cbtimer.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_sleep.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_flash.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Libraries\Common\bin\CC254x_BLE_HCI_TL_None.lib</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\config\buildComponents.cfg</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_bufmgr.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_event.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\hci.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_clock.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_aes.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt_uuid.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gapbondmgr.c</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gap.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\sm.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_adc.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_startup.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_dma.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OnBoard.r51</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Timers.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_defs.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Memory.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_led.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\comdef.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\bcomdef.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_uart.c</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_PwrMgr.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_key.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.c</file>
       <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_drivers.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_clock.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_tl.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\linkdb.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_tl.h</file>
-      <file>$PROJ_DIR$\..\Profiles\Batt\battservice.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_cbtimer.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_flash.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Timers.c</file>
-      <file>$PROJ_DIR$\..\Profiles\Batt\battservice.c</file>
-      <file>$PROJ_DIR$\..\Profiles\CGM\cgmservice.h</file>
-      <file>$PROJ_DIR$\..\Source\Cgm_Main.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_adc.c</file>
-      <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\Cgm_Main.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gapbondmgr.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\l2cap.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_math.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gapbondmgr.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_led.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_ClockBLE.c</file>
-      <file>$PROJ_DIR$\..\Profiles\CGM\cgmservice.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_drivers.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\bcomdef.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_types.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Cgm.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_key.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmSimData.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_lcd.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\npi.pbi</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\att.h</file>
-      <file>$PROJ_DIR$\..\Source\cgmSimData.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_flash.c</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gapbondmgr.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\linkdb.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gatt_profile_uuid.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_flash.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_board_cfg.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_sleep.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_uart.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Memory.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\mcu\cc2540\osal_snv.c</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Timers.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_PwrMgr.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_snv.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\l2cap.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\hci.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_mcu.h</file>
-      <file>$PROJ_DIR$\..\Source\cgm.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_led.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\ti_51ew_cc2540b.xcl</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_data.h</file>
-      <file>$PROJ_DIR$\..\Source\cgm.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_lcd.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_cbtimer.pbi</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_event.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_dma.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\peripheral.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\devinfoservice.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_defs.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_sleep.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_timer.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Exe\CGMSimulator.d51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\List\CGMSimulator.map</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_uart.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OnBoard.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\HIDDev\hiddev.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_math.h</file>
-      <file>$PROJ_DIR$\..\Profiles\DevInfo\devinfoservice.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_led.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_board.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_adc.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gatt_uuid.r51</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_bufmgr.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\sm.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_bufmgr.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\peripheral.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\common\hal_drivers.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\Cgm_Main.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Cgm.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_board_cfg.h</file>
-      <file>$PROJ_DIR$\buildConfig.cfg</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmSimData.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_PwrMgr.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gatt_uuid.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_uart.pbi</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\gatt.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_key.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_snv.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gapgattserver.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_data.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\HIDDev\hiddev.h</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\battservice.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.c</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\comdef.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Libraries\CC2541DB\bin\CC2541_BLE_peri.lib</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_startup.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_ClockBLE.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gapbondmgr.pbi</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\gatt_uuid.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_uart.r51</file>
       <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Tasks.h</file>
       <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Memory.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_board.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_lcd.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_PwrMgr.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_ClockBLE.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_flash.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Timers.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_key.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\peripheral.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_sleep.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\common\hal_drivers.c</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmSimData.pbi</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_adc.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmservice.r51</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gapbondmgr.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_clock.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_adc.r51</file>
+      <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
       <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_timer.pbi</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Timers.r51</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_sleep.c</file>
-      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_Memory.pbi</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_Tasks.h</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_bufmgr.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_PwrMgr.c</file>
       <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_snv.r51</file>
-      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_timer.h</file>
-      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\npi\npi_np\npi.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_adc.h</file>
+      <file>$PROJ_DIR$\..\Source\cgmsimdata.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_lcd.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_flash.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_drivers.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Memory.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\l2cap.h</file>
+      <file>$PROJ_DIR$\..\Source\cgmSimData.c</file>
+      <file>$PROJ_DIR$\..\Source\crc.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\crc.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_board_cfg.h</file>
+      <file>$TOOLKIT_DIR$\lib\clib\cl-pli-blxd-1e16x01.r51</file>
+      <file>$PROJ_DIR$\..\Source\crc.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_sleep.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\osal_cbtimer.pbi</file>
+      <file>$PROJ_DIR$\..\Source\Cgm_Main.c</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_lcd.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_uart.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_bufmgr.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_board_cfg.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_assert.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gattservapp.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\battservice.pbi</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gattservapp.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\osal_bufmgr.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OnBoard.r51</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\comdef.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\att.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_led.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\include\sm.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_aes.r51</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_flash.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgm.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\npi.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_PwrMgr.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\cgmservice.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\controller\include\ll_timer2.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\include\OSAL_PwrMgr.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_tl.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_adc.c</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\hci\hci_event.h</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Include\gapgattserver.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL_ClockBLE.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\gapbondmgr.pbi</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_timer.r51</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\hal_drivers.pbi</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_dma.c</file>
+      <file>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\include\hal_uart.h</file>
+      <file>C:\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\linkdb.h</file>
+      <file>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Obj\OSAL.r51</file>
+      <file>$PROJ_DIR$\..\Source\OSAL_Cgm.c</file>
     </outputs>
     <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_timer.c</name>
+      <name>$PROJ_DIR$\..\Profiles\CGM\cgmservice.c</name>
       <outputs>
         <tool>
           <name>ICC8051</name>
-          <file> 59</file>
+          <file> 165</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 211</file>
+          <file> 209</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>XLINK</name>
-          <file> 166 30 165</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_cbtimer.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 104</file>
+          <file> 21 5 67 198 98 94 35 56 169 152 40 23 149 3 10 17 87 193 91 13 202 27 33</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 157</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 136 32 50 199 7 162 208 35 207 23</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 86 32 50 92 123 87 88 85 215 66</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Source\OSAL_Cgm.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 124</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 184</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 7 136 32 50 199 162 208 35 207 120 46 122 102 73 45 167 209 185 26 24 154 72 23 114 20 179 194 116 13 18 53 126 155</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 123 86 32 50 92 87 88 85 215 98 174 93 100 149 62 140 175 138 150 24 195 158 66 148 79 80 61 133 191 130 60 147 155</file>
+          <file> 106 107 127 78 159 56 169 77 79 223 199 178 49 19 126 195 166 131 135 27 167</file>
         </tool>
       </inputs>
     </file>
@@ -307,113 +261,21 @@
       <outputs>
         <tool>
           <name>ICC8051</name>
-          <file> 6</file>
+          <file> 61</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 161</file>
+          <file> 111</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 136 32 50 208 35 101 18 114 13 77 3 53 172</file>
+          <file> 21 5 67 198 98 94 35 56 169 152 40 23 149 3 10 17 87 193 76</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 93 92 123 87 86 32 50 88 85 134 130 148 191 33 135 60 172</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Memory.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 141</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 214</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 199 7 162 136 32 50 208 35 90 26 24 163 45</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 92 123 87 86 32 50 88 85 91 150 24 139 62</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gap.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 19</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 8</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 20 136 32 50 208 35 179</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 93 92 123 87 79 86 32 50 88 85 80</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_bufmgr.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 178</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 180</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 136 32 50 199 7 162 208 35 90 26 24 163 31</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 86 32 50 92 123 87 88 85 91 150 24 139 216</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 12</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 202</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 111 50 199 7 162 209 185 26 24 136 32 208 35 207 145 74 90 163 120</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 111 50 92 123 87 175 138 150 24 86 32 88 85 215 95 99 91 139 98</file>
+          <file> 106 107 127 78 159 56 169 77 79 223 199 178 49 19 126 195 76</file>
         </tool>
       </inputs>
     </file>
@@ -422,21 +284,298 @@
       <outputs>
         <tool>
           <name>ICC8051</name>
-          <file> 113</file>
+          <file> 55</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 204</file>
+          <file> 218</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 136 32 50 208 35 28 20 179 101 13 18 114 77 73 46 45 53 194 116</file>
+          <file> 21 5 67 198 98 94 35 56 169 152 40 146 13 202 23 10 149 3 17 15 8 113 193 216 91</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 93 92 123 87 86 32 50 88 85 146 79 80 134 191 130 148 33 149 174 62 60 61 116</file>
+          <file> 106 107 127 78 159 56 169 77 79 48 131 135 223 49 199 178 19 38 157 192 195 89 91</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_PwrMgr.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 153</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 208</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 198 98 94 32 140 112 185 35 56 169 152 40 151 54</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107 127 78 205 62 112 53 159 56 169 77 79 73 211</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 124 114 108</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Profiles\Batt\battservice.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 60</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 194</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 67 198 98 94 35 56 169 152 40 172 100 182 140 112 23 149 3 10 17 87 193 65 1</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 107 127 78 159 56 169 77 79 164 117 191 62 112 223 199 178 49 19 126 195 66 1</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_sleep.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 34</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 90</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 98 140 94 112 100 182 185 81 134 35 56 169 198 152 40 151 54 118 113 161 67 210 64</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 98 140 78 112 117 191 62 127 53 63 16 159 56 169 107 77 79 73 211 150 192 43 106 36 25</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_flash.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 175</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 26</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 182 140 94 98 112 139 100 155</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 182 140 78 98 112 139 117 191 204 127</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\mcu\cc2540\osal_snv.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 171</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 115</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 172 98 100 182 140 94 112 155 198 35 56 169 152 40 146 113 125</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 164 127 117 191 62 78 112 204 107 159 56 169 77 79 48 192 30</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\gap.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 97</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 6</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 67 198 98 94 13 35 56 169 152 40 202</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 107 127 78 131 159 56 169 77 79 135</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_lcd.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 188</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 174</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 98 128 100 182 140 94 112 35 56 169 198 152 40 32 185 113</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 98 14 117 191 62 78 127 112 159 56 169 107 77 79 205 53 192</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Exe\CGMSimulator.d51</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 124 114</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 69 31 224 96 28 51 153 72 197 60 129 80 165 61 97 55 120 168 203 83 176 175 29 188 102 34 68 219 70 207 7 41 171 75 99 144 183</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\npi\npi_np\npi.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 207</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 110</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 98 100 182 140 94 112 119 222</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 127 117 191 62 78 112 119 37</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 203</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 85</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 35 56 169 198 98 94 152 40 147 139 100 182 140 112</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 159 56 169 107 127 78 77 79 147 98 139 117 191 62 112</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 197</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 58</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 67 198 98 94 32 140 112 185 35 56 169 152 40 81 100 182 134</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 107 127 78 32 62 112 53 159 56 169 77 79 63 117 191 16</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\gatt_uuid.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 120</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 84</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 198 98 94 35 56 169 152 40 10 67 149 3 17</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107 127 78 159 56 169 77 79 49 106 199 178 19</file>
         </tool>
       </inputs>
     </file>
@@ -445,21 +584,262 @@
       <outputs>
         <tool>
           <name>ICC8051</name>
-          <file> 43</file>
+          <file> 68</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 201</file>
+          <file> 45</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186 209 185 26 162 7 24</file>
+          <file> 21 5 100 182 140 94 98 112</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 175 138 150 87 123 24 7</file>
+          <file> 117 191 62 78 127 112 98</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_cbtimer.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 41</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 186</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 35 56 169 198 98 94 152 40 151 57</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 159 56 169 107 127 78 77 79 73 44</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\cgm.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 129</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 206</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 67 198 98 94 35 56 169 152 40 54 32 140 112 185 172 100 182 81 134 10 149 3 15 8 113 216 193 87 23 12 91 13 202 27 33 76 95 1 173</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 107 127 78 159 56 169 77 79 211 205 62 112 53 164 117 191 63 16 49 199 178 38 157 192 89 195 126 223 18 166 131 135 27 167 76 95 1 173 180</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_timer.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 219</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 170</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_ClockBLE.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 217</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 198 98 94 32 140 112 185 35 56 169 152 40 33</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107 127 78 205 62 112 53 159 56 169 77 79 167</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Timers.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 72</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 52</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 198 98 94 32 140 112 185 35 56 169 152 40 123 100 182</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107 127 78 205 62 112 53 159 56 169 77 79 24 117 191</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_key.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 29</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 122</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 140 94 98 112 118 172 100 182 134 35 56 169 198 152 40</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\common\hal_drivers.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 176</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 220</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 172 98 100 182 140 94 112 147 139 118 134 128 81 185 123 222 35 56 169 198 152 40 54</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 164 127 117 191 62 78 112 50 143 150 16 14 63 53 24 37 159 56 169 107 77 79 211</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Memory.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 51</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 82</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 198 98 94 35 56 169 152 40 32 140 112 185 113</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107 127 78 159 56 169 77 79 205 62 112 53 192</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\cgmSimData.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 80</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 163</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 173</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 173</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\crc.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 181</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 74</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 101 169 180</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\Source\Cgm_Main.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 31</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 9</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 98 134 100 182 140 94 112 123 118 81 35 56 169 198 152 40 151 54 146 32 185</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 127 16 117 191 62 78 112 24 150 63 159 56 169 107 77 79 73 211 48 205 53</file>
         </tool>
       </inputs>
     </file>
@@ -468,21 +848,136 @@
       <outputs>
         <tool>
           <name>ICC8051</name>
-          <file> 206</file>
+          <file> 70</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 190</file>
+          <file> 104</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186 185 26 162 7 24 120 167 209 136 32 50 199 208 35 145</file>
+          <file> 21 5 182 140 94 98 112 118 222 100 35 56 169 198 152 40 54</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 185 26 87 7 24 98 123 140 175 138 86 32 50 92 88 85 95</file>
+          <file> 182 140 78 98 112 150 127 37 117 191 159 56 169 107 77 79 211</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\osal_bufmgr.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 7</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 0</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 35 56 169 198 98 94 152 40 32 140 112 185 196</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 159 56 169 107 127 78 77 79 205 62 112 53 86</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_led.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 102</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 59</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 140 94 98 112 118 81 100 182 35 56 169 198 152 40</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 140 78 98 112 150 127 63 117 191 62 159 56 169 107 77 79</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 224</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 137</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 47 169 198 98 94 100 182 140 112 35 56 152 40 151 54 33 32 185 118</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 47 169 107 127 78 117 191 62 112 159 56 77 79 73 211 167 205 53 150</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 75</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 160</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 67 198 98 94 35 56 169 152 40 213 15 8 113 222 100 182 140 112 141 121 3 13 202 23 149 10 146 12 91</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 106 107 127 78 159 56 169 77 79 142 38 157 192 37 117 191 62 112 11 215 178 131 135 223 199 49 48 12 91</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_adc.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 168</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 109</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 21 5 172 98 100 182 140 94 112</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 164 127 117 191 62 78 112 140 98</file>
         </tool>
       </inputs>
     </file>
@@ -495,525 +990,54 @@
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 159</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 22 209 185 26 162 7 24 167</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 22 175 138 150 87 123 24 7 26 140</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_Timers.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 212</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 144</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 199 7 162 90 26 24 163 136 32 50 208 35 164 209 185</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 92 123 87 91 150 24 139 86 32 50 88 85 219 175 138</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Profiles\Batt\battservice.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 197</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 0</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 136 32 50 208 35 51 209 185 26 24 101 18 114 13 77 3 53 170 103</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 93 92 123 87 86 32 50 88 85 176 175 138 150 24 134 130 148 191 33 135 60 196 103</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Source\Cgm_Main.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 112</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 183</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 7 96 209 185 26 162 24 164 120 89 136 32 50 199 208 35 207 145 28 90 163</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 123 192 175 138 150 87 24 219 98 173 86 32 50 92 88 85 215 95 146 91 139</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_adc.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 14</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 81</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 51 7 209 185 26 162 24</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 176 123 175 138 150 87 24 26 7</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_led.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 9</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 152</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 26 162 7 24 120 89 209 185 136 32 50 199 208 35</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 87 7 24 98 123 173 175 138 150 86 32 50 92 88 85</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_ClockBLE.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 40</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 203</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 199 7 162 90 26 24 163 136 32 50 208 35 74</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 92 123 87 91 150 24 139 86 32 50 88 85 99</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Profiles\CGM\cgmservice.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 1</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
           <file> 2</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 136 32 50 208 35 101 18 114 13 77 3 53 116 20 179 108 74</file>
+          <file> 21 5 139 100 182 140 94 98 112 222</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 93 92 123 87 86 32 50 88 85 134 130 148 191 33 135 60 133 79 80 108 99</file>
+          <file> 139 117 191 62 78 127 112 98 140 37</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\cc2540\OnBoard.c</name>
+      <name>$PROJ_DIR$\..\Source\OSAL_Cgm.c</name>
       <outputs>
         <tool>
           <name>ICC8051</name>
-          <file> 84</file>
+          <file> 96</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 168</file>
+          <file> 22</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 90 26 24 163 136 32 50 208 35 89 209 185 96</file>
+          <file> 21 5 98 35 56 169 198 94 152 40 151 118 8 67 213 15 113 222 100 182 140 112 141 121 57 3 13 202 216 91 10 149 193 12 95</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 93 92 123 87 90 150 24 139 86 32 50 88 85 173 175 138 192</file>
+          <file> 127 159 56 169 107 78 77 79 73 150 157 106 142 38 192 37 117 191 62 112 11 215 44 178 131 135 89 166 49 199 195 18 95</file>
         </tool>
       </inputs>
     </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_key.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 37</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 64</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 26 162 7 24 120 51 209 185 96 136 32 50 199 208 35</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 87 7 24 98 123 176 175 138 150 192 86 32 50 92 88 85</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Source\cgmSimData.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 127</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 187</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 49</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 49</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_flash.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 105</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 68</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 185 26 162 7 24 22 209 137</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 185 26 87 7 24 22 175 138 47 123</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\mcu\cc2540\osal_snv.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 218</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 193</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 51 7 209 185 26 162 24 137 199 136 32 50 208 35 28 45 55</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 176 123 175 138 150 87 24 47 92 86 32 50 88 85 146 62 34</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\Source\cgm.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 57</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 5</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 136 32 50 208 35 145 90 26 24 163 51 209 185 89 96 13 18 114 73 46 45 194 53 3 101 126 116 20 179 108 74 172 155 103 49</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 93 92 123 87 86 32 50 88 85 95 91 150 24 139 176 175 138 173 192 191 130 148 149 174 62 61 60 135 134 147 133 79 80 108 99 172 155 103 49</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_lcd.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 128</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 58</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 7 210 209 185 26 162 24 136 32 50 199 208 35 90 163 45</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 7 39 175 138 150 87 123 24 86 32 50 92 88 85 91 139 62</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\CC2541DK-MINI Keyfob Slave\Exe\CGMSimulator.d51</name>
-      <outputs>
-        <tool>
-          <name>XLINK</name>
-          <file> 166 30</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>XLINK</name>
-          <file> 153 112 12 124 40 141 36 212 84 197 57 127 1 6 19 113 177 14 76 83 63 105 37 128 9 41 43 59 206 21 178 104 218 181 200 69 44</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_aes.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 76</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 29</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 136 32 50 199 7 162 208 35 11 22 209 185 26 24</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 86 32 50 92 123 87 88 85 11 7 22 175 138 150 24</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\common\hal_drivers.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 63</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 16</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 51 7 209 185 26 162 24 11 22 120 96 210 89 163 164 167 136 32 50 199 208 35 145</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 176 123 175 138 150 87 24 143 48 98 192 39 173 139 219 140 86 32 50 92 88 85 95</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\Profiles\Roles\peripheral.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 181</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 160</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 122 199 7 162 136 32 50 208 35 102 73 46 45 167 209 185 26 24 154 72 114 20 179 101 18 13 28 126 116</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 93 92 123 87 86 32 50 88 85 100 149 174 62 140 175 138 150 24 195 158 148 79 80 134 130 191 146 126 116</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\ble\host\gatt_uuid.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 177</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 189</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 199 7 162 136 32 50 208 35 13 122 18 114 77</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 92 123 87 86 32 50 88 85 191 93 130 148 33</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\hal\target\CC2540EB\hal_sleep.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 41</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 10</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 7 26 162 24 209 185 163 89 96 136 32 50 199 208 35 207 145 120 45 4 122 15 171</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 7 26 87 24 175 138 150 123 139 173 192 86 32 50 92 88 85 215 95 98 62 67 93 65 115</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Components\osal\common\OSAL_PwrMgr.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 36</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 188</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 199 7 162 90 26 24 163 136 32 50 208 35 207 145</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 92 123 87 91 150 24 139 86 32 50 88 85 215 95</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\Texas Instruments\BLE-CC254x-1.4.0\Projects\ble\common\npi\npi_np\npi.c</name>
-      <outputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 21</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 129</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICC8051</name>
-          <file> 70 186 7 209 185 26 162 24 27 167</file>
-        </tool>
-        <tool>
-          <name>BICOMP</name>
-          <file> 123 175 138 150 87 24 27 140</file>
-        </tool>
-      </inputs>
-    </file>
+    <forcedrebuild>
+      <name>$PROJ_DIR$\..\..\common\npi\npi_np\npi_uart.c</name>
+      <tool>ICC8051</tool>
+    </forcedrebuild>
     <forcedrebuild>
       <name>$PROJ_DIR$\..\..\common\npi\npi_np\npi_spi.c</name>
       <tool>ICC8051</tool>
     </forcedrebuild>
     <forcedrebuild>
-      <name>$PROJ_DIR$\..\..\common\npi\npi_np\npi_uart.c</name>
-      <tool>ICC8051</tool>
+      <name>[MULTI_TOOL]</name>
+      <tool>XLINK</tool>
     </forcedrebuild>
   </configuration>
 </project>

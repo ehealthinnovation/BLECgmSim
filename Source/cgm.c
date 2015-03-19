@@ -39,6 +39,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "OSAL_Clock.h"
 #include "battservice.h"
 #include "cgmsimdata.h"
+#include "crc.h"
 
 
 /*
@@ -54,6 +55,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define FEATURE_GLUCOSE_HYPOALERT		1	///< The patient high feature
 #define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
 #define FEATURE_GLUCOSE_QUALITY			1	///< The CGM support quality indication
+#define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
 ///@}
 // End of featureactivation 
 
@@ -258,6 +260,10 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 #if (FEATURE_GLUCOSE_RATEALERT==1)
 						| CGM_FEATURE_ALERTS_INC_DEC
 #endif /* FEATURE_GLUCOSE_RATEALERT==1*/
+#if (FEATURE_GLUCOSE_CRC==1)
+						| CGM_FEATURE_E2E_CRC
+#endif /* FEATURE_GLUCOSE_CRC==1*/
+
 						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
@@ -342,7 +348,7 @@ static void cgmResetMeasDB();
 static void cgmMeasSend(void);
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);
 //CGM application level functions
-static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result);
+static void cgmservice_cb(uint8 event, uint8* valueP, uint8 *len, uint8 * result);
 static void cgmSimulationAppInit();
 static void cgm_ProcessOSALMsg( osal_event_hdr_t *pMsg );
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
@@ -384,6 +390,10 @@ static int32 cgmARateTest(SFLOAT currentRate);
 #if (FEATURE_GLUCOSE_QUALITY==1)
 static SFLOAT cgmGQuality(SFLOAT input);
 #endif
+#if (FEATURE_GLUCOSE_CRC==1)
+static  int8 cgmCtlPntMsgFindCRC( cgmCtlPntMsg_t* pMsg);
+static  int8 cgmRACPMsgFindCRC( cgmRACPMsg_t* pMsg);
+#endif /* FEATURE_GLUCOSE_CRC*/
 /*********************************************************************
  * PROFILE CALLBACKS
  */
@@ -500,7 +510,7 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
         cgmSessionStartIndicator=false;
         
 }
@@ -916,10 +926,6 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
                         break;
 #endif /*FEATURE_GLUCOSE_RATEALERT==1*/
 		//Other functions are not implemented
-			roperand[0]=CGM_SPEC_OP_RESP_CODE;
-			roperand[1]=CGM_SPEC_OP_RESP_OP_NOT_SUPPORT;
-			roperand_len=2;
-			break;
 		default:
 			ropcode=CGM_SPEC_OP_RESP_CODE;
 			roperand[0]=opcode;
@@ -1067,6 +1073,14 @@ static void cgmMeasSend(void)
 		*p++ = HI_UINT16(cgmCurrentMeas.quality);
 	}	
 	CGMMeas.len=cgmCurrentMeas.size;
+#if (FEATURE_GLUCOSE_CRC==1)
+	uint16 crc_temp=0;
+	//Calculate the CCITT-CRC
+	crc_temp=ccitt_crc16(CGMMeas.value,CGMMeas.len);
+	//Append the CRC to the message
+	*p++ = LO_UINT16(crc_temp);
+	*p++ = HI_UINT16(crc_temp);
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 	CGM_MeasSend(gapConnHandle, &CGMMeas,  cgmTaskId);
 	//Start timing for the next update cycle.
 	osal_start_timerEx(cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);
@@ -1080,9 +1094,19 @@ static void cgmMeasSend(void)
   @return  none*/
 static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len)
 {
+        
 	cgmCtlPntRsp.value[0]=opcode;
 	cgmCtlPntRsp.len=1+roperand_len;
 	osal_memcpy(cgmCtlPntRsp.value+1,roperand, roperand_len);
+ #if (FEATURE_GLUCOSE_CRC==1)
+	uint16 crc_temp=0;
+	//Calculate the CCITT-CRC
+	crc_temp=ccitt_crc16(CGMMeas.value,CGMMeas.len);
+	//Append the CRC to the message
+	*(cgmCtlPntRsp.value+cgmCtlPntRsp.len) = LO_UINT16(crc_temp);
+	*(cgmCtlPntRsp.value+cgmCtlPntRsp.len+1) = HI_UINT16(crc_temp);
+        cgmCtlPntRsp.len+=2;
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 	CGM_CtlPntIndicate(gapConnHandle, &cgmCtlPntRsp, cgmTaskId);
 }
 
@@ -1093,10 +1117,15 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len
   @param   event - service event. Enumeration can be found in cgmservice.h  
   @param   valueP - data value past from the GATT layer to the Application Layer, or vice versa.
   @param   result - the address to the memory to pass the processing result back to the GATT layer
-  @param   len - the length of the data residing in valueP
+  @param   len - pointer to the length of the data residing in valueP
   @return  none */
-static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
+static void cgmservice_cb(uint8 event, uint8* valueP, uint8 *len, uint8 * result)
 {
+        uint8* initP=valueP; // The pointer for the initial value
+#if (FEATURE_GLUCOSE_CRC==1)
+        uint16 crc_temp=0;
+#endif /* FEATURE_GLUCOSE_CRC==1*/
+  
 	switch (event)
 	{
 		//when CGM measurement characteristic notification is enabled/disabled by the collector APP
@@ -1106,13 +1135,20 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 		//when the CGM feture characteristic is read by the collector APP
 		case CGM_FEATURE_READ_REQUEST:
 			{
+                                
 				*valueP = cgmFeature.cgmFeature & 0xFF;
 				*(++valueP) = (cgmFeature.cgmFeature >> 8) & 0xFF;
 				*(++valueP) = (cgmFeature.cgmFeature >> 16) & 0xFF;
 				*(++valueP) =  cgmFeature.cgmTypeSample;
+#if (FEATURE_GLUCOSE_CRC==0)
+                                *(++valueP) =  0xFF;
 				*(++valueP) =  0xFF;
-				*(++valueP) =  0xFF;
-				break;
+#else
+                                crc_temp = ccitt_crc16 (initP, 4);
+                                *(++valueP) =  LO_UINT16(crc_temp);
+                                *(++valueP) =  HI_UINT16(crc_temp);
+#endif /* FEATURE_GLUCOSE_CRC==0*/
+                                break;
 			}
 		//when the CGM status characteristic is read by the collector APP
 		case CGM_STATUS_READ_REQUEST:
@@ -1123,6 +1159,12 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 				*(++valueP) = BREAK_UINT32(cgmStatus.cgmStatus,0);
 				*(++valueP) = BREAK_UINT32(cgmStatus.cgmStatus,1);
 				*(++valueP) = BREAK_UINT32(cgmStatus.cgmStatus,2);
+#if (FEATURE_GLUCOSE_CRC==1)
+                                crc_temp = ccitt_crc16 (initP, 5);
+                                *(++valueP) =  LO_UINT16(crc_temp);
+                                *(++valueP) =  HI_UINT16(crc_temp);
+                                *len=*len+2;
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 				break;
 			}
 		//when the CGM session start time characteristic is read by the collector APP
@@ -1138,6 +1180,12 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 				*(++valueP) = (cgmStartTime.startTime.seconds) & 0xFF;
 				*(++valueP) = (cgmStartTime.timeZone) & 0xFF;
 				*(++valueP) = (cgmStartTime.dstOffset) & 0xFF;
+#if (FEATURE_GLUCOSE_CRC==1)
+                                crc_temp = ccitt_crc16 (initP, 9);
+                                *(++valueP) =  LO_UINT16(crc_temp);
+                                *(++valueP) =  HI_UINT16(crc_temp);
+                                *len=*len+2;
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 				break;
 			}
 		//when the CGM sensor run time characteristic is read by the collector APP
@@ -1145,13 +1193,33 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 			{
 				*valueP = cgmSessionRunTime & 0xFF;
 				*(++valueP) = (cgmSessionRunTime >> 8) & 0xFF;
+#if (FEATURE_GLUCOSE_CRC==1)
+                                crc_temp = ccitt_crc16 (initP, 2);
+                                *(++valueP) =  LO_UINT16(crc_temp);
+                                *(++valueP) =  HI_UINT16(crc_temp);
+                                *len=*len+2;
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 				break;
 			}
 		//when the CGM start time characteristic is written by the collector APP
 		case CGM_START_TIME_WRITE_REQUEST:
 			{	
 				cgmSessionStartTime_t input;
-				UTCTime input_UTC;	
+				UTCTime input_UTC;
+
+
+#if (FEATURE_GLUCOSE_CRC==1)
+				//Check the presence of CRC
+				if ( (*len)<11)
+                                   {*result = ATT_ERR_MISSING_CRC;
+                                    return;
+                                   }
+				//Check the validity of CRC
+				if ( ccitt_crc16_test(valueP,*len)==0){
+					*result = ATT_ERR_INVALID_CRC;
+					return;
+				}
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 				//Loaded the written value to the local buffer	
 				input.startTime.year=BUILD_UINT16(valueP[0],valueP[1]);
 				input.startTime.month=valueP[2];
@@ -1194,9 +1262,21 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 				if ( msgPtr )
 				{
 					msgPtr->hdr.event = CTL_PNT_MSG;
-					msgPtr->len = len;
-					osal_memcpy(msgPtr->data, valueP, len);
-					osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
+					msgPtr->len = *len;
+					osal_memcpy(msgPtr->data, valueP, *len);
+#if (FEATURE_GLUCOSE_CRC==1)
+                                //Test the presence of CRC
+			        if (cgmCtlPntMsgFindCRC(msgPtr)==0){
+					*result = ATT_ERR_MISSING_CRC;
+					break;
+				}
+                                //Test the validity of the CRC
+				if (ccitt_crc16_test(msgPtr->data,*len)==0){
+					*result = ATT_ERR_INVALID_CRC;
+					break;
+				}
+#endif /* FEATURE_GLUCOSE_CRC==1*/ 
+				osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
 				}
 			}
 			break;
@@ -1209,8 +1289,8 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 len, uint8 * result)
 				if ( msgPtr )
 				{
 					msgPtr->hdr.event = RACP_MSG;
-					msgPtr->len = len;
-					osal_memcpy(msgPtr->data, valueP, len);
+					msgPtr->len = *len;
+					osal_memcpy(msgPtr->data, valueP, *len);
 					osal_msg_send( cgmTaskId, (uint8 *)msgPtr );
 				}
 			}
@@ -1373,6 +1453,9 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 		size++;
 	if (flag & CGM_STATUS_ANNUNC_STATUS_OCT)
 		size++;
+#if (FEATURE_GLUCOSE_CRC==1)
+	size+=2;
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 	pMeas->size=size;  
 	pMeas->flags= (flag);  
 }
@@ -1413,12 +1496,12 @@ static void cgmSimulationAppInit()
         //cgmCaliDBWriteIndx=1;
 	
 	//Introduce 4 records to test the RACP
-	cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
-	cgmAddRecord(&pts_measure);
-	pts_measure.timeoffset=0x0028;
-	cgmAddRecord(&pts_measure);
-	pts_measure.timeoffset=0x0029;
-	cgmAddRecord(&pts_measure);
+	//cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
+	//cgmAddRecord(&pts_measure);
+	//pts_measure.timeoffset=0x0028;
+	//cgmAddRecord(&pts_measure);
+	//pts_measure.timeoffset=0x0029;
+	//cgmAddRecord(&pts_measure);
         
 	
         //----End of PTS Specific Code------------------
@@ -1761,6 +1844,15 @@ static void cgmRACPSendNextMeas(){
 			*p++ = HI_UINT16(currentRecord->quality);
 		}	
 		cgmRACPRspNoti.len=currentRecord->size;
+#if (FEATURE_GLUCOSE_CRC==1)
+		uint16 crc_temp=0;
+		//Calculate the CCITT-CRC
+		crc_temp=ccitt_crc16(cgmRACPRspNoti.value,cgmRACPRspNoti.len);
+		//Append the CRC to the message
+		*p++ = LO_UINT16(crc_temp);
+		*p++ = HI_UINT16(crc_temp);
+		cgmRACPRspNoti.len+=2;	
+#endif /* FEATURE_GLUCOSE_CRC==1*/
 		cgmMeasDBSendIndx++;
 		CGM_MeasSend(gapConnHandle, &cgmRACPRspNoti, cgmTaskId);
 		osal_start_timerEx(cgmTaskId, RACP_IND_SEND_EVT, 1000); //EXTRA: set the timer to be smaller to improve speed
@@ -2311,3 +2403,87 @@ static SFLOAT cgmGQuality(SFLOAT input)
 	return 0x005A;
 }
 #endif
+
+/// @addtogroup crc16grp
+/// @{
+#if (FEATURE_GLUCOSE_CRC==1)
+/**
+ * \brief This function checks the presence of the CRC field in the CGMCP command.
+ * \detail The function checks the presence of CRC by checking the command length corresponding to each of the possible CGMCP operation.
+ * \param [in] pMsg - the pointer to the CGMCP command message
+ * \return The result
+ * <table><th><td>Value</td><td>Meaning</td></th>
+ * 	  <tr><td>0</td><td>The CRC is missing</td></tr>
+ * 	  <tr><td>1</td><td>The CRC is present</td></tr>
+ * </table> */
+static  int8 cgmCtlPntMsgFindCRC( cgmCtlPntMsg_t* pMsg){
+	uint8 opcode = pMsg->data[0];
+	uint8 len=pMsg->len;
+	int8 result=1;
+	switch (opcode){
+		//The cases can be simplified.
+		case CGM_SPEC_OP_SET_INTERVAL: result = (len>=4)? 1:0; 	break;
+		case CGM_SPEC_OP_GET_INTERVAL: result = (len>=3)? 1:0; break;
+		case CGM_SPEC_OP_SET_CAL: result = (len>=13)? 1:0; break;
+		case CGM_SPEC_OP_GET_CAL: result = (len>=5)? 1:0;break;
+		case CGM_SPEC_OP_SET_ALERT_LOW:
+		case CGM_SPEC_OP_SET_ALERT_HIGH: result=(len>=5)?1:0;break;
+		case CGM_SPEC_OP_GET_ALERT_HIGH:
+		case CGM_SPEC_OP_GET_ALERT_LOW: result=(len>=3)?1:0;break;
+		case CGM_SPEC_OP_SET_ALERT_HYPO:
+		case CGM_SPEC_OP_SET_ALERT_HYPER: result=(len>=5)?1:0;break;
+		case CGM_SPEC_OP_GET_ALERT_HYPO:
+		case CGM_SPEC_OP_GET_ALERT_HYPER: result=(len>=3)?1:0;break;
+		case CGM_SPEC_OP_SET_ALERT_RATE_DECREASE:
+		case CGM_SPEC_OP_SET_ALERT_RATE_INCREASE:result=(len>5)?1:0;break;
+		case CGM_SPEC_OP_GET_ALERT_RATE_DECREASE:
+		case CGM_SPEC_OP_GET_ALERT_RATE_INCREASE:result=(len>3)?1:0;break;
+		case CGM_SPEC_OP_STOP_SES:
+		case CGM_SPEC_OP_START_SES:result=(len>3)?1:0;break;
+	}
+	return result;
+}
+
+/**
+ * \brief This function checks the presence of the CRC field in the RACP command.
+ * \detail The function checks the presence of CRC by checking the command length corresponding to each of the possible RACP operation.
+ * \param [in] pMsg - the pointer to the RACP command message
+ * \return The result
+ * <table><th><td>Value</td><td>Meaning</td></th>
+ * 	  <tr><td>0</td><td>The CRC is missing</td></tr>
+ * 	  <tr><td>1</td><td>The CRC is present</td></tr>
+ * </table> */
+static  int8 cgmRACPMsgFindCRC( cgmRACPMsg_t* pMsg){
+	uint8 opcode=pMsg->data[0];
+	uint8 operator=pMsg->data[1];
+	uint8 len=pMsg->len;
+	int8 result=1;
+	switch (opcode){
+		case CTL_PNT_OP_ABORT:result=(len>=4)?1:0;break;
+		case CTL_PNT_OP_REQ:
+		case CTL_PNT_OP_GET_NUM:
+		case CTL_PNT_OP_CLR:
+				      if (operator==CTL_PNT_OPER_ALL || operator==CTL_PNT_OPER_FIRST || operator==CTL_PNT_OPER_LAST)
+				      {
+					      result=(len>=4)?1:0;
+					      break;}
+				      else if (operator==CTL_PNT_OPER_LESS_EQUAL || operator==CTL_PNT_OPER_GREATER_EQUAL)
+				      {
+					      result=(len>=7)?1:0;
+					      break;
+				      }
+				      else //the range case
+				      {
+					      result=(len>=9)?1:0;
+					      break;
+				      }
+		default:
+				      break;
+	}
+	return result;
+}
+#endif /*FEATURE_GLUCOSE_CRC==1*/
+/// @}
+
+
+

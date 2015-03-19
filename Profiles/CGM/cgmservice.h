@@ -57,8 +57,8 @@ extern "C"
 #define	CGM_RACP_IND_ENABLED			16              ///< RACP indication is enabled
 
 // ATT status values
-#define	CGM_ERR_IN_PROGRESS		     	0x80            ///< GATT error, transmission in progress
-#define CGM_ERR_CCC_CONFIG		     	0x81            ///< GATT error, incompatible CCC configuration
+#define	CGM_ERR_IN_PROGRESS		     	0xFE            ///< GATT error, transmission in progress
+#define CGM_ERR_CCC_CONFIG		     	0xFD            ///< GATT error, incompatible CCC configuration
 
 // CGM Service UUID
 #define CGM_SERV_UUID				0x181F	///< GM service
@@ -197,12 +197,12 @@ extern "C"
 // Record Control Access Point 
 //Record Control Point values OP Codes
 //https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.record_access_control_point.xml
-#define CTL_PNT_OP_REQ                  	0x01	///< eport stored record (Operator: Value from Operator Table)
-#define CTL_PNT_OP_CLR                       	0x02	///< elete stored records (Operator: Value from Operator Table)
-#define CTL_PNT_OP_ABORT                     	0x03	///< bort operation (Operator: Null 'value of 0x00 from Operator Table')
-#define CTL_PNT_OP_GET_NUM                   	0x04	///< eport number of stored records (Operator: Value from Operator Table)
-#define CTL_PNT_OP_NUM_RSP                   	0x05	///< umber of stored records response (Operator: Null 'value of 0x00 from Operator Table')
-#define CTL_PNT_OP_REQ_RSP                   	0x06	///< esponse Code (Operator: Null 'value of 0x00 from Operator Table')
+#define CTL_PNT_OP_REQ                  	0x01	///< Report stored record (Operator: Value from Operator Table)
+#define CTL_PNT_OP_CLR                       	0x02	///< Delete stored records (Operator: Value from Operator Table)
+#define CTL_PNT_OP_ABORT                     	0x03	///< Abort operation (Operator: Null 'value of 0x00 from Operator Table')
+#define CTL_PNT_OP_GET_NUM                   	0x04	///< Report number of stored records (Operator: Value from Operator Table)
+#define CTL_PNT_OP_NUM_RSP                   	0x05	///< Number of stored records response (Operator: Null 'value of 0x00 from Operator Table')
+#define CTL_PNT_OP_REQ_RSP                   	0x06	///< Response Code (Operator: Null 'value of 0x00 from Operator Table')
 
 //Record Control Point operator
 #define CTL_PNT_OPER_NULL                   	0x00	///< Null
@@ -283,7 +283,7 @@ extern "C"
  * TYPEDEFS
  */
 // Glucose Service callback function
-typedef void (*CGMServiceCB_t)(uint8 event, uint8* data, uint8 dataLen,uint8 *result);
+typedef void (*CGMServiceCB_t)(uint8 event, uint8* data, uint8 *dataLen,uint8 *result);
 
 /*
  * MACROS

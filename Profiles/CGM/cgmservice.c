@@ -429,19 +429,19 @@ static uint8 CGM_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
       // The rest of the cases deal with CGM service specific characteristic read.
       case CGM_FEATURE_UUID:       
         *pLen = CGM_CHAR_VAL_SIZE_FEATURE;
-         (*CGMServiceCB)(CGM_FEATURE_READ_REQUEST, pValue, *pLen, (uint8 *)&status );
+         (*CGMServiceCB)(CGM_FEATURE_READ_REQUEST, pValue, pLen, (uint8 *)&status );
       break;
      case CGM_STATUS_UUID:
         *pLen = CGM_CHAR_VAL_SIZE_STATUS;
-         (*CGMServiceCB)(CGM_STATUS_READ_REQUEST, pValue, *pLen,(uint8 *)&status);
+         (*CGMServiceCB)(CGM_STATUS_READ_REQUEST, pValue, pLen,(uint8 *)&status);
          break;
       case CGM_SES_START_TIME_UUID:
         *pLen = CGM_CHAR_VAL_SIZE_START_TIME;
-        (*CGMServiceCB)(CGM_START_TIME_READ_REQUEST, pValue, *pLen,(uint8 *)&status);
+        (*CGMServiceCB)(CGM_START_TIME_READ_REQUEST, pValue, pLen,(uint8 *)&status);
       break;
       case CGM_SES_RUN_TIME_UUID:
         *pLen = CGM_CHAR_VAL_SIZE_RUN_TIME;
-        (*CGMServiceCB)(CGM_RUN_TIME_READ_REQUEST, pValue, *pLen,(uint8 *)&status);
+        (*CGMServiceCB)(CGM_RUN_TIME_READ_REQUEST, pValue, pLen,(uint8 *)&status);
       break;
       default:
         // Should never get here! (characteristics 3 and 4 do not have read permissions)
@@ -523,14 +523,14 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
     
   case CGM_SES_START_TIME_UUID:
 	    //Invoke the service callback to perform tasks in response to value written to start time. These tasks can be defined in the application layer in cgm.c 
-       (*CGMServiceCB)(CGM_START_TIME_WRITE_REQUEST, pValue, len, (uint8 *)&status);
+       (*CGMServiceCB)(CGM_START_TIME_WRITE_REQUEST, pValue, &len, (uint8 *)&status);
     break;
     
   case CGM_SPEC_OPS_CTRL_PT_UUID: //if CGM specific control point is written
       if(len >= CGM_CTL_PNT_MIN_SIZE  && len <= CGM_CTL_PNT_MAX_SIZE)
       {
 	//Invoke the service callback to perform tasks in response to value written to OPCP. These tasks can be defined in the application layer in cgm.c 
-        (*CGMServiceCB)(CGM_CTL_PNT_CMD, pValue, len, (uint8 *)&status); //call back to APP2SERV to process the command received.
+        (*CGMServiceCB)(CGM_CTL_PNT_CMD, pValue, &len, (uint8 *)&status); //call back to APP2SERV to process the command received.
       }
       else
       {
@@ -553,10 +553,15 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
 	      {
 		      status = CGM_ERR_CCC_CONFIG;
 	      }
+	      else if ( opcode == CTL_PNT_OP_REQ &&
+			      !( GATTServApp_ReadCharCfg( connHandle, CGMMeasConfig) & GATT_CLIENT_CFG_NOTIFY))
+	      {
+		      status = CGM_ERR_CCC_CONFIG;
+	      }
 	      else
 	      {
 	    		//Invoke the service callback to perform tasks in response to value written to RACP. These tasks can be defined in the application layer in cgm.c 
-	      	      (*CGMServiceCB)(CGM_RACP_CTL_PNT_CMD,pValue,len, (uint8 *) &status);
+	      	      (*CGMServiceCB)(CGM_RACP_CTL_PNT_CMD,pValue,&len, (uint8 *) &status);
 	      }
       }
       else
