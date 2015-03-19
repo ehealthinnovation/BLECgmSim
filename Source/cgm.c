@@ -56,6 +56,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
 #define FEATURE_GLUCOSE_QUALITY			1	///< The CGM support quality indication
 #define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
+#define FEATURE_GLUCOSE_DEVICE_ALERT		1	///< The device alert support
 ///@}
 // End of featureactivation 
 
@@ -142,7 +143,7 @@ typedef struct {
 	uint8         flags;				///<Indicates the presene of optional data fields.  						
 	uint16        concentration;			///<The concentration of glucose eastimate, in the SFLOAT data type.
 	uint16        timeoffset;			///<The timeoffset from the session start time from the record in the unit of minute.
-	uint24        annunication;			///<Annunciation of relevant status of the sensor or the record.
+	uint24        annunciation;			///<Annunciation of relevant status of the sensor or the record.
 	uint16        trend;				///<The rate of increase or decrease, in the SFLOAT data type. It has the unit of mg/dL/min
 	uint16        quality;				///<The quality of the CGM measurement,
 } cgmMeasC_t;
@@ -263,7 +264,9 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 #if (FEATURE_GLUCOSE_CRC==1)
 						| CGM_FEATURE_E2E_CRC
 #endif /* FEATURE_GLUCOSE_CRC==1*/
-
+#if (FEATURE_GLUCOSE_DEVICE_ALERT==1)
+						| CGM_FEATURE_ALERTS_DEVICE_SPEC
+#endif /*(FEATURE_GLUCOSE_DEVICE_ALERT==1)*/
 						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
@@ -925,6 +928,15 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 			roperand_len=2;
                         break;
 #endif /*FEATURE_GLUCOSE_RATEALERT==1*/
+#if (FEATURE_GLUCOSE_DEVICE_ALERT==1)
+		case CGM_SPEC_OP_RESET_ALERT_DEVICE_SPEC:
+			cgmStatus.cgmStatus ^= CGM_STATUS_ANNUNC_DEVICE_SPEC_ALERT;  
+			ropcode=CGM_SPEC_OP_RESP_CODE;
+			roperand[0]=opcode;
+			roperand[1]=CGM_SPEC_OP_RESP_SUCCESS;
+			roperand_len=2;
+			break;
+#endif /*(FEATURE_GLUCOSE_DEVICE_ALERT==1)*/
 		//Other functions are not implemented
 		default:
 			ropcode=CGM_SPEC_OP_RESP_CODE;
@@ -1058,11 +1070,11 @@ static void cgmMeasSend(void)
 	*p++ = HI_UINT16(cgmCurrentMeas.timeoffset);
 	//The following portion is optionally present depending on the flag field of the record
 	if (flags & CGM_STATUS_ANNUNC_STATUS_OCT)
-		*p++ = (cgmCurrentMeas.annunication) & 0xFF;
+		*p++ = (cgmCurrentMeas.annunciation) & 0xFF;
 	if (flags & CGM_STATUS_ANNUNC_WARNING_OCT)
-		*p++ = (cgmCurrentMeas.annunication>>16) & 0xFF;
+		*p++ = (cgmCurrentMeas.annunciation>>16) & 0xFF;
 	if (flags & CGM_STATUS_ANNUNC_CAL_TEMP_OCT)
-		*p++ = (cgmCurrentMeas.annunication>>8)  & 0xFF;
+		*p++ = (cgmCurrentMeas.annunciation>>8)  & 0xFF;
 	if (flags & CGM_TREND_INFO_PRES)
 	{  *p++ = LO_UINT16(cgmCurrentMeas.trend);
 		*p++ = HI_UINT16(cgmCurrentMeas.trend);
@@ -1364,7 +1376,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	uint8		size=6;			//The size field of the glucose measurement characteristic
 	uint16		trend;			//The trend field of the glucose measurement characteristic
 	uint16		quality=0;		//The quality field of the glucose measurement characteristic
-	uint32		annunciation=0;		//The annunciation field of the current glucose measurement characteristic
+	uint32		*annunciation=&(cgmStatus.cgmStatus);		//The annunciation field of the current glucose measurement characteristic
 	int32		currentGlucose_cal=0;	//The signed version of the current glucose value for caluculation of trend
 	int32		previousGlucose_cal=0;	//The signed version of the previous glucose value for calculation of trend 
 	uint16		offset_dif;		//The offset between current and previous record calculating trend 
@@ -1403,25 +1415,25 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 #endif
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
-	annunciation |= cgmCaliTestCalibration(glucoseGen);
+	(*annunciation) |= cgmCaliTestCalibration(glucoseGen);
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
 #if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
 	//If the patient high/low feature is enabled. The newly generated glucose reading will be read to determine if the reading exceeds normal range.
-	annunciation |= cgmPHighTest(glucoseGen);
-	annunciation |= cgmPLowTest(glucoseGen);
+	(*annunciation) |= cgmPHighTest(glucoseGen);
+	(*annunciation) |= cgmPLowTest(glucoseGen);
 #endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
 #if (FEATURE_GLUCOSE_HYPERALERT==1)
-	annunciation |= cgmAHyperTest(glucoseGen);
+	(*annunciation) |= cgmAHyperTest(glucoseGen);
 #endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
-	annunciation |= cgmAHypoTest(glucoseGen);
+	(*annunciation) |= cgmAHypoTest(glucoseGen);
 #endif /*FEATURE_GLUCOSE_HYOALERT==1*/
 #if (FEATURE_GLUCOSE_RATEALERT==1)
-	annunciation |= cgmARateTest(trend);
+	(*annunciation) |= cgmARateTest(trend);
 #endif /*FEATURE_GLUCOSE_RATEALERT==1*/
 
 	//update the annuciation field
-	pMeas->annunication=annunciation;
+	pMeas->annunciation=*annunciation;
 
 	//Prepare the flag
 	flag |= CGM_TREND_INFO_PRES;
@@ -1429,11 +1441,11 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	flag |= CGM_QUALITY_PRES;
 #endif
 	//Update the flag bits corresponding to each annunciation
-	if((annunciation & 0x0000FF)!=0)
+	if((*annunciation & 0x0000FF)!=0)
 		flag|=CGM_STATUS_ANNUNC_STATUS_OCT;
-	if((annunciation & 0x00FF00)!=0)
+	if((*annunciation & 0x00FF00)!=0)
 		flag|=CGM_STATUS_ANNUNC_CAL_TEMP_OCT;
-	if((annunciation & 0xFF0000)!=0)
+	if((*annunciation & 0xFF0000)!=0)
 		flag|=CGM_STATUS_ANNUNC_WARNING_OCT;
 
 	//Update the flag field
@@ -1828,11 +1840,11 @@ static void cgmRACPSendNextMeas(){
 		*p++ = HI_UINT16(currentRecord->timeoffset);
 
 		if (flags & CGM_STATUS_ANNUNC_STATUS_OCT)
-			*p++ = (currentRecord->annunication) & 0xFF;
+			*p++ = (currentRecord->annunciation) & 0xFF;
 		if (flags & CGM_STATUS_ANNUNC_WARNING_OCT)
-			*p++ = (currentRecord->annunication>>16) & 0xFF;
+			*p++ = (currentRecord->annunciation>>16) & 0xFF;
 		if (flags & CGM_STATUS_ANNUNC_CAL_TEMP_OCT)
-			*p++ = (currentRecord->annunication>>8)  & 0xFF;
+			*p++ = (currentRecord->annunciation>>8)  & 0xFF;
 		if (flags & CGM_TREND_INFO_PRES)
 		{  
 			*p++ = LO_UINT16(currentRecord->trend);
