@@ -49,14 +49,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /// \defgroup featureactivation Feature Activation Macros
 ///@{
-#define FEATURE_GLUCOSE_CALIBRATION		1	///< The glucose calibration feature
-#define FEATURE_GLUCOSE_PATIENTHIGHLOW		1	///< The patient high feature
-#define FEATURE_GLUCOSE_HYPERALERT		1	///< The patient high feature
-#define FEATURE_GLUCOSE_HYPOALERT		1	///< The patient high feature
-#define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
-#define FEATURE_GLUCOSE_QUALITY			1	///< The CGM support quality indication
-#define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
-#define FEATURE_GLUCOSE_DEVICE_ALERT		1	///< The device alert support
+#define FEATURE_GLUCOSE_CALIBRATION		0	///< The glucose calibration feature
+#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0	///< The patient high feature
+#define FEATURE_GLUCOSE_HYPERALERT		0	///< The patient high feature
+#define FEATURE_GLUCOSE_HYPOALERT		0	///< The patient high feature
+#define FEATURE_GLUCOSE_RATEALERT		0	///< The rate of increase/decrease alert feature
+#define FEATURE_GLUCOSE_QUALITY			0	///< The CGM support quality indication
+#define FEATURE_GLUCOSE_CRC			0	///< The E2E-CRC support
+#define FEATURE_GLUCOSE_DEVICE_ALERT		0	///< The device alert support
 ///@}
 // End of featureactivation 
 
@@ -280,6 +280,9 @@ static uint16			cgmTimeOffset;				///<The time offset from the session start tim
 static uint16                   cgmSessionRunTime=0x00A8;		///<The run time of the current sensor. Default value is 7 days.
 static bool                     cgmSessionStartIndicator=false;		///<Indicate whether the sesstion has been started
 static bool			cgmStartTimeConfigIndicator=false;	///<Indicate whether the session start time has been configured before with the set start time CGMCP command.
+/// @adtogroup racpgrp
+/// The macros, constants, variables, functions that are related to the RACP.
+/// @{
 //RACP Related Variables
 static cgmMeasC_t *	cgmMeasDB;					///<Pointer to the glucose measurement history database.
 static uint8		cgmMeasDBWriteIndx;				///<Hold the array index of the next place to write record.
@@ -289,6 +292,7 @@ static uint8		cgmMeasDBSearchStart; 				///<The starting index records meeting t
 static uint8		cgmMeasDBSearchEnd;				///<The ending index of records meeting the search criterion.
 static uint16		cgmMeasDBSearchNum;   				///<The resulting record number that matches the criterion.
 static uint8		cgmMeasDBSendIndx;   				///<The index of the next record to be sent. It is used in RACP reporting record function.
+/// @}
 /// \ingroup calibrationgrp
 ///@{
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
@@ -347,6 +351,7 @@ static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas);
 static void cgmProcessRACPMsg( cgmRACPMsg_t * pMsg);
 static void cgmRACPSendNextMeas();
 static void cgmResetMeasDB();
+static uint8 cgmRACPClearRecord(uint8 startindx, uint8 endindx, uint16 count);  
 //CGM measurement related functions
 static void cgmMeasSend(void);
 static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas);
@@ -513,7 +518,7 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
         cgmSessionStartIndicator=false;
         
 }
@@ -1508,12 +1513,14 @@ static void cgmSimulationAppInit()
         //cgmCaliDBWriteIndx=1;
 	
 	//Introduce 4 records to test the RACP
-	//cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
-	//cgmAddRecord(&pts_measure);
-	//pts_measure.timeoffset=0x0028;
-	//cgmAddRecord(&pts_measure);
-	//pts_measure.timeoffset=0x0029;
-	//cgmAddRecord(&pts_measure);
+	cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
+	cgmAddRecord(&pts_measure);
+	pts_measure.timeoffset=0x0028;
+	cgmAddRecord(&pts_measure);
+	pts_measure.timeoffset=0x0029;
+	cgmAddRecord(&pts_measure);
+        pts_measure.timeoffset=0x002A;
+	cgmAddRecord(&pts_measure);
         
 	
         //----End of PTS Specific Code------------------
@@ -1696,6 +1703,7 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 		//Get the history records or their number count.
 		case CTL_PNT_OP_REQ:
 		case CTL_PNT_OP_GET_NUM:
+		case CTL_PNT_OP_CLR: //The case for deleting record.
 			//Parse the input command operand bease on the filter requirement
 			//If the operator is not valid
 			if (operator==0){
@@ -1770,6 +1778,17 @@ static void cgmProcessRACPMsg (cgmRACPMsg_t * pMsg)
 					cgmRACPRsp.len=4;
 					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
 				}
+				//If we need to delete the record, the record delete function is called.
+				else if (opcode==CTL_PNT_OP_CLR)
+				{
+					cgmRACPRsp.value[0]=CTL_PNT_OP_REQ_RSP;
+					cgmRACPRsp.value[1]=0;
+					cgmRACPRsp.value[2]=opcode;
+					cgmRACPRsp.value[3]=cgmRACPClearRecord(cgmMeasDBSearchStart,cgmMeasDBSearchEnd,cgmMeasDBSearchNum);
+					cgmRACPRsp.len=4;
+  					CGM_RACPIndicate(gapConnHandle, &cgmRACPRsp, cgmTaskId);
+				}
+
 			}
 			//If search is not successful, indicate the result.
 			else
@@ -2497,5 +2516,43 @@ static  int8 cgmRACPMsgFindCRC( cgmRACPMsg_t* pMsg){
 #endif /*FEATURE_GLUCOSE_CRC==1*/
 /// @}
 
-
+/// \ingroup racpgrp
+/// @{
+/**
+ * @brief The function to delete a block of entries from the measurement database.
+ * @param [in] startindx -  the starting index of the record entry block
+ * @param [in] endindx - the ending index of the record entry block
+ * @param [in] count - the total number of record in the entry block.
+ * @return The code corresponds to the RACP response code.*/
+static uint8 cgmRACPClearRecord(uint8 startindx, uint8 endindx, uint16 count){
+	// If the block to delete is the entire database. Simply reset the database
+	if (count>=cgmMeasDBCount){
+			cgmResetMeasDB();
+			return CTL_PNT_RSP_SUCCESS;
+	}
+	// If the block to delete ends at the last record
+	uint8 lastrecordindx = (cgmMeasDBOldestIndx+cgmMeasDBCount-1)%CGM_MEAS_DB_SIZE;
+	if (endindx == lastrecordindx){
+		//just need to reset the index
+		cgmMeasDBCount-=count;
+		cgmMeasDBWriteIndx=startindx;
+		return CTL_PNT_RSP_SUCCESS;
+	}
+	// If the block to delete sits inside of a range.
+	uint8 probeindx,newindx;
+	uint16 count_temp;
+	count_temp= (CGM_MEAS_DB_SIZE+lastrecordindx-endindx)%CGM_MEAS_DB_SIZE;	// The number of records to be moved forward
+	probeindx= endindx+1;
+	newindx= startindx;
+	while(count_temp>0){
+		osal_memcpy(cgmMeasDB+newindx,cgmMeasDB+probeindx,sizeof(cgmMeasC_t));
+		newindx = (newindx+1)%CGM_MEAS_DB_SIZE;
+		probeindx = (probeindx+1)%CGM_MEAS_DB_SIZE;
+		count_temp--;
+	}
+	cgmMeasDBWriteIndx=newindx;
+	cgmMeasDBCount-=count;
+	return CTL_PNT_RSP_SUCCESS;
+}
+///@}
 
