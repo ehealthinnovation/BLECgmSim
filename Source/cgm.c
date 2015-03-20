@@ -518,8 +518,8 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
-        cgmSessionStartIndicator=false;
+	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+        cgmSessionStartIndicator=true;
         
 }
 
@@ -1513,14 +1513,14 @@ static void cgmSimulationAppInit()
         //cgmCaliDBWriteIndx=1;
 	
 	//Introduce 4 records to test the RACP
-	cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
-	cgmAddRecord(&pts_measure);
-	pts_measure.timeoffset=0x0028;
-	cgmAddRecord(&pts_measure);
-	pts_measure.timeoffset=0x0029;
-	cgmAddRecord(&pts_measure);
-        pts_measure.timeoffset=0x002A;
-	cgmAddRecord(&pts_measure);
+	//cgmMeasC_t pts_measure={0x08,0x01,0x00C8,0x0027,0xF123};
+	//cgmAddRecord(&pts_measure);
+	//pts_measure.timeoffset=0x0028;
+	//cgmAddRecord(&pts_measure);
+	//pts_measure.timeoffset=0x0029;
+	//cgmAddRecord(&pts_measure);
+        //pts_measure.timeoffset=0x002A;
+	//cgmAddRecord(&pts_measure);
         
 	
         //----End of PTS Specific Code------------------
