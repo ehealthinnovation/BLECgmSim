@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['cgm_5fcalibration_5fclear',['CGM_CALIBRATION_CLEAR',['../cgmservice_8h.html#af5a995e1486f08f4b8ac40a77b1aa01a',1,'cgmservice.h']]],
   ['cgm_5fcalibration_5fnir',['CGM_CALIBRATION_NIR',['../cgmservice_8h.html#aadf1cab7651aeda3ae4dc83431f05807',1,'cgmservice.h']]],
   ['cgm_5fcalibration_5fpending',['CGM_CALIBRATION_PENDING',['../cgmservice_8h.html#a539e92bb9d04ed6dcc02e0d88623d15b',1,'cgmservice.h']]],
   ['cgm_5fcalibration_5freject',['CGM_CALIBRATION_REJECT',['../cgmservice_8h.html#a5728e56afa09948b4d235d15089ae4c2',1,'cgmservice.h']]],

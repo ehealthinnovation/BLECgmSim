@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['recordcontrolpointuuid',['recordControlPointUUID',['../cgmservice_8c.html#a16dc0ab3b32c439504e3ef9bdcaba2e7',1,'cgmservice.c']]]
+  ['quality',['quality',['../structcgmMeasC__t.html#aa0ab9911801795a62bb9195983f28a16',1,'cgmMeasC_t']]]
 ];

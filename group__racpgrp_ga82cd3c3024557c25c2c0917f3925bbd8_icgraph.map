@@ -1,0 +1,6 @@
+<map id="CGM_SetSendState" name="CGM_SetSendState">
+<area shape="rect" id="node3" href="$group__racpgrp.html#ga174761c312677278087f9769b23d206a" title="Record Access Control Point messages processing. " alt="" coords="196,7,353,36"/>
+<area shape="rect" id="node9" href="$cgm_8c.html#a0465481906c1b06b8066a9cdbaebb6ef" title="As part of the RACP operation, this function sends the set of historical measurement data to the coll..." alt="" coords="404,59,577,88"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="409,5,572,35"/>
+<area shape="rect" id="node7" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="628,32,769,61"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Generic Access Profile (GAP)" name="Generic Access Profile (GAP)">
+<area shape="rect" id="node1" href="$group__accessgrp.html" title="Configure discoverability and connectivity of the device. " alt="" coords="216,5,325,35"/>
+<area shape="rect" id="node2" href="$group__securitygrp.html" title="Security related entities. " alt="" coords="212,59,329,88"/>
+</map>

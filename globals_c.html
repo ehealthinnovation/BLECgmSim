@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -40,8 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -81,11 +87,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html#index_a"><span>a</span></a></li>
       <li class="current"><a href="globals_c.html#index_c"><span>c</span></a></li>
       <li><a href="globals_d.html#index_d"><span>d</span></a></li>
+      <li><a href="globals_f.html#index_f"><span>f</span></a></li>
       <li><a href="globals_g.html#index_g"><span>g</span></a></li>
+      <li><a href="globals_h.html#index_h"><span>h</span></a></li>
       <li><a href="globals_i.html#index_i"><span>i</span></a></li>
       <li><a href="globals_m.html#index_m"><span>m</span></a></li>
       <li><a href="globals_n.html#index_n"><span>n</span></a></li>
       <li><a href="globals_o.html#index_o"><span>o</span></a></li>
+      <li><a href="globals_p.html#index_p"><span>p</span></a></li>
       <li><a href="globals_r.html#index_r"><span>r</span></a></li>
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
       <li><a href="globals_t.html#index_t"><span>t</span></a></li>
@@ -93,12 +102,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('globals_c.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Groups</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -111,9 +134,35 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
+<li>CALIBRATION_CONCENTRATION_MAX
+: <a class="el" href="group__calibrationgrp.html#gad8944565f4f691030d39da33358dff8d">cgm.c</a>
+</li>
+<li>CALIBRATION_CONCENTRATION_MIN
+: <a class="el" href="group__calibrationgrp.html#ga84156e1307f300d587c3d6198bd693f6">cgm.c</a>
+</li>
+<li>CALIBRATION_DATABASE_SIZE
+: <a class="el" href="group__calibrationgrp.html#ga32c861cec415ebfc0ab5065b14571408">cgm.c</a>
+</li>
+<li>CALIBRATION_INTERVAL
+: <a class="el" href="group__calibrationgrp.html#ga1319e8959b8f242ad4cf9f6267cf8abc">cgm.c</a>
+</li>
+<li>CALIBRATION_TIME_TOLERANCE
+: <a class="el" href="group__calibrationgrp.html#ga3ff2daca400dd43384c8a0f01c2fe0ae">cgm.c</a>
+</li>
+<li>ccitt_crc16()
+: <a class="el" href="group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5">crc.c</a>
+, <a class="el" href="group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5">crc.h</a>
+</li>
+<li>ccitt_crc16_test()
+: <a class="el" href="group__crc16grp.html#gad34bec376b346456ffa3cbb0d538cc0d">crc.c</a>
+, <a class="el" href="group__crc16grp.html#gad34bec376b346456ffa3cbb0d538cc0d">crc.h</a>
+</li>
 <li>CGM_AddService()
-: <a class="el" href="cgmservice_8c.html#a0771376939d0c4f54b2075cf71b03e93">cgmservice.c</a>
-, <a class="el" href="cgmservice_8h.html#a0771376939d0c4f54b2075cf71b03e93">cgmservice.h</a>
+: <a class="el" href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93">cgmservice.c</a>
+, <a class="el" href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93">cgmservice.h</a>
+</li>
+<li>CGM_CALIBRATION_CLEAR
+: <a class="el" href="cgmservice_8h.html#af5a995e1486f08f4b8ac40a77b1aa01a">cgmservice.h</a>
 </li>
 <li>CGM_CALIBRATION_NIR
 : <a class="el" href="cgmservice_8h.html#aadf1cab7651aeda3ae4dc83431f05807">cgmservice.h</a>
@@ -237,14 +286,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#a07d983841bfcd9bc6513f628151bb4e6">cgmservice.c</a>
 </li>
 <li>CGM_HandleConnStatusCB()
-: <a class="el" href="cgmservice_8c.html#a02ccf56cf34288b8f060e916e32b0b96">cgmservice.c</a>
+: <a class="el" href="group__accessgrp.html#ga02ccf56cf34288b8f060e916e32b0b96">cgmservice.c</a>
 </li>
 <li>cgm_HandleKeys()
-: <a class="el" href="cgm_8c.html#a6f82f30f260bbf813078ff7c1824a20d">cgm.c</a>
+: <a class="el" href="group__appgrp.html#ga6f82f30f260bbf813078ff7c1824a20d">cgm.c</a>
 </li>
 <li>CGM_Init()
-: <a class="el" href="cgm_8c.html#acba44e75a8e99cc3b2b3a4601e38d5c3">cgm.c</a>
-, <a class="el" href="cgm_8h.html#acba44e75a8e99cc3b2b3a4601e38d5c3">cgm.h</a>
+: <a class="el" href="group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3">cgm.c</a>
+, <a class="el" href="group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3">cgm.h</a>
 </li>
 <li>CGM_MEAS_CONFIG_POS
 : <a class="el" href="cgmservice_8c.html#a090875a3de6efa30c1c18fc822b2e177">cgmservice.c</a>
@@ -265,18 +314,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#ac81dcf559f929132e230137add71602e">cgmservice.c</a>
 </li>
 <li>CGM_MeasSend()
-: <a class="el" href="cgmservice_8c.html#a9052db411f0409bcd92f502d76fdd04e">cgmservice.c</a>
-, <a class="el" href="cgmservice_8h.html#a9052db411f0409bcd92f502d76fdd04e">cgmservice.h</a>
+: <a class="el" href="group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e">cgmservice.c</a>
+, <a class="el" href="group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e">cgmservice.h</a>
 </li>
 <li>cgm_PeripheralCBs
 : <a class="el" href="cgm_8c.html#a8b5e9bfc6f8e38cb9374948cf817c39e">cgm.c</a>
 </li>
 <li>CGM_ProcessEvent()
-: <a class="el" href="cgm_8c.html#a4cc841bb1551cb45b719f171fff26092">cgm.c</a>
-, <a class="el" href="cgm_8h.html#a4cc841bb1551cb45b719f171fff26092">cgm.h</a>
+: <a class="el" href="group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092">cgm.c</a>
+, <a class="el" href="group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092">cgm.h</a>
 </li>
 <li>cgm_ProcessOSALMsg()
-: <a class="el" href="cgm_8c.html#ae9e2667a47ab687cf120b7febeae6dd2">cgm.c</a>
+: <a class="el" href="group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2">cgm.c</a>
 </li>
 <li>CGM_QUALITY_PRES
 : <a class="el" href="cgmservice_8h.html#a626b04b3da72e6e76f0543a38ec1f37a">cgmservice.h</a>
@@ -303,15 +352,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#ad6e3cb1d439019fdcfb314eab82cf372">cgmservice.c</a>
 </li>
 <li>CGM_RACPIndicate()
-: <a class="el" href="cgmservice_8c.html#ac7c75c61070035c194830bafdc95d98f">cgmservice.c</a>
-, <a class="el" href="cgmservice_8h.html#ac7c75c61070035c194830bafdc95d98f">cgmservice.h</a>
+: <a class="el" href="group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f">cgmservice.c</a>
+, <a class="el" href="group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f">cgmservice.h</a>
 </li>
 <li>CGM_ReadAttrCB()
-: <a class="el" href="cgmservice_8c.html#a754655758307068eee06a7623e4bdc43">cgmservice.c</a>
+: <a class="el" href="group__gattgrp.html#ga754655758307068eee06a7623e4bdc43">cgmservice.c</a>
 </li>
 <li>CGM_Register()
-: <a class="el" href="cgmservice_8c.html#a1b9e6c9397b03e5aa9f622af47e617cf">cgmservice.c</a>
-, <a class="el" href="cgmservice_8h.html#a1b9e6c9397b03e5aa9f622af47e617cf">cgmservice.h</a>
+: <a class="el" href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf">cgmservice.c</a>
+, <a class="el" href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf">cgmservice.h</a>
 </li>
 <li>CGM_RUN_TIME_READ_REQUEST
 : <a class="el" href="cgmservice_8h.html#a4a5bb1d76c3cb27f673dfbff200f9787">cgmservice.h</a>
@@ -356,8 +405,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#a2927659231f57f3e3f680c2f85385a05">cgmservice.c</a>
 </li>
 <li>CGM_SetSendState()
-: <a class="el" href="cgmservice_8c.html#a82cd3c3024557c25c2c0917f3925bbd8">cgmservice.c</a>
-, <a class="el" href="cgmservice_8h.html#a82cd3c3024557c25c2c0917f3925bbd8">cgmservice.h</a>
+: <a class="el" href="group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8">cgmservice.c</a>
+, <a class="el" href="group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8">cgmservice.h</a>
 </li>
 <li>CGM_SIM_DATA_OFFSET
 : <a class="el" href="cgmSimData_8c.html#ac4e28b70fb54041a4452bc8730bb54d1">cgmSimData.c</a>
@@ -585,31 +634,103 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8h.html#a7e90bd4e5dbb065efb2e246bd4f19525">cgmservice.h</a>
 </li>
 <li>CGM_WriteAttrCB()
-: <a class="el" href="cgmservice_8c.html#aaac5cf232850d4918c42dab3955691df">cgmservice.c</a>
+: <a class="el" href="group__gattgrp.html#gaaac5cf232850d4918c42dab3955691df">cgmservice.c</a>
 </li>
 <li>cgmAddRecord()
-: <a class="el" href="cgm_8c.html#acb4ad98d2b4978dd6bfc7f2d0c380167">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gacb4ad98d2b4978dd6bfc7f2d0c380167">cgm.c</a>
 </li>
 <li>cgmAdvCancelled
-: <a class="el" href="cgm_8c.html#ac1dc08560a5ccac8e4685aa59093f0b3">cgm.c</a>
+: <a class="el" href="group__accessgrp.html#gac1dc08560a5ccac8e4685aa59093f0b3">cgm.c</a>
+</li>
+<li>cgmAHyperProcessInput()
+: <a class="el" href="group__hyperalertgrp.html#ga03bf9ff71cc0fd11b671e6641fea5d2d">cgm.c</a>
+</li>
+<li>cgmAHyperReset()
+: <a class="el" href="group__hyperalertgrp.html#gaf45daf134f219ecc97ec0ae1f2d76929">cgm.c</a>
+</li>
+<li>cgmAHyperTest()
+: <a class="el" href="group__hyperalertgrp.html#ga59032a2c9dcd8e7ae4f9047d3b317d45">cgm.c</a>
+</li>
+<li>cgmAHyperVerifyInput()
+: <a class="el" href="group__hyperalertgrp.html#ga42fca2b30be289ffc5db4321cb91df7c">cgm.c</a>
+</li>
+<li>cgmAHypoProcessInput()
+: <a class="el" href="group__hypoalertgrp.html#ga27a35e9cd7db647478006a2db6354e0e">cgm.c</a>
+</li>
+<li>cgmAHypoReset()
+: <a class="el" href="group__hypoalertgrp.html#ga05c0880d78bc3548e05eecfbb724e6fa">cgm.c</a>
+</li>
+<li>cgmAHypoTest()
+: <a class="el" href="group__hypoalertgrp.html#gaefb9303d8344c07ffaa1f06d5da5874f">cgm.c</a>
+</li>
+<li>cgmAHypoVerifyInput()
+: <a class="el" href="group__hypoalertgrp.html#ga19994691446dbf35a5dba7f285915ca0">cgm.c</a>
+</li>
+<li>cgmARateProcessInput()
+: <a class="el" href="group__ratealertgrp.html#gab857618aa0410ab022cb390f2d7c2571">cgm.c</a>
+</li>
+<li>cgmARateReset()
+: <a class="el" href="group__ratealertgrp.html#ga69ddcd5abb3cce89fbb1b505ffe08c2c">cgm.c</a>
+</li>
+<li>cgmARateTest()
+: <a class="el" href="group__ratealertgrp.html#gac41b4687b53d4f1b8cf1db597d93879b">cgm.c</a>
+</li>
+<li>cgmARateVerifyInput()
+: <a class="el" href="group__ratealertgrp.html#gab934378f37b2b68f536f50773000ff43">cgm.c</a>
 </li>
 <li>CGMAttrTbl
-: <a class="el" href="cgmservice_8c.html#a5b572daeabf82897758c6bdb4404b4c9">cgmservice.c</a>
+: <a class="el" href="group__gattgrp.html#ga5b572daeabf82897758c6bdb4404b4c9">cgmservice.c</a>
 </li>
 <li>cgmBondCB
-: <a class="el" href="cgm_8c.html#a177900700c1119f37831698164ced76a">cgm.c</a>
+: <a class="el" href="group__securitygrp.html#ga177900700c1119f37831698164ced76a">cgm.c</a>
 </li>
 <li>cgmBonded
-: <a class="el" href="cgm_8c.html#ab69ec5800610a84c07d3f65298720453">cgm.c</a>
+: <a class="el" href="group__accessgrp.html#gab69ec5800610a84c07d3f65298720453">cgm.c</a>
 </li>
 <li>cgmBondedAddr
-: <a class="el" href="cgm_8c.html#ada87186257589073ec318c40d4e8aec5">cgm.c</a>
+: <a class="el" href="group__accessgrp.html#gada87186257589073ec318c40d4e8aec5">cgm.c</a>
+</li>
+<li>cgmCaliAddRecord()
+: <a class="el" href="group__calibrationgrp.html#gaa9a047fd5c00f146f8fec275af0e4f5c">cgm.c</a>
+</li>
+<li>cgmCalibration
+: <a class="el" href="group__calibrationgrp.html#ga89b09344fffb654b6b2f991066d48cf1">cgm.c</a>
+</li>
+<li>cgmCaliDB
+: <a class="el" href="group__calibrationgrp.html#ga2043926e8a2d9252f872c7e19c1b0cc1">cgm.c</a>
+</li>
+<li>cgmCaliDBCount
+: <a class="el" href="group__calibrationgrp.html#gaed9696ea02a7686a3860c07eea8b4e65">cgm.c</a>
+</li>
+<li>cgmCaliDBOldestIndx
+: <a class="el" href="group__calibrationgrp.html#ga3f9584860ae5963a7c9908693c9ee4df">cgm.c</a>
+</li>
+<li>cgmCaliDBRecordNum
+: <a class="el" href="group__calibrationgrp.html#ga57a0e51cc7eef0f0f54699b49b19c001">cgm.c</a>
+</li>
+<li>cgmCaliDBSearch()
+: <a class="el" href="group__calibrationgrp.html#ga8af27597f8b33df95d18a6f5e516c39d">cgm.c</a>
+</li>
+<li>cgmCaliDBWriteIndx
+: <a class="el" href="group__calibrationgrp.html#gadedda7a8dbf1586601e2c9c9a8369c5f">cgm.c</a>
+</li>
+<li>cgmCaliProcessCalibration()
+: <a class="el" href="group__calibrationgrp.html#ga8f19512441a655a7ce748e01d5b0499e">cgm.c</a>
+</li>
+<li>cgmCaliTestCalibration()
+: <a class="el" href="group__calibrationgrp.html#ga8a7632600e3c8b37259077835f8677c6">cgm.c</a>
+</li>
+<li>cgmCaliTmpRecord
+: <a class="el" href="group__calibrationgrp.html#gad7c85c9b550d7b546d3bf7b2d2887789">cgm.c</a>
+</li>
+<li>cgmCaliVerifyInput()
+: <a class="el" href="group__calibrationgrp.html#ga3c7d990d6555f472a1f1d2bab553e84a">cgm.c</a>
 </li>
 <li>CGMCBs
-: <a class="el" href="cgmservice_8c.html#adcd41fdbfe15748b395569ab1a4f3d5a">cgmservice.c</a>
+: <a class="el" href="group__gattgrp.html#gadcd41fdbfe15748b395569ab1a4f3d5a">cgmservice.c</a>
 </li>
 <li>cgmCommInterval
-: <a class="el" href="cgm_8c.html#ad453ed779b8de795f34ade951bf28061">cgm.c</a>
+: <a class="el" href="group__glucosemeasgrp.html#gad453ed779b8de795f34ade951bf28061">cgm.c</a>
 </li>
 <li>CGMControlConfig
 : <a class="el" href="cgmservice_8c.html#a338e9c6ab1ec08f00ad76a060b337e13">cgmservice.c</a>
@@ -620,23 +741,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>CGMControlProps
 : <a class="el" href="cgmservice_8c.html#a237f1632901b1a72d8cfca62bf514db1">cgmservice.c</a>
 </li>
+<li>cgmCtlPntMsgFindCRC()
+: <a class="el" href="group__crc16grp.html#ga00794c9f7422078eb769b33c6d5a40ec">cgm.c</a>
+</li>
 <li>cgmCtlPntResponse()
-: <a class="el" href="cgm_8c.html#a7fa5b7e5f57194eae928a1f3e7af3f51">cgm.c</a>
+: <a class="el" href="group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51">cgm.c</a>
 </li>
 <li>cgmCtlPntRsp
-: <a class="el" href="cgm_8c.html#accc6e78f6e8224fd90750a80d9337ef9">cgm.c</a>
+: <a class="el" href="group__cgmcpgrp.html#gaccc6e78f6e8224fd90750a80d9337ef9">cgm.c</a>
 </li>
 <li>cgmCurrentMeas
 : <a class="el" href="cgm_8c.html#a4b774c25e31f51c6938acb819488f6ec">cgm.c</a>
 </li>
 <li>cgmCurrentTime_UTC
-: <a class="el" href="cgm_8c.html#a2b07fa901cb4eb6f5f6959c863b58562">cgm.c</a>
+: <a class="el" href="group__glucosemeasgrp.html#ga2b07fa901cb4eb6f5f6959c863b58562">cgm.c</a>
 </li>
 <li>cgmData
 : <a class="el" href="cgmSimData_8c.html#a1c29e0c2584e42f210e29e83767dc56d">cgmSimData.c</a>
 </li>
+<li>cgmDecreaseThreshold
+: <a class="el" href="group__ratealertgrp.html#gaba564eb7bff4d338e7a74efb48d1480c">cgm.c</a>
+</li>
 <li>cgmFeature
-: <a class="el" href="cgm_8c.html#af019f74880b435218d9a0801dade8604">cgm.c</a>
+: <a class="el" href="group__featuregrp.html#gaf019f74880b435218d9a0801dade8604">cgm.c</a>
 </li>
 <li>CGMFeatureDummy
 : <a class="el" href="cgmservice_8c.html#a98616fecf11549a2d98865cbfd187ce0">cgmservice.c</a>
@@ -648,50 +775,62 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#a23d0e18cf0fa34adfaaac6186a7c8131">cgmservice.c</a>
 </li>
 <li>cgmGapStateCB()
-: <a class="el" href="cgm_8c.html#ac4d2fd85d8b7423c2c2e081370ef84a8">cgm.c</a>
+: <a class="el" href="group__accessgrp.html#gac4d2fd85d8b7423c2c2e081370ef84a8">cgm.c</a>
 </li>
 <li>cgmGetNextData()
 : <a class="el" href="cgmSimData_8c.html#abd8b6f0d34e034c23e41345cd4860c23">cgmSimData.c</a>
 , <a class="el" href="cgmsimdata_8h.html#abd8b6f0d34e034c23e41345cd4860c23">cgmsimdata.h</a>
 </li>
+<li>cgmGQuality()
+: <a class="el" href="group__qualitygrp.html#ga21df09a6e9350ebfcaa8d04c37881fbb">cgm.c</a>
+</li>
+<li>cgmHyperThreshold
+: <a class="el" href="group__hyperalertgrp.html#gadc904ac185fa0d0f9d33753e07613cdf">cgm.c</a>
+</li>
+<li>cgmHypoThreshold
+: <a class="el" href="group__hypoalertgrp.html#gaf81bba76dc9cc2c82c8a72c8fa84b635">cgm.c</a>
+</li>
+<li>cgmIncreaseThreshold
+: <a class="el" href="group__ratealertgrp.html#ga806316bfc1db0365edeef2459a9b61ce">cgm.c</a>
+</li>
 <li>CGMMeas
-: <a class="el" href="cgm_8c.html#a271118ea88c1d9c9a552a9c933d72ee1">cgm.c</a>
+: <a class="el" href="group__glucosemeasgrp.html#ga271118ea88c1d9c9a552a9c933d72ee1">cgm.c</a>
 </li>
 <li>CGMMeasConfig
 : <a class="el" href="cgmservice_8c.html#a1de5c0fde711250cc72aea196e9b384b">cgmservice.c</a>
 </li>
 <li>cgmMeasDB
-: <a class="el" href="cgm_8c.html#ae73cb77e24ec9a2a667c659c04da4b2e">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gae73cb77e24ec9a2a667c659c04da4b2e">cgm.c</a>
 </li>
 <li>cgmMeasDBCount
-: <a class="el" href="cgm_8c.html#a016bde928a3f4cbbdca7534933aec971">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga016bde928a3f4cbbdca7534933aec971">cgm.c</a>
 </li>
 <li>cgmMeasDBOldestIndx
-: <a class="el" href="cgm_8c.html#a51fe6355b4d154bb9dc0a8d94bcee96f">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga51fe6355b4d154bb9dc0a8d94bcee96f">cgm.c</a>
 </li>
 <li>cgmMeasDBSearchEnd
-: <a class="el" href="cgm_8c.html#a92412556c9710a6195d9a67a0e44825c">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga92412556c9710a6195d9a67a0e44825c">cgm.c</a>
 </li>
 <li>cgmMeasDBSearchNum
-: <a class="el" href="cgm_8c.html#a1bc4bf5e2239598ea631a4a6b12eff6c">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga1bc4bf5e2239598ea631a4a6b12eff6c">cgm.c</a>
 </li>
 <li>cgmMeasDBSearchStart
-: <a class="el" href="cgm_8c.html#afd55ea5be947c5a7c06032019f4e40ee">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gafd55ea5be947c5a7c06032019f4e40ee">cgm.c</a>
 </li>
 <li>cgmMeasDBSendIndx
-: <a class="el" href="cgm_8c.html#ad3275ce8f98b595ab734914eddcad62d">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gad3275ce8f98b595ab734914eddcad62d">cgm.c</a>
 </li>
 <li>cgmMeasDBSendInProgress
-: <a class="el" href="cgmservice_8c.html#ae5c9724bd56fcaea8adfdbd4cfef39e8">cgmservice.c</a>
+: <a class="el" href="group__racpgrp.html#gae5c9724bd56fcaea8adfdbd4cfef39e8">cgmservice.c</a>
 </li>
 <li>cgmMeasDBWriteIndx
-: <a class="el" href="cgm_8c.html#a80be5e96b3d47031fa1ab57f79d93538">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga80be5e96b3d47031fa1ab57f79d93538">cgm.c</a>
 </li>
 <li>CGMMeasProps
 : <a class="el" href="cgmservice_8c.html#a963dbe91964e04b1dcb5c99843a756cb">cgmservice.c</a>
 </li>
 <li>cgmMeasSend()
-: <a class="el" href="cgm_8c.html#aac30e5ccb1204d766511c392844ecba1">cgm.c</a>
+: <a class="el" href="group__glucosemeasgrp.html#gaac30e5ccb1204d766511c392844ecba1">cgm.c</a>
 </li>
 <li>CGMMeassurementDummy
 : <a class="el" href="cgmservice_8c.html#ae28753c0e7843537fd2c8726360131f1">cgmservice.c</a>
@@ -700,19 +839,52 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#a87906ddd011a2394a55789b938da3a16">cgmservice.c</a>
 </li>
 <li>cgmNewGlucoseMeas()
-: <a class="el" href="cgm_8c.html#a8370c5150f948904ae5dec44ff71ab16">cgm.c</a>
+: <a class="el" href="group__glucosemeasgrp.html#ga8370c5150f948904ae5dec44ff71ab16">cgm.c</a>
 </li>
 <li>cgmPairStateCB()
-: <a class="el" href="cgm_8c.html#a643679134719ede6e8f5f277076661e9">cgm.c</a>
+: <a class="el" href="group__securitygrp.html#ga643679134719ede6e8f5f277076661e9">cgm.c</a>
 </li>
 <li>cgmPasscodeCB()
-: <a class="el" href="cgm_8c.html#a77520224060d061e23e0fa5b0eabc082">cgm.c</a>
+: <a class="el" href="group__securitygrp.html#ga77520224060d061e23e0fa5b0eabc082">cgm.c</a>
+</li>
+<li>cgmPatientHigh
+: <a class="el" href="group__patienthighlowgrp.html#ga8a3970e981857fcd7f33c8be6a107cf1">cgm.c</a>
+</li>
+<li>cgmPatientLow
+: <a class="el" href="group__patienthighlowgrp.html#ga5647868422993c3860c667971fbaa981">cgm.c</a>
+</li>
+<li>cgmPHighProcessInput()
+: <a class="el" href="group__patienthighlowgrp.html#gac77c5b64fb57f4ff7c3ae95f9062d99a">cgm.c</a>
+</li>
+<li>cgmPHighReset()
+: <a class="el" href="group__patienthighlowgrp.html#ga2c65e7c0e60b0862da014609c4089cfb">cgm.c</a>
+</li>
+<li>cgmPHighTest()
+: <a class="el" href="group__patienthighlowgrp.html#ga8618662d3e54806626242c567619e866">cgm.c</a>
+</li>
+<li>cgmPHighVerifyInput()
+: <a class="el" href="group__patienthighlowgrp.html#ga908bae2be9c9a18352c54fd6ee11c6b3">cgm.c</a>
+</li>
+<li>cgmPLowProcessInput()
+: <a class="el" href="group__patienthighlowgrp.html#ga7e08d98f530dd922f6c9486b168cca4d">cgm.c</a>
+</li>
+<li>cgmPLowReset()
+: <a class="el" href="group__patienthighlowgrp.html#ga8132ef439ae2b12b880929b3ba6a7a3d">cgm.c</a>
+</li>
+<li>cgmPLowTest()
+: <a class="el" href="group__patienthighlowgrp.html#ga89c51e44b64e38ef4b676aa446cea6ea">cgm.c</a>
+</li>
+<li>cgmPLowVerifyInput()
+: <a class="el" href="group__patienthighlowgrp.html#ga0e947b7789563eefd0dd722244cfe2c7">cgm.c</a>
 </li>
 <li>cgmProcessCtlPntMsg()
-: <a class="el" href="cgm_8c.html#abf9bd92004225c06fb287cd38df4917d">cgm.c</a>
+: <a class="el" href="group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d">cgm.c</a>
 </li>
 <li>cgmProcessRACPMsg()
-: <a class="el" href="cgm_8c.html#a174761c312677278087f9769b23d206a">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga174761c312677278087f9769b23d206a">cgm.c</a>
+</li>
+<li>cgmRACPClearRecord()
+: <a class="el" href="group__racpgrp.html#gaa70ab27b136437e7bc15951b06e27250">cgm.c</a>
 </li>
 <li>CGMRacpConfig
 : <a class="el" href="cgmservice_8c.html#a876f2e6a7345b4da5e117539d319dd1f">cgmservice.c</a>
@@ -720,41 +892,47 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>CGMRacpDummy
 : <a class="el" href="cgmservice_8c.html#a7a7c2b80d901cf7b82069f0d610fa895">cgmservice.c</a>
 </li>
+<li>cgmRACPMsgFindCRC()
+: <a class="el" href="group__crc16grp.html#ga2603981b2aed0ecf70e8130ff109af2f">cgm.c</a>
+</li>
 <li>CGMRacpProps
 : <a class="el" href="cgmservice_8c.html#a23288c09fe18f53fd68ecf3c66572453">cgmservice.c</a>
 </li>
 <li>cgmRACPRsp
-: <a class="el" href="cgm_8c.html#ad00a3d9f001c9d4a137883a3e4e08972">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gad00a3d9f001c9d4a137883a3e4e08972">cgm.c</a>
 </li>
 <li>cgmRACPRspNoti
-: <a class="el" href="cgm_8c.html#acb53d82177cb1473fd49a2f8facd9fed">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gacb53d82177cb1473fd49a2f8facd9fed">cgm.c</a>
 </li>
 <li>cgmRACPSendNextMeas()
 : <a class="el" href="cgm_8c.html#a0465481906c1b06b8066a9cdbaebb6ef">cgm.c</a>
 </li>
+<li>cgmResetCaliDB()
+: <a class="el" href="group__calibrationgrp.html#ga55f3cacf30d0753a03754fa9c157878a">cgm.c</a>
+</li>
 <li>cgmResetMeasDB()
-: <a class="el" href="cgm_8c.html#aaabeffca85d49988708f60d453c70729">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#gaaabeffca85d49988708f60d453c70729">cgm.c</a>
 </li>
 <li>cgmSearchMeasDB()
-: <a class="el" href="cgm_8c.html#a23e61e604774464abf1aa26ee15bb6ed">cgm.c</a>
+: <a class="el" href="group__racpgrp.html#ga23e61e604774464abf1aa26ee15bb6ed">cgm.c</a>
 </li>
 <li>CGMService
 : <a class="el" href="cgmservice_8c.html#a8e593d732b0b7c884fc98085df2dc557">cgmservice.c</a>
 </li>
 <li>cgmservice_cb()
-: <a class="el" href="cgm_8c.html#a0ef2d5d9172a596b1c883a485621afb1">cgm.c</a>
+: <a class="el" href="group__gattgrp.html#gad9d36d46d52f7bad5fe9316e881f8335">cgm.c</a>
 </li>
 <li>CGMServiceCB
-: <a class="el" href="cgmservice_8c.html#af03dbf8279dda1067d9201e07fc9e478">cgmservice.c</a>
+: <a class="el" href="group__gattgrp.html#gaf03dbf8279dda1067d9201e07fc9e478">cgmservice.c</a>
 </li>
 <li>CGMServiceCB_t
-: <a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">cgmservice.h</a>
+: <a class="el" href="cgmservice_8h.html#af2a95e5a3e869c17660fd3d7f755ef81">cgmservice.h</a>
 </li>
 <li>CGMServiceUUID
 : <a class="el" href="cgmservice_8c.html#aa0eba4aba5c6bb78c01b8181a7f246d2">cgmservice.c</a>
 </li>
 <li>cgmSessionRunTime
-: <a class="el" href="cgm_8c.html#a9d7a621ecf2246f2444565cd671403e1">cgm.c</a>
+: <a class="el" href="group__runtimegrp.html#ga9d7a621ecf2246f2444565cd671403e1">cgm.c</a>
 </li>
 <li>CGMSessionRunTimeDummy
 : <a class="el" href="cgmservice_8c.html#a4618617f79e9a4e57afc2784ddeb4563">cgmservice.c</a>
@@ -766,7 +944,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#ab46e963a26bab379653133b5a1f568d6">cgmservice.c</a>
 </li>
 <li>cgmSessionStartIndicator
-: <a class="el" href="cgm_8c.html#a6ff483e7a99c9180441dde04f8d9afda">cgm.c</a>
+: <a class="el" href="group__starttimegrp.html#ga6ff483e7a99c9180441dde04f8d9afda">cgm.c</a>
 </li>
 <li>CGMSessionStartTimeDummy
 : <a class="el" href="cgmservice_8c.html#a67a7efaa603874387116074bf69f8aa1">cgmservice.c</a>
@@ -778,26 +956,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgmservice_8c.html#ae7fc44918534f1a92aaf52c833291161">cgmservice.c</a>
 </li>
 <li>cgmSimDataReset()
-: <a class="el" href="cgmsimdata_8h.html#afb238b22b0f57f8cb40be1b2af27c61c">cgmsimdata.h</a>
-, <a class="el" href="cgmSimData_8c.html#afb238b22b0f57f8cb40be1b2af27c61c">cgmSimData.c</a>
+: <a class="el" href="cgmSimData_8c.html#afb238b22b0f57f8cb40be1b2af27c61c">cgmSimData.c</a>
+, <a class="el" href="cgmsimdata_8h.html#afb238b22b0f57f8cb40be1b2af27c61c">cgmsimdata.h</a>
 </li>
 <li>cgmSimulationAppInit()
-: <a class="el" href="cgm_8c.html#aa21434c720a4f0d6721b418ccc568a9b">cgm.c</a>
+: <a class="el" href="group__appgrp.html#gaa21434c720a4f0d6721b418ccc568a9b">cgm.c</a>
 </li>
 <li>CGMSpecificOpsControlPointUUID
 : <a class="el" href="cgmservice_8c.html#a630d824fe083bec2bf2530fafd03f4c1">cgmservice.c</a>
 </li>
 <li>cgmStartTime
-: <a class="el" href="cgm_8c.html#a4fc8137cd59dc58a4022e737f28a80a9">cgm.c</a>
+: <a class="el" href="group__starttimegrp.html#ga4fc8137cd59dc58a4022e737f28a80a9">cgm.c</a>
 </li>
 <li>cgmStartTime_UTC
-: <a class="el" href="cgm_8c.html#a6a2e529e6d4937facc8802d8bcf4a7dc">cgm.c</a>
+: <a class="el" href="group__starttimegrp.html#ga6a2e529e6d4937facc8802d8bcf4a7dc">cgm.c</a>
 </li>
 <li>cgmStartTimeConfigIndicator
-: <a class="el" href="cgm_8c.html#a120160e340bd7713538f379f592b7419">cgm.c</a>
+: <a class="el" href="group__starttimegrp.html#ga120160e340bd7713538f379f592b7419">cgm.c</a>
 </li>
 <li>cgmStatus
-: <a class="el" href="cgm_8c.html#aa8fe0d985084f73c822b29bc210c7514">cgm.c</a>
+: <a class="el" href="group__statusgrp.html#gaa8fe0d985084f73c822b29bc210c7514">cgm.c</a>
 </li>
 <li>CGMStatusDummy
 : <a class="el" href="cgmservice_8c.html#aef05e8d9216414dc4765648360c45878">cgmservice.c</a>
@@ -812,16 +990,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="cgm_8c.html#adc1dd9a2f0842f4b5935628bd9b21089">cgm.c</a>
 </li>
 <li>cgmTimeOffset
-: <a class="el" href="cgm_8c.html#a30f72dceafc033979ea75d12aec2b395">cgm.c</a>
+: <a class="el" href="group__glucosemeasgrp.html#ga30f72dceafc033979ea75d12aec2b395">cgm.c</a>
 </li>
 <li>cgmVerifyDSTOffset()
-: <a class="el" href="cgm_8c.html#adeba38cb321081ba7dce291314afadd4">cgm.c</a>
+: <a class="el" href="group__appgrp.html#gadeba38cb321081ba7dce291314afadd4">cgm.c</a>
 </li>
 <li>cgmVerifyTime()
-: <a class="el" href="cgm_8c.html#af52f0e1f47e1d16c862eaf8321a8d0b3">cgm.c</a>
+: <a class="el" href="group__appgrp.html#gaf52f0e1f47e1d16c862eaf8321a8d0b3">cgm.c</a>
 </li>
 <li>cgmVerifyTimeZone()
-: <a class="el" href="cgm_8c.html#a7d5b52089f9e8c4784a7729996ca1573">cgm.c</a>
+: <a class="el" href="group__appgrp.html#ga7d5b52089f9e8c4784a7729996ca1573">cgm.c</a>
 </li>
 <li>CTL_PNT_FILTER_TIME_OFFSET
 : <a class="el" href="cgmservice_8h.html#a640779c10a7a81f6d11a6bfae3f8b176">cgmservice.h</a>
@@ -897,12 +1075,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

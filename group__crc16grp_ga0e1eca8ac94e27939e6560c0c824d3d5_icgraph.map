@@ -1,0 +1,12 @@
+<map id="ccitt_crc16" name="ccitt_crc16">
+<area shape="rect" id="node3" href="$group__glucosemeasgrp.html#gaac30e5ccb1204d766511c392844ecba1" title="Send the most current record stored in cgmCurrentMeas as a GATT notification to the CGM measurement c..." alt="" coords="357,57,467,87"/>
+<area shape="rect" id="node7" href="$group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51" title="Send a record control point response. " alt="" coords="143,109,284,139"/>
+<area shape="rect" id="node14" href="$group__gattgrp.html#gad9d36d46d52f7bad5fe9316e881f8335" title="The callback function in the application layer when the GATT service layer receives read/write operat..." alt="" coords="357,188,467,217"/>
+<area shape="rect" id="node20" href="$cgm_8c.html#a0465481906c1b06b8066a9cdbaebb6ef" title="As part of the RACP operation, this function sends the set of historical measurement data to the coll..." alt="" coords="540,5,713,35"/>
+<area shape="rect" id="node23" href="$group__crc16grp.html#gad34bec376b346456ffa3cbb0d538cc0d" title="Test the input message against its attached CRC16 code. " alt="" coords="156,213,271,243"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="764,57,905,87"/>
+<area shape="rect" id="node9" href="$group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="333,111,491,140"/>
+<area shape="rect" id="node11" href="$group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="545,109,708,139"/>
+<area shape="rect" id="node16" href="$group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3" title="The routine to iniialize the CGM simulator. " alt="" coords="588,188,665,217"/>
+<area shape="rect" id="node18" href="$OSAL__Cgm_8c.html#a7ad49ef9f96d7753c3e77e0e69231bb2" title="This function invokes the initialization function for each task. " alt="" coords="785,188,884,217"/>
+</map>

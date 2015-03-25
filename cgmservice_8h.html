@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -40,8 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -67,12 +73,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('cgmservice_8h.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Groups</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -81,11 +102,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_0d366a5812a235e2e84bf54d0150899c.html">Profiles</a></li><li class="navelem"><a class="el" href="dir_7111c12c3feacbe157dd0909bf2c1b55.html">CGM</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
@@ -181,10 +197,10 @@ Macros</h2></td></tr>
 <tr class="memitem:a54a184d99c696a8225fe21c2a125f74f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a54a184d99c696a8225fe21c2a125f74f">CGM_RACP_IND_ENABLED</a>&#160;&#160;&#160;16</td></tr>
 <tr class="memdesc:a54a184d99c696a8225fe21c2a125f74f"><td class="mdescLeft">&#160;</td><td class="mdescRight">RACP indication is enabled.  <a href="#a54a184d99c696a8225fe21c2a125f74f">More...</a><br/></td></tr>
 <tr class="separator:a54a184d99c696a8225fe21c2a125f74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abac44e772a7cd6ee4b42711e476abd82"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#abac44e772a7cd6ee4b42711e476abd82">CGM_ERR_IN_PROGRESS</a>&#160;&#160;&#160;0x80</td></tr>
+<tr class="memitem:abac44e772a7cd6ee4b42711e476abd82"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#abac44e772a7cd6ee4b42711e476abd82">CGM_ERR_IN_PROGRESS</a>&#160;&#160;&#160;0xFE</td></tr>
 <tr class="memdesc:abac44e772a7cd6ee4b42711e476abd82"><td class="mdescLeft">&#160;</td><td class="mdescRight">GATT error, transmission in progress.  <a href="#abac44e772a7cd6ee4b42711e476abd82">More...</a><br/></td></tr>
 <tr class="separator:abac44e772a7cd6ee4b42711e476abd82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f97f56844c6aafb37a042e0f2cf5098"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a2f97f56844c6aafb37a042e0f2cf5098">CGM_ERR_CCC_CONFIG</a>&#160;&#160;&#160;0x81</td></tr>
+<tr class="memitem:a2f97f56844c6aafb37a042e0f2cf5098"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a2f97f56844c6aafb37a042e0f2cf5098">CGM_ERR_CCC_CONFIG</a>&#160;&#160;&#160;0xFD</td></tr>
 <tr class="memdesc:a2f97f56844c6aafb37a042e0f2cf5098"><td class="mdescLeft">&#160;</td><td class="mdescRight">GATT error, incompatible CCC configuration.  <a href="#a2f97f56844c6aafb37a042e0f2cf5098">More...</a><br/></td></tr>
 <tr class="separator:a2f97f56844c6aafb37a042e0f2cf5098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c6a7bae073c8f1579a1f64197b7acf9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a2c6a7bae073c8f1579a1f64197b7acf9">CGM_SERV_UUID</a>&#160;&#160;&#160;0x181F</td></tr>
@@ -524,22 +540,22 @@ Macros</h2></td></tr>
 <tr class="memdesc:a18f4226676827492dd6fe45eea40a9e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Daylight Time unknown.  <a href="#a18f4226676827492dd6fe45eea40a9e5">More...</a><br/></td></tr>
 <tr class="separator:a18f4226676827492dd6fe45eea40a9e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f7ce28586818cb73f8b42a2d43c95cf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a6f7ce28586818cb73f8b42a2d43c95cf">CTL_PNT_OP_REQ</a>&#160;&#160;&#160;0x01</td></tr>
-<tr class="memdesc:a6f7ce28586818cb73f8b42a2d43c95cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">eport stored record (Operator: Value from Operator Table)  <a href="#a6f7ce28586818cb73f8b42a2d43c95cf">More...</a><br/></td></tr>
+<tr class="memdesc:a6f7ce28586818cb73f8b42a2d43c95cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report stored record (Operator: Value from Operator Table)  <a href="#a6f7ce28586818cb73f8b42a2d43c95cf">More...</a><br/></td></tr>
 <tr class="separator:a6f7ce28586818cb73f8b42a2d43c95cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a50e32b56bca8e933c01e44853c1f59"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a1a50e32b56bca8e933c01e44853c1f59">CTL_PNT_OP_CLR</a>&#160;&#160;&#160;0x02</td></tr>
-<tr class="memdesc:a1a50e32b56bca8e933c01e44853c1f59"><td class="mdescLeft">&#160;</td><td class="mdescRight">elete stored records (Operator: Value from Operator Table)  <a href="#a1a50e32b56bca8e933c01e44853c1f59">More...</a><br/></td></tr>
+<tr class="memdesc:a1a50e32b56bca8e933c01e44853c1f59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete stored records (Operator: Value from Operator Table)  <a href="#a1a50e32b56bca8e933c01e44853c1f59">More...</a><br/></td></tr>
 <tr class="separator:a1a50e32b56bca8e933c01e44853c1f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69f3a197ce8d45f48de94004890d49ec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a69f3a197ce8d45f48de94004890d49ec">CTL_PNT_OP_ABORT</a>&#160;&#160;&#160;0x03</td></tr>
-<tr class="memdesc:a69f3a197ce8d45f48de94004890d49ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">bort operation (Operator: Null 'value of 0x00 from Operator Table')  <a href="#a69f3a197ce8d45f48de94004890d49ec">More...</a><br/></td></tr>
+<tr class="memdesc:a69f3a197ce8d45f48de94004890d49ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort operation (Operator: Null 'value of 0x00 from Operator Table')  <a href="#a69f3a197ce8d45f48de94004890d49ec">More...</a><br/></td></tr>
 <tr class="separator:a69f3a197ce8d45f48de94004890d49ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabf7ae9e6315d127993d36ce2ff28452"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#aabf7ae9e6315d127993d36ce2ff28452">CTL_PNT_OP_GET_NUM</a>&#160;&#160;&#160;0x04</td></tr>
-<tr class="memdesc:aabf7ae9e6315d127993d36ce2ff28452"><td class="mdescLeft">&#160;</td><td class="mdescRight">eport number of stored records (Operator: Value from Operator Table)  <a href="#aabf7ae9e6315d127993d36ce2ff28452">More...</a><br/></td></tr>
+<tr class="memdesc:aabf7ae9e6315d127993d36ce2ff28452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report number of stored records (Operator: Value from Operator Table)  <a href="#aabf7ae9e6315d127993d36ce2ff28452">More...</a><br/></td></tr>
 <tr class="separator:aabf7ae9e6315d127993d36ce2ff28452"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4115e6bdc7b74afd240d56eb966c5d04"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a4115e6bdc7b74afd240d56eb966c5d04">CTL_PNT_OP_NUM_RSP</a>&#160;&#160;&#160;0x05</td></tr>
-<tr class="memdesc:a4115e6bdc7b74afd240d56eb966c5d04"><td class="mdescLeft">&#160;</td><td class="mdescRight">umber of stored records response (Operator: Null 'value of 0x00 from Operator Table')  <a href="#a4115e6bdc7b74afd240d56eb966c5d04">More...</a><br/></td></tr>
+<tr class="memdesc:a4115e6bdc7b74afd240d56eb966c5d04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of stored records response (Operator: Null 'value of 0x00 from Operator Table')  <a href="#a4115e6bdc7b74afd240d56eb966c5d04">More...</a><br/></td></tr>
 <tr class="separator:a4115e6bdc7b74afd240d56eb966c5d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab917c4bfa7bd7012101e06b4757fb5ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#ab917c4bfa7bd7012101e06b4757fb5ed">CTL_PNT_OP_REQ_RSP</a>&#160;&#160;&#160;0x06</td></tr>
-<tr class="memdesc:ab917c4bfa7bd7012101e06b4757fb5ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">esponse Code (Operator: Null 'value of 0x00 from Operator Table')  <a href="#ab917c4bfa7bd7012101e06b4757fb5ed">More...</a><br/></td></tr>
+<tr class="memdesc:ab917c4bfa7bd7012101e06b4757fb5ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Response Code (Operator: Null 'value of 0x00 from Operator Table')  <a href="#ab917c4bfa7bd7012101e06b4757fb5ed">More...</a><br/></td></tr>
 <tr class="separator:ab917c4bfa7bd7012101e06b4757fb5ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3da546fa0631aa9ae9063e783bcb4518"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a3da546fa0631aa9ae9063e783bcb4518">CTL_PNT_OPER_NULL</a>&#160;&#160;&#160;0x00</td></tr>
 <tr class="memdesc:a3da546fa0631aa9ae9063e783bcb4518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Null.  <a href="#a3da546fa0631aa9ae9063e783bcb4518">More...</a><br/></td></tr>
@@ -700,6 +716,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a539e92bb9d04ed6dcc02e0d88623d15b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a539e92bb9d04ed6dcc02e0d88623d15b">CGM_CALIBRATION_PENDING</a>&#160;&#160;&#160;0x04</td></tr>
 <tr class="memdesc:a539e92bb9d04ed6dcc02e0d88623d15b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibration Process Pending.  <a href="#a539e92bb9d04ed6dcc02e0d88623d15b">More...</a><br/></td></tr>
 <tr class="separator:a539e92bb9d04ed6dcc02e0d88623d15b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a995e1486f08f4b8ac40a77b1aa01a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#af5a995e1486f08f4b8ac40a77b1aa01a">CGM_CALIBRATION_CLEAR</a>&#160;&#160;&#160;0x00</td></tr>
+<tr class="memdesc:af5a995e1486f08f4b8ac40a77b1aa01a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset all bits back to 0.  <a href="#af5a995e1486f08f4b8ac40a77b1aa01a">More...</a><br/></td></tr>
+<tr class="separator:af5a995e1486f08f4b8ac40a77b1aa01a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a620ba402cfd5c0cceafbfbca407e791e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a620ba402cfd5c0cceafbfbca407e791e">UNIT_MASSDENSITY_MG_PER_DL</a>&#160;&#160;&#160;0x27B1</td></tr>
 <tr class="memdesc:a620ba402cfd5c0cceafbfbca407e791e"><td class="mdescLeft">&#160;</td><td class="mdescRight">ass density (milligram per decilitre)  <a href="#a620ba402cfd5c0cceafbfbca407e791e">More...</a><br/></td></tr>
 <tr class="separator:a620ba402cfd5c0cceafbfbca407e791e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -721,32 +740,32 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:acfa1ab7be02696f17542bfdd37554cf1"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a> )(uint8 event, uint8 *data, uint8 dataLen, uint8 *result)</td></tr>
-<tr class="separator:acfa1ab7be02696f17542bfdd37554cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2a95e5a3e869c17660fd3d7f755ef81"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#af2a95e5a3e869c17660fd3d7f755ef81">CGMServiceCB_t</a> )(uint8 event, uint8 *data, uint8 *dataLen, uint8 *result)</td></tr>
+<tr class="separator:af2a95e5a3e869c17660fd3d7f755ef81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0771376939d0c4f54b2075cf71b03e93"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a0771376939d0c4f54b2075cf71b03e93">CGM_AddService</a> (uint32 services)</td></tr>
-<tr class="memdesc:a0771376939d0c4f54b2075cf71b03e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the CGM service by registering GATT attributes with the GATT server.  <a href="#a0771376939d0c4f54b2075cf71b03e93">More...</a><br/></td></tr>
-<tr class="separator:a0771376939d0c4f54b2075cf71b03e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b9e6c9397b03e5aa9f622af47e617cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a1b9e6c9397b03e5aa9f622af47e617cf">CGM_Register</a> (<a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a> pfnServiceCB)</td></tr>
-<tr class="memdesc:a1b9e6c9397b03e5aa9f622af47e617cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function with the CGM Service.  <a href="#a1b9e6c9397b03e5aa9f622af47e617cf">More...</a><br/></td></tr>
-<tr class="separator:a1b9e6c9397b03e5aa9f622af47e617cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9052db411f0409bcd92f502d76fdd04e"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a9052db411f0409bcd92f502d76fdd04e">CGM_MeasSend</a> (uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId)</td></tr>
-<tr class="memdesc:a9052db411f0409bcd92f502d76fdd04e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a CGM measurement via the CGM measurement notification.  <a href="#a9052db411f0409bcd92f502d76fdd04e">More...</a><br/></td></tr>
-<tr class="separator:a9052db411f0409bcd92f502d76fdd04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0771376939d0c4f54b2075cf71b03e93"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93">CGM_AddService</a> (uint32 services)</td></tr>
+<tr class="memdesc:ga0771376939d0c4f54b2075cf71b03e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the CGM service by registering GATT attributes with the GATT server.  <a href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93">More...</a><br/></td></tr>
+<tr class="separator:ga0771376939d0c4f54b2075cf71b03e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1b9e6c9397b03e5aa9f622af47e617cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf">CGM_Register</a> (<a class="el" href="cgmservice_8h.html#af2a95e5a3e869c17660fd3d7f755ef81">CGMServiceCB_t</a> pfnServiceCB)</td></tr>
+<tr class="memdesc:ga1b9e6c9397b03e5aa9f622af47e617cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function with the CGM Service.  <a href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf">More...</a><br/></td></tr>
+<tr class="separator:ga1b9e6c9397b03e5aa9f622af47e617cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9052db411f0409bcd92f502d76fdd04e"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e">CGM_MeasSend</a> (uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId)</td></tr>
+<tr class="memdesc:ga9052db411f0409bcd92f502d76fdd04e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a CGM measurement via the CGM measurement notification.  <a href="group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e">More...</a><br/></td></tr>
+<tr class="separator:ga9052db411f0409bcd92f502d76fdd04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebfc8874360bd525daaeae5ed4272d68"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#aebfc8874360bd525daaeae5ed4272d68">CGM_ContextSend</a> (uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId)</td></tr>
 <tr class="memdesc:aebfc8874360bd525daaeae5ed4272d68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a CGM measurement context.  <a href="#aebfc8874360bd525daaeae5ed4272d68">More...</a><br/></td></tr>
 <tr class="separator:aebfc8874360bd525daaeae5ed4272d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0499582a5412733ce20b318c836483cd"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a0499582a5412733ce20b318c836483cd">CGM_CtlPntIndicate</a> (uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId)</td></tr>
 <tr class="memdesc:a0499582a5412733ce20b318c836483cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an indication containing a CGM measurement.  <a href="#a0499582a5412733ce20b318c836483cd">More...</a><br/></td></tr>
 <tr class="separator:a0499582a5412733ce20b318c836483cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7c75c61070035c194830bafdc95d98f"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#ac7c75c61070035c194830bafdc95d98f">CGM_RACPIndicate</a> (uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId)</td></tr>
-<tr class="memdesc:ac7c75c61070035c194830bafdc95d98f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an indication to the RACP characteristic.  <a href="#ac7c75c61070035c194830bafdc95d98f">More...</a><br/></td></tr>
-<tr class="separator:ac7c75c61070035c194830bafdc95d98f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82cd3c3024557c25c2c0917f3925bbd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8h.html#a82cd3c3024557c25c2c0917f3925bbd8">CGM_SetSendState</a> (bool input)</td></tr>
-<tr class="memdesc:a82cd3c3024557c25c2c0917f3925bbd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the state of the CGM database transmission indicator.  <a href="#a82cd3c3024557c25c2c0917f3925bbd8">More...</a><br/></td></tr>
-<tr class="separator:a82cd3c3024557c25c2c0917f3925bbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac7c75c61070035c194830bafdc95d98f"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f">CGM_RACPIndicate</a> (uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId)</td></tr>
+<tr class="memdesc:gac7c75c61070035c194830bafdc95d98f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an indication to the RACP characteristic.  <a href="group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f">More...</a><br/></td></tr>
+<tr class="separator:gac7c75c61070035c194830bafdc95d98f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga82cd3c3024557c25c2c0917f3925bbd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8">CGM_SetSendState</a> (bool input)</td></tr>
+<tr class="memdesc:ga82cd3c3024557c25c2c0917f3925bbd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the state of the CGM database transmission indicator.  <a href="group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8">More...</a><br/></td></tr>
+<tr class="separator:ga82cd3c3024557c25c2c0917f3925bbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains the CGM service definitions and prototypes. </p>
@@ -756,6 +775,20 @@ Functions</h2></td></tr>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="af5a995e1486f08f4b8ac40a77b1aa01a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CGM_CALIBRATION_CLEAR&#160;&#160;&#160;0x00</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reset all bits back to 0. </p>
+
+</div>
+</div>
 <a class="anchor" id="aadf1cab7651aeda3ae4dc83431f05807"></a>
 <div class="memitem">
 <div class="memproto">
@@ -957,7 +990,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CGM_ERR_CCC_CONFIG&#160;&#160;&#160;0x81</td>
+          <td class="memname">#define CGM_ERR_CCC_CONFIG&#160;&#160;&#160;0xFD</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -971,7 +1004,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define CGM_ERR_IN_PROGRESS&#160;&#160;&#160;0x80</td>
+          <td class="memname">#define CGM_ERR_IN_PROGRESS&#160;&#160;&#160;0xFE</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2572,7 +2605,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>bort operation (Operator: Null 'value of 0x00 from Operator Table') </p>
+<p>Abort operation (Operator: Null 'value of 0x00 from Operator Table') </p>
 
 </div>
 </div>
@@ -2586,7 +2619,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>elete stored records (Operator: Value from Operator Table) </p>
+<p>Delete stored records (Operator: Value from Operator Table) </p>
 
 </div>
 </div>
@@ -2600,7 +2633,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>eport number of stored records (Operator: Value from Operator Table) </p>
+<p>Report number of stored records (Operator: Value from Operator Table) </p>
 
 </div>
 </div>
@@ -2614,7 +2647,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>umber of stored records response (Operator: Null 'value of 0x00 from Operator Table') </p>
+<p>Number of stored records response (Operator: Null 'value of 0x00 from Operator Table') </p>
 
 </div>
 </div>
@@ -2628,7 +2661,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>eport stored record (Operator: Value from Operator Table) </p>
+<p>Report stored record (Operator: Value from Operator Table) </p>
 
 </div>
 </div>
@@ -2642,7 +2675,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>esponse Code (Operator: Null 'value of 0x00 from Operator Table') </p>
+<p>Response Code (Operator: Null 'value of 0x00 from Operator Table') </p>
 
 </div>
 </div>
@@ -3557,12 +3590,12 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="acfa1ab7be02696f17542bfdd37554cf1"></a>
+<a class="anchor" id="af2a95e5a3e869c17660fd3d7f755ef81"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void(* CGMServiceCB_t)(uint8 event, uint8 *data, uint8 dataLen, uint8 *result)</td>
+          <td class="memname">typedef void(* CGMServiceCB_t)(uint8 event, uint8 *data, uint8 *dataLen, uint8 *result)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -3570,31 +3603,6 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a0771376939d0c4f54b2075cf71b03e93"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bStatus_t CGM_AddService </td>
-          <td>(</td>
-          <td class="paramtype">uint32&#160;</td>
-          <td class="paramname"><em>services</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes the CGM service by registering GATT attributes with the GATT server. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">services</td><td>- services to add. This is a bit map and can contain more than one service. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="aebfc8874360bd525daaeae5ed4272d68"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3679,164 +3687,28 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="cgmservice_8h_a0499582a5412733ce20b318c836483cd_icgraph.png" border="0" usemap="#cgmservice_8h_a0499582a5412733ce20b318c836483cd_icgraph" alt=""/></div>
+<map name="cgmservice_8h_a0499582a5412733ce20b318c836483cd_icgraph" id="cgmservice_8h_a0499582a5412733ce20b318c836483cd_icgraph">
+<area shape="rect" id="node3" href="group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51" title="Send a record control point response. " alt="" coords="199,5,340,35"/><area shape="rect" id="node5" href="group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="389,5,547,35"/><area shape="rect" id="node7" href="group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="595,5,757,35"/><area shape="rect" id="node9" href="group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="807,5,948,35"/></map>
 </div>
-</div>
-<a class="anchor" id="a9052db411f0409bcd92f502d76fdd04e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bStatus_t CGM_MeasSend </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">attHandleValueNoti_t *&#160;</td>
-          <td class="paramname"><em>pNoti</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>taskId</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send a CGM measurement via the CGM measurement notification. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection handle </td></tr>
-    <tr><td class="paramname">pNoti</td><td>- pointer to notification structure </td></tr>
-    <tr><td class="paramname">taskId</td><td>- the task id of the CGM application </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ac7c75c61070035c194830bafdc95d98f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bStatus_t CGM_RACPIndicate </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">attHandleValueInd_t *&#160;</td>
-          <td class="paramname"><em>pInd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>taskId</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send an indication to the RACP characteristic. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection handle </td></tr>
-    <tr><td class="paramname">pInd</td><td>- pointer to indication structure </td></tr>
-    <tr><td class="paramname">taskId</td><td>- the task id of the CGM application </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a1b9e6c9397b03e5aa9f622af47e617cf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CGM_Register </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a>&#160;</td>
-          <td class="paramname"><em>pfnServiceCB</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Register a callback function with the CGM Service. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pfnServiceCB</td><td>- Callback function. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a82cd3c3024557c25c2c0917f3925bbd8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool CGM_SetSendState </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>input</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set the state of the CGM database transmission indicator. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>- the state of the transmission <table class="doxtable">
-<tr>
-<td>0</td><td>data transmission is not in progress</td></tr>
-<tr>
-<td>1</td><td>data transmission is in progress</td></tr>
-</table>
-</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>none</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>- </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>none </dd></dl>
+</p>
 
 </div>
 </div>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_0d366a5812a235e2e84bf54d0150899c.html">Profiles</a></li><li class="navelem"><a class="el" href="dir_7111c12c3feacbe157dd0909bf2c1b55.html">CGM</a></li><li class="navelem"><a class="el" href="cgmservice_8h.html">cgmservice.h</a></li>
+    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

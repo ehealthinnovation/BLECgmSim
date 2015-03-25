@@ -1,0 +1,7 @@
+<map id="cgmResetMeasDB" name="cgmResetMeasDB">
+<area shape="rect" id="node3" href="$group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="396,5,553,35"/>
+<area shape="rect" id="node9" href="$group__racpgrp.html#gaa70ab27b136437e7bc15951b06e27250" title="The function to delete a block of entries from the measurement database. " alt="" coords="188,59,345,88"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="603,32,765,61"/>
+<area shape="rect" id="node7" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="815,32,956,61"/>
+<area shape="rect" id="node11" href="$group__racpgrp.html#ga174761c312677278087f9769b23d206a" title="Record Access Control Point messages processing. " alt="" coords="396,59,553,88"/>
+</map>

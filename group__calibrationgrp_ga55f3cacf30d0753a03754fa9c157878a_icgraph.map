@@ -1,0 +1,8 @@
+<map id="cgmResetCaliDB" name="cgmResetCaliDB">
+<area shape="rect" id="node3" href="$group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="179,5,336,35"/>
+<area shape="rect" id="node9" href="$group__appgrp.html#gaa21434c720a4f0d6721b418ccc568a9b" title="Initialize the CGM simulator application. Reset the historical database. " alt="" coords="183,59,332,88"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="384,5,547,35"/>
+<area shape="rect" id="node7" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="596,5,737,35"/>
+<area shape="rect" id="node11" href="$group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3" title="The routine to iniialize the CGM simulator. " alt="" coords="427,59,504,88"/>
+<area shape="rect" id="node13" href="$OSAL__Cgm_8c.html#a7ad49ef9f96d7753c3e77e0e69231bb2" title="This function invokes the initialization function for each task. " alt="" coords="617,59,716,88"/>
+</map>

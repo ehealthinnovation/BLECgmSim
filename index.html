@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -40,8 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -62,12 +68,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('index.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Groups</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -94,7 +114,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li class="level1"><a href="#programming">Procedure for Functional Implementation</a></li>
 <li class="level1"><a href="#revision">Revision History</a></li>
-<li class="level1"><a href="#future">Future Implementations</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="overview"></a>
@@ -113,10 +132,11 @@ Structure of the Firmware</h2>
 Mapping of Functional Blocks to Source Code</div></div>
 <p>The CGM sensor simulator is implemented on a single chip CC254X from Texas Instrument (TI). Coming with the chip is the TI operation system, TI Bluetooth LE software stack, and Bluetooth LE profiles.</p>
 <p>The above diagram shows the one to one mapping of the software source files with the CGM simulator architecture. The file hierarchy on the right will appear in the workplace of the IAR workbench when opening the project file ($PROJECT_DIR/CC254XDB/CGMSimultor.eww).</p>
-<p>Starting from the bottom, <b>HAL</b> (Hardware Abstract Layer) implements the drivers for the peripheral modules on the chip and the circuit board. These files are hardware dependent.</p>
-<p><b>LIB</b> (CC2541-BLE-peri.lib) implements the Bluetooth LE stack. This library is supplied in a closed source form by TI. The functions inside the library can be called by the upper layers through the exposed APIs defined under <b>INCLUDE</b> (exposed APIs).</p>
-<p><b>PROFILES</b> configure those services that the current Bluetooth LE device supports. In the CGM simulator, the profile consists of CGM service (<a class="el" href="cgmservice_8c.html" title="This file contains the CGM sample service for use with the CGM sample application. ">cgmservice.c</a>), Bond Management Service (gapbondmgr.c), Battery Service etc. These files define the characteristics to be included in the service. The implementation of service should be in compliant with the BLE service specifications.</p>
+<p>Starting from the bottom, <b>HAL</b> (Hardware Abstract Layer) implements the drivers for the peripheral modules on the chip and the circuit board. These files are hardware dependent. Here is the <a href="http://e2e.ti.com/cfs-file/__key/CommunityServer-Discussions-Components-Files/155/8117.HAL-Driver-API.pdf">official manual</a> for the HAL API.</p>
+<p><b>LIB</b> (CC2541-BLE-peri.lib) implements the Bluetooth LE stack. This library is supplied in a closed source form by TI. The functions inside the library can be called by the upper layers through the exposed APIs defined under <b>INCLUDE</b> (exposed APIs). An official TI BLE stack API manual is host <a href="http://ideafind.cn/api/BLE_API_Guide_main.htm">here</a>.</p>
+<p><b>PROFILES</b> configure those services that the current Bluetooth LE device supports. In the CGM simulator, the profile consists of CGM service (<a class="el" href="cgmservice_8c.html" title="This file contains the CGM sample service for use with the CGM sample application. ">cgmservice.c</a>), Bond Management Service (gapbondmgr.c), Battery Service etc. These files define the characteristics to be included in the service. The implementation of service should be in compliant with the BLE service specifications. The current CGM simulator software emphasizes the implementation of the CGM profile.</p>
 <p><b>APP</b> (application layer) folder contains implementation of the behavioral logic behind each of those characteristics defined in the profile. They surround the CGM sensor functions, such as sampling the glucose estimate values, setting the session start time, storing glucose measurement records and later retrieving them via record access control point (RACP).</p>
+<p><b>OSAL</b> (OS abstraction layer) is the quasi-realtime operation system that coordinates micro-controller resource among different layers. Additionally, it provides mechanism to pass information among layers asynchronously. An account for the TI OSAL API can be found <a href="http://e2e.ti.com/cfs-file/__key/CommunityServer-Discussions-Components-Files/158/0184.OSAL-API.pdf">here</a>.</p>
 <h2><a class="anchor" id="copyright"></a>
 Copyright Disclaim</h2>
 <p>Please note that the portion of BLE stack source code and library provided by TI is protected by <a class="el" href="tilicense.html">Texas Instruments Incorporated Software License</a> . In brief, modification or redistribution of the TI code is legitimate only when the code is used with a TI chip. For this reason, the TI licensed code is not host in this repository, user needs to download then <a href="http://www.ti.com/tool/ble-stack">here</a> and follow the instructions in <a class="el" href="index.html#installation">Installation Guideline</a> , before the CGMS application can be compiled.</p>
@@ -249,27 +269,47 @@ Procedure for Functional Implementation</h1>
 <p class="endli">Up to this point, the 3-step procedure of adding an application function has been walked through. Other functions can be implemented in a similar manner.  </p>
 </li>
 </ol>
+<p>The above is a simplified version of the development process should help potential developers get up to speed quickly. For a deeper understanding on software development on CC254x, the following document are recomended,</p>
+<ul>
+<li>
+<a href="http://www.ti.com/lit/ug/swru271f/swru271f.pdf">TI BLE Software Developer's Guide</a> </li>
+<li>
+<a href="http://www.ti.com/lit/ug/swru297c/swru297c.pdf">TI BLE Sample Application Guide</a> </li>
+</ul>
 <h1><a class="anchor" id="revision"></a>
 Revision History</h1>
 <ul>
 <li>
+2015-03-24 <ul>
+<li>
+Implemented RACP Delete Function. </li>
+<li>
+Implemented E2E-CRC data integrity check. </li>
+<li>
+Implemented CGMCP alert configuration including: patient defined high/low glucose value alert; rate of increase/decrease alert; hyperglycemia/hypoglycemia alert; device alert reset.  </li>
+<li>
+Implemented CGMCP support for calibration procedure. </li>
+<li>
+Updated documentation: grouping programming entities into <a href="modules.html">modules</a> for easy navigation.  </li>
+<li>
+Updated documentation: adding links to TI official document. </li>
+<li>
+Updated documentation: deleted the future implementation session.  </li>
+</ul>
+</li>
+<li>
 2015-02-20 Initial compilation of the CGM Sim library </li>
 </ul>
-<h1><a class="anchor" id="future"></a>
-Future Implementations</h1>
-<ol>
-<li>
-Floating Point Operation Library </li>
-<li>
-Set Calibration Value </li>
-</ol>
 </div></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

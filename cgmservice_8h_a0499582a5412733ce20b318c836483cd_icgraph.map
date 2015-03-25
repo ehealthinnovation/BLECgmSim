@@ -1,0 +1,6 @@
+<map id="CGM_CtlPntIndicate" name="CGM_CtlPntIndicate">
+<area shape="rect" id="node3" href="$group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51" title="Send a record control point response. " alt="" coords="199,5,340,35"/>
+<area shape="rect" id="node5" href="$group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="389,5,547,35"/>
+<area shape="rect" id="node7" href="$group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="595,5,757,35"/>
+<area shape="rect" id="node9" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="807,5,948,35"/>
+</map>

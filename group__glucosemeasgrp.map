@@ -1,0 +1,4 @@
+<map id="Glucose Measurement Characteristic" name="Glucose Measurement Characteristic">
+<area shape="rect" id="node1" href="$group__gattgrp.html" title="This group contains modules related to generic attribute profile layer. " alt="" coords="7,5,167,51"/>
+<area shape="rect" id="node3" href="$group__qualitygrp.html" title="This is a group of constants, variables, functions related to the glucose measurement quality estimat..." alt="" coords="420,5,591,51"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="cgm_HandleKeys" name="cgm_HandleKeys">
+<area shape="rect" id="node3" href="$group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="179,5,341,35"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="391,5,532,35"/>
+</map>

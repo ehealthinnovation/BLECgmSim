@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quality',['quality',['../structcgmMeasC__t.html#aa0ab9911801795a62bb9195983f28a16',1,'cgmMeasC_t']]]
+  ['nextcalibrationtime',['nextCalibrationTime',['../structcgmCalibrationDataRecord__t.html#a4a6d210a7637800258272c36ad3f8385',1,'cgmCalibrationDataRecord_t']]]
 ];

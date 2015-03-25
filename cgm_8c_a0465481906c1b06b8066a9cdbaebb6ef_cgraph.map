@@ -1,0 +1,6 @@
+<map id="cgmRACPSendNextMeas" name="cgmRACPSendNextMeas">
+<area shape="rect" id="node3" href="$group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5" title="CRC&#45;CCITT calculation using the tabular form. " alt="" coords="259,5,344,35"/>
+<area shape="rect" id="node5" href="$group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e" title="Send a CGM measurement via the CGM measurement notification. " alt="" coords="240,59,363,88"/>
+<area shape="rect" id="node7" href="$group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f" title="Send an indication to the RACP characteristic. " alt="" coords="229,112,373,141"/>
+<area shape="rect" id="node9" href="$group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8" title="Set the state of the CGM database transmission indicator. " alt="" coords="231,165,372,195"/>
+</map>

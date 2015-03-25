@@ -1,0 +1,5 @@
+<map id="cgmVerifyTimeZone" name="cgmVerifyTimeZone">
+<area shape="rect" id="node3" href="$group__gattgrp.html#gad9d36d46d52f7bad5fe9316e881f8335" title="The callback function in the application layer when the GATT service layer receives read/write operat..." alt="" coords="193,5,303,35"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3" title="The routine to iniialize the CGM simulator. " alt="" coords="353,5,431,35"/>
+<area shape="rect" id="node7" href="$OSAL__Cgm_8c.html#a7ad49ef9f96d7753c3e77e0e69231bb2" title="This function invokes the initialization function for each task. " alt="" coords="481,5,580,35"/>
+</map>

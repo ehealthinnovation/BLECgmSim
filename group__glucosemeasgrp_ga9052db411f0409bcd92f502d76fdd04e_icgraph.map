@@ -1,0 +1,5 @@
+<map id="CGM_MeasSend" name="CGM_MeasSend">
+<area shape="rect" id="node3" href="$group__glucosemeasgrp.html#gaac30e5ccb1204d766511c392844ecba1" title="Send the most current record stored in cgmCurrentMeas as a GATT notification to the CGM measurement c..." alt="" coords="209,5,319,35"/>
+<area shape="rect" id="node7" href="$cgm_8c.html#a0465481906c1b06b8066a9cdbaebb6ef" title="As part of the RACP operation, this function sends the set of historical measurement data to the coll..." alt="" coords="177,59,351,88"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="401,32,543,61"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="cgmProcessRACPMsg" name="cgmProcessRACPMsg">
+<area shape="rect" id="node3" href="$group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f" title="Send an indication to the RACP characteristic. " alt="" coords="221,5,365,35"/>
+<area shape="rect" id="node5" href="$group__racpgrp.html#ga23e61e604774464abf1aa26ee15bb6ed" title="This function implements the search function for the gluocose measurement. " alt="" coords="224,59,363,88"/>
+<area shape="rect" id="node7" href="$group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8" title="Set the state of the CGM database transmission indicator. " alt="" coords="223,112,364,141"/>
+<area shape="rect" id="node9" href="$group__racpgrp.html#gaa70ab27b136437e7bc15951b06e27250" title="The function to delete a block of entries from the measurement database. " alt="" coords="215,165,372,195"/>
+<area shape="rect" id="node11" href="$group__racpgrp.html#gaaabeffca85d49988708f60d453c70729" title="Reset the cgm measurement history database. " alt="" coords="421,165,555,195"/>
+</map>

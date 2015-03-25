@@ -1,0 +1,5 @@
+<map id="cgmPLowReset" name="cgmPLowReset">
+<area shape="rect" id="node3" href="$group__appgrp.html#gaa21434c720a4f0d6721b418ccc568a9b" title="Initialize the CGM simulator application. Reset the historical database. " alt="" coords="168,5,317,35"/>
+<area shape="rect" id="node5" href="$group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3" title="The routine to iniialize the CGM simulator. " alt="" coords="367,5,444,35"/>
+<area shape="rect" id="node7" href="$OSAL__Cgm_8c.html#a7ad49ef9f96d7753c3e77e0e69231bb2" title="This function invokes the initialization function for each task. " alt="" coords="495,5,593,35"/>
+</map>

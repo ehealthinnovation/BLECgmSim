@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -40,8 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -67,12 +73,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('cgmservice_8c.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Groups</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -81,11 +102,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_0d366a5812a235e2e84bf54d0150899c.html">Profiles</a></li><li class="navelem"><a class="el" href="dir_7111c12c3feacbe157dd0909bf2c1b55.html">CGM</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
@@ -146,38 +162,37 @@ Macros</h2></td></tr>
 <tr class="memdesc:a7cc71697c05d0d19ba59f7239bf94a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The position of the value of the CGM Specific Operation Control Point (OPCP) charateristic in the attribute array.  <a href="#a7cc71697c05d0d19ba59f7239bf94a8b">More...</a><br/></td></tr>
 <tr class="separator:a7cc71697c05d0d19ba59f7239bf94a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27f7da31bda22bb80451cb8de8e66d49"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a27f7da31bda22bb80451cb8de8e66d49">CGM_CGM_OPCP_CONFIG_POS</a>&#160;&#160;&#160;17</td></tr>
-<tr class="memdesc:a27f7da31bda22bb80451cb8de8e66d49"><td class="mdescLeft">&#160;</td><td class="mdescRight">The position of the Client Configuration of the CGM Specific Operation Control Point OPCP) charateristic in the attribute array.  <a href="#a27f7da31bda22bb80451cb8de8e66d49">More...</a><br/></td></tr>
 <tr class="separator:a27f7da31bda22bb80451cb8de8e66d49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a754655758307068eee06a7623e4bdc43"><td class="memItemLeft" align="right" valign="top">static uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a754655758307068eee06a7623e4bdc43">CGM_ReadAttrCB</a> (uint16 connHandle, gattAttribute_t *pAttr, uint8 *pValue, uint8 *pLen, uint16 offset, uint8 maxLen)</td></tr>
-<tr class="memdesc:a754655758307068eee06a7623e4bdc43"><td class="mdescLeft">&#160;</td><td class="mdescRight">The callback function when an attribute is being read by a collector.  <a href="#a754655758307068eee06a7623e4bdc43">More...</a><br/></td></tr>
-<tr class="separator:a754655758307068eee06a7623e4bdc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaac5cf232850d4918c42dab3955691df"><td class="memItemLeft" align="right" valign="top">static bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#aaac5cf232850d4918c42dab3955691df">CGM_WriteAttrCB</a> (uint16 connHandle, gattAttribute_t *pAttr, uint8 *pValue, uint8 len, uint16 offset)</td></tr>
-<tr class="memdesc:aaac5cf232850d4918c42dab3955691df"><td class="mdescLeft">&#160;</td><td class="mdescRight">The CGM service layer callback function when an attribute is being written to by the collector.  <a href="#aaac5cf232850d4918c42dab3955691df">More...</a><br/></td></tr>
-<tr class="separator:aaac5cf232850d4918c42dab3955691df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02ccf56cf34288b8f060e916e32b0b96"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a02ccf56cf34288b8f060e916e32b0b96">CGM_HandleConnStatusCB</a> (uint16 connHandle, uint8 changeType)</td></tr>
-<tr class="memdesc:a02ccf56cf34288b8f060e916e32b0b96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple Profile link status change handler function.  <a href="#a02ccf56cf34288b8f060e916e32b0b96">More...</a><br/></td></tr>
-<tr class="separator:a02ccf56cf34288b8f060e916e32b0b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7c75c61070035c194830bafdc95d98f"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#ac7c75c61070035c194830bafdc95d98f">CGM_RACPIndicate</a> (uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId)</td></tr>
-<tr class="memdesc:ac7c75c61070035c194830bafdc95d98f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an indication to the RACP characteristic.  <a href="#ac7c75c61070035c194830bafdc95d98f">More...</a><br/></td></tr>
-<tr class="separator:ac7c75c61070035c194830bafdc95d98f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0771376939d0c4f54b2075cf71b03e93"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a0771376939d0c4f54b2075cf71b03e93">CGM_AddService</a> (uint32 services)</td></tr>
-<tr class="memdesc:a0771376939d0c4f54b2075cf71b03e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the CGM service by registering GATT attributes with the GATT server.  <a href="#a0771376939d0c4f54b2075cf71b03e93">More...</a><br/></td></tr>
-<tr class="separator:a0771376939d0c4f54b2075cf71b03e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b9e6c9397b03e5aa9f622af47e617cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a1b9e6c9397b03e5aa9f622af47e617cf">CGM_Register</a> (<a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a> pfnServiceCB)</td></tr>
-<tr class="memdesc:a1b9e6c9397b03e5aa9f622af47e617cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function with the CGM Service.  <a href="#a1b9e6c9397b03e5aa9f622af47e617cf">More...</a><br/></td></tr>
-<tr class="separator:a1b9e6c9397b03e5aa9f622af47e617cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9052db411f0409bcd92f502d76fdd04e"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a9052db411f0409bcd92f502d76fdd04e">CGM_MeasSend</a> (uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId)</td></tr>
-<tr class="memdesc:a9052db411f0409bcd92f502d76fdd04e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a CGM measurement via the CGM measurement notification.  <a href="#a9052db411f0409bcd92f502d76fdd04e">More...</a><br/></td></tr>
-<tr class="separator:a9052db411f0409bcd92f502d76fdd04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga754655758307068eee06a7623e4bdc43"><td class="memItemLeft" align="right" valign="top">static uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#ga754655758307068eee06a7623e4bdc43">CGM_ReadAttrCB</a> (uint16 connHandle, gattAttribute_t *pAttr, uint8 *pValue, uint8 *pLen, uint16 offset, uint8 maxLen)</td></tr>
+<tr class="memdesc:ga754655758307068eee06a7623e4bdc43"><td class="mdescLeft">&#160;</td><td class="mdescRight">The callback function when an attribute is being read by a collector.  <a href="group__gattgrp.html#ga754655758307068eee06a7623e4bdc43">More...</a><br/></td></tr>
+<tr class="separator:ga754655758307068eee06a7623e4bdc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaac5cf232850d4918c42dab3955691df"><td class="memItemLeft" align="right" valign="top">static bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#gaaac5cf232850d4918c42dab3955691df">CGM_WriteAttrCB</a> (uint16 connHandle, gattAttribute_t *pAttr, uint8 *pValue, uint8 len, uint16 offset)</td></tr>
+<tr class="memdesc:gaaac5cf232850d4918c42dab3955691df"><td class="mdescLeft">&#160;</td><td class="mdescRight">The CGM service layer callback function when an attribute is being written to by the collector.  <a href="group__gattgrp.html#gaaac5cf232850d4918c42dab3955691df">More...</a><br/></td></tr>
+<tr class="separator:gaaac5cf232850d4918c42dab3955691df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga02ccf56cf34288b8f060e916e32b0b96"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__accessgrp.html#ga02ccf56cf34288b8f060e916e32b0b96">CGM_HandleConnStatusCB</a> (uint16 connHandle, uint8 changeType)</td></tr>
+<tr class="memdesc:ga02ccf56cf34288b8f060e916e32b0b96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple Profile link status change handler function.  <a href="group__accessgrp.html#ga02ccf56cf34288b8f060e916e32b0b96">More...</a><br/></td></tr>
+<tr class="separator:ga02ccf56cf34288b8f060e916e32b0b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac7c75c61070035c194830bafdc95d98f"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f">CGM_RACPIndicate</a> (uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId)</td></tr>
+<tr class="memdesc:gac7c75c61070035c194830bafdc95d98f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an indication to the RACP characteristic.  <a href="group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f">More...</a><br/></td></tr>
+<tr class="separator:gac7c75c61070035c194830bafdc95d98f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0771376939d0c4f54b2075cf71b03e93"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93">CGM_AddService</a> (uint32 services)</td></tr>
+<tr class="memdesc:ga0771376939d0c4f54b2075cf71b03e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the CGM service by registering GATT attributes with the GATT server.  <a href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93">More...</a><br/></td></tr>
+<tr class="separator:ga0771376939d0c4f54b2075cf71b03e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1b9e6c9397b03e5aa9f622af47e617cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf">CGM_Register</a> (<a class="el" href="cgmservice_8h.html#af2a95e5a3e869c17660fd3d7f755ef81">CGMServiceCB_t</a> pfnServiceCB)</td></tr>
+<tr class="memdesc:ga1b9e6c9397b03e5aa9f622af47e617cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function with the CGM Service.  <a href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf">More...</a><br/></td></tr>
+<tr class="separator:ga1b9e6c9397b03e5aa9f622af47e617cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9052db411f0409bcd92f502d76fdd04e"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e">CGM_MeasSend</a> (uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId)</td></tr>
+<tr class="memdesc:ga9052db411f0409bcd92f502d76fdd04e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a CGM measurement via the CGM measurement notification.  <a href="group__glucosemeasgrp.html#ga9052db411f0409bcd92f502d76fdd04e">More...</a><br/></td></tr>
+<tr class="separator:ga9052db411f0409bcd92f502d76fdd04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0499582a5412733ce20b318c836483cd"><td class="memItemLeft" align="right" valign="top">bStatus_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a0499582a5412733ce20b318c836483cd">CGM_CtlPntIndicate</a> (uint16 connHandle, attHandleValueInd_t *pInd, uint8 taskId)</td></tr>
 <tr class="memdesc:a0499582a5412733ce20b318c836483cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an indication containing a CGM measurement.  <a href="#a0499582a5412733ce20b318c836483cd">More...</a><br/></td></tr>
 <tr class="separator:a0499582a5412733ce20b318c836483cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82cd3c3024557c25c2c0917f3925bbd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a82cd3c3024557c25c2c0917f3925bbd8">CGM_SetSendState</a> (bool input)</td></tr>
-<tr class="memdesc:a82cd3c3024557c25c2c0917f3925bbd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the state of the CGM database transmission indicator.  <a href="#a82cd3c3024557c25c2c0917f3925bbd8">More...</a><br/></td></tr>
-<tr class="separator:a82cd3c3024557c25c2c0917f3925bbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga82cd3c3024557c25c2c0917f3925bbd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8">CGM_SetSendState</a> (bool input)</td></tr>
+<tr class="memdesc:ga82cd3c3024557c25c2c0917f3925bbd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the state of the CGM database transmission indicator.  <a href="group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8">More...</a><br/></td></tr>
+<tr class="separator:ga82cd3c3024557c25c2c0917f3925bbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -203,14 +218,13 @@ Variables</h2></td></tr>
 <tr class="memdesc:a16dc0ab3b32c439504e3ef9bdcaba2e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record Control Point stored as a constant.  <a href="#a16dc0ab3b32c439504e3ef9bdcaba2e7">More...</a><br/></td></tr>
 <tr class="separator:a16dc0ab3b32c439504e3ef9bdcaba2e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a630d824fe083bec2bf2530fafd03f4c1"><td class="memItemLeft" align="right" valign="top">CONST uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a630d824fe083bec2bf2530fafd03f4c1">CGMSpecificOpsControlPointUUID</a> [ATT_BT_UUID_SIZE] = {LO_UINT16(<a class="el" href="cgmservice_8h.html#a85f0d0dd85548ba0e5dc40804f9daaf1">CGM_SPEC_OPS_CTRL_PT_UUID</a>), HI_UINT16(<a class="el" href="cgmservice_8h.html#a85f0d0dd85548ba0e5dc40804f9daaf1">CGM_SPEC_OPS_CTRL_PT_UUID</a>)}</td></tr>
-<tr class="memdesc:a630d824fe083bec2bf2530fafd03f4c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">CGM Specific Ops Control Point stored as a constant.  <a href="#a630d824fe083bec2bf2530fafd03f4c1">More...</a><br/></td></tr>
 <tr class="separator:a630d824fe083bec2bf2530fafd03f4c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af03dbf8279dda1067d9201e07fc9e478"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#af03dbf8279dda1067d9201e07fc9e478">CGMServiceCB</a></td></tr>
-<tr class="memdesc:af03dbf8279dda1067d9201e07fc9e478"><td class="mdescLeft">&#160;</td><td class="mdescRight">The variable to register the CGM service callback function.  <a href="#af03dbf8279dda1067d9201e07fc9e478">More...</a><br/></td></tr>
-<tr class="separator:af03dbf8279dda1067d9201e07fc9e478"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5c9724bd56fcaea8adfdbd4cfef39e8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#ae5c9724bd56fcaea8adfdbd4cfef39e8">cgmMeasDBSendInProgress</a></td></tr>
-<tr class="memdesc:ae5c9724bd56fcaea8adfdbd4cfef39e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">An variable to indicate whether the RACP transmission is in progress.  <a href="#ae5c9724bd56fcaea8adfdbd4cfef39e8">More...</a><br/></td></tr>
-<tr class="separator:ae5c9724bd56fcaea8adfdbd4cfef39e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf03dbf8279dda1067d9201e07fc9e478"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="cgmservice_8h.html#af2a95e5a3e869c17660fd3d7f755ef81">CGMServiceCB_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#gaf03dbf8279dda1067d9201e07fc9e478">CGMServiceCB</a></td></tr>
+<tr class="memdesc:gaf03dbf8279dda1067d9201e07fc9e478"><td class="mdescLeft">&#160;</td><td class="mdescRight">The variable to register the CGM service callback function.  <a href="group__gattgrp.html#gaf03dbf8279dda1067d9201e07fc9e478">More...</a><br/></td></tr>
+<tr class="separator:gaf03dbf8279dda1067d9201e07fc9e478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae5c9724bd56fcaea8adfdbd4cfef39e8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__racpgrp.html#gae5c9724bd56fcaea8adfdbd4cfef39e8">cgmMeasDBSendInProgress</a></td></tr>
+<tr class="memdesc:gae5c9724bd56fcaea8adfdbd4cfef39e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">An variable to indicate whether the RACP transmission is in progress.  <a href="group__racpgrp.html#gae5c9724bd56fcaea8adfdbd4cfef39e8">More...</a><br/></td></tr>
+<tr class="separator:gae5c9724bd56fcaea8adfdbd4cfef39e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e593d732b0b7c884fc98085df2dc557"><td class="memItemLeft" align="right" valign="top">static CONST gattAttrType_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a8e593d732b0b7c884fc98085df2dc557">CGMService</a> = {ATT_BT_UUID_SIZE, <a class="el" href="cgmservice_8c.html#aa0eba4aba5c6bb78c01b8181a7f246d2">CGMServiceUUID</a> }</td></tr>
 <tr class="memdesc:a8e593d732b0b7c884fc98085df2dc557"><td class="mdescLeft">&#160;</td><td class="mdescRight">CGM GATT service declaration data structure.  <a href="#a8e593d732b0b7c884fc98085df2dc557">More...</a><br/></td></tr>
 <tr class="separator:a8e593d732b0b7c884fc98085df2dc557"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,12 +279,10 @@ Variables</h2></td></tr>
 <tr class="memitem:a66f6da5a52e7ad4cee940a51b813af23"><td class="memItemLeft" align="right" valign="top">static uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a66f6da5a52e7ad4cee940a51b813af23">CGMControlDummy</a> =0</td></tr>
 <tr class="memdesc:a66f6da5a52e7ad4cee940a51b813af23"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a dummy variable to register the CGM OPCP characteristic to the ATT server. The actual variable for receiving the CGM measurement is defined in <a class="el" href="cgm_8c.html" title="This file contains the CGM sensor simulator application for use with the CC2540 Bluetooth Low Energy ...">cgm.c</a>.  <a href="#a66f6da5a52e7ad4cee940a51b813af23">More...</a><br/></td></tr>
 <tr class="separator:a66f6da5a52e7ad4cee940a51b813af23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b572daeabf82897758c6bdb4404b4c9"><td class="memItemLeft" align="right" valign="top">static gattAttribute_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#a5b572daeabf82897758c6bdb4404b4c9">CGMAttrTbl</a> []</td></tr>
-<tr class="memdesc:a5b572daeabf82897758c6bdb4404b4c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This variable is used to define the attributes of the CGM service.  <a href="#a5b572daeabf82897758c6bdb4404b4c9">More...</a><br/></td></tr>
-<tr class="separator:a5b572daeabf82897758c6bdb4404b4c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcd41fdbfe15748b395569ab1a4f3d5a"><td class="memItemLeft" align="right" valign="top">CONST gattServiceCBs_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cgmservice_8c.html#adcd41fdbfe15748b395569ab1a4f3d5a">CGMCBs</a></td></tr>
-<tr class="memdesc:adcd41fdbfe15748b395569ab1a4f3d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Service Callbacks.  <a href="#adcd41fdbfe15748b395569ab1a4f3d5a">More...</a><br/></td></tr>
-<tr class="separator:adcd41fdbfe15748b395569ab1a4f3d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5b572daeabf82897758c6bdb4404b4c9"><td class="memItemLeft" align="right" valign="top">static gattAttribute_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#ga5b572daeabf82897758c6bdb4404b4c9">CGMAttrTbl</a> []</td></tr>
+<tr class="separator:ga5b572daeabf82897758c6bdb4404b4c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadcd41fdbfe15748b395569ab1a4f3d5a"><td class="memItemLeft" align="right" valign="top">CONST gattServiceCBs_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gattgrp.html#gadcd41fdbfe15748b395569ab1a4f3d5a">CGMCBs</a></td></tr>
+<tr class="separator:gadcd41fdbfe15748b395569ab1a4f3d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains the CGM sample service for use with the CGM sample application. </p>
@@ -289,8 +301,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>The position of the Client Configuration of the CGM Specific Operation Control Point OPCP) charateristic in the attribute array. </p>
+<p>The position of the Client Configuration of the CGM Specific Operation Control Point OPCP) charateristic in the attribute array </p>
 
 </div>
 </div>
@@ -421,31 +432,6 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a0771376939d0c4f54b2075cf71b03e93"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bStatus_t CGM_AddService </td>
-          <td>(</td>
-          <td class="paramtype">uint32&#160;</td>
-          <td class="paramname"><em>services</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes the CGM service by registering GATT attributes with the GATT server. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">services</td><td>- services to add. This is a bit map and can contain more than one service. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a0499582a5412733ce20b318c836483cd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -487,370 +473,18 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
 
+<p><div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="cgmservice_8c_a0499582a5412733ce20b318c836483cd_icgraph.png" border="0" usemap="#cgmservice_8c_a0499582a5412733ce20b318c836483cd_icgraph" alt=""/></div>
+<map name="cgmservice_8c_a0499582a5412733ce20b318c836483cd_icgraph" id="cgmservice_8c_a0499582a5412733ce20b318c836483cd_icgraph">
+<area shape="rect" id="node3" href="group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51" title="Send a record control point response. " alt="" coords="199,5,340,35"/><area shape="rect" id="node5" href="group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="389,5,547,35"/><area shape="rect" id="node7" href="group__appgrp.html#gae9e2667a47ab687cf120b7febeae6dd2" title="Process an incoming task message. " alt="" coords="595,5,757,35"/><area shape="rect" id="node9" href="group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092" title="The routine to enable CGM application to process the system event. " alt="" coords="807,5,948,35"/></map>
 </div>
-</div>
-<a class="anchor" id="a02ccf56cf34288b8f060e916e32b0b96"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void CGM_HandleConnStatusCB </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>changeType</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Simple Profile link status change handler function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection handle </td></tr>
-    <tr><td class="paramname">changeType</td><td>- type of change </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>none </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9052db411f0409bcd92f502d76fdd04e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bStatus_t CGM_MeasSend </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">attHandleValueNoti_t *&#160;</td>
-          <td class="paramname"><em>pNoti</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>taskId</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send a CGM measurement via the CGM measurement notification. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection handle </td></tr>
-    <tr><td class="paramname">pNoti</td><td>- pointer to notification structure </td></tr>
-    <tr><td class="paramname">taskId</td><td>- the task id of the CGM application </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ac7c75c61070035c194830bafdc95d98f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bStatus_t CGM_RACPIndicate </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">attHandleValueInd_t *&#160;</td>
-          <td class="paramname"><em>pInd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>taskId</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Send an indication to the RACP characteristic. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection handle </td></tr>
-    <tr><td class="paramname">pInd</td><td>- pointer to indication structure </td></tr>
-    <tr><td class="paramname">taskId</td><td>- the task id of the CGM application </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a754655758307068eee06a7623e4bdc43"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static uint8 CGM_ReadAttrCB </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gattAttribute_t *&#160;</td>
-          <td class="paramname"><em>pAttr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8 *&#160;</td>
-          <td class="paramname"><em>pValue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8 *&#160;</td>
-          <td class="paramname"><em>pLen</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>offset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>maxLen</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The callback function when an attribute is being read by a collector. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection message was received on </td></tr>
-    <tr><td class="paramname">pAttr</td><td>- pointer to attribute </td></tr>
-    <tr><td class="paramname">pValue</td><td>- pointer to data to be read </td></tr>
-    <tr><td class="paramname">pLen</td><td>- length of data to be read </td></tr>
-    <tr><td class="paramname">offset</td><td>- offset of the first octet to be read </td></tr>
-    <tr><td class="paramname">maxLen</td><td>- maximum length of data to be read </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a1b9e6c9397b03e5aa9f622af47e617cf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void CGM_Register </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a>&#160;</td>
-          <td class="paramname"><em>pfnServiceCB</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Register a callback function with the CGM Service. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pfnServiceCB</td><td>- Callback function. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>None. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a82cd3c3024557c25c2c0917f3925bbd8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool CGM_SetSendState </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>input</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set the state of the CGM database transmission indicator. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">input</td><td>- </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>none </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aaac5cf232850d4918c42dab3955691df"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bStatus_t CGM_WriteAttrCB </td>
-          <td>(</td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>connHandle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gattAttribute_t *&#160;</td>
-          <td class="paramname"><em>pAttr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8 *&#160;</td>
-          <td class="paramname"><em>pValue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint16&#160;</td>
-          <td class="paramname"><em>offset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The CGM service layer callback function when an attribute is being written to by the collector. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">connHandle</td><td>- connection message was received on </td></tr>
-    <tr><td class="paramname">pAttr</td><td>- pointer to attribute </td></tr>
-    <tr><td class="paramname">pValue</td><td>- pointer to data to be written </td></tr>
-    <tr><td class="paramname">len</td><td>- length of data </td></tr>
-    <tr><td class="paramname">offset</td><td>- offset of the first octet to be written </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Success or Failure </dd></dl>
+</p>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="a5b572daeabf82897758c6bdb4404b4c9"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">gattAttribute_t CGMAttrTbl[]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This variable is used to define the attributes of the CGM service. </p>
-
-</div>
-</div>
-<a class="anchor" id="adcd41fdbfe15748b395569ab1a4f3d5a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">CONST gattServiceCBs_t CGMCBs</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">{</div>
-<div class="line">  <a class="code" href="cgmservice_8c.html#a754655758307068eee06a7623e4bdc43">CGM_ReadAttrCB</a>,   </div>
-<div class="line">  <a class="code" href="cgmservice_8c.html#aaac5cf232850d4918c42dab3955691df">CGM_WriteAttrCB</a>,  </div>
-<div class="line">  NULL              </div>
-<div class="line">}</div>
-<div class="ttc" id="cgmservice_8c_html_a754655758307068eee06a7623e4bdc43"><div class="ttname"><a href="cgmservice_8c.html#a754655758307068eee06a7623e4bdc43">CGM_ReadAttrCB</a></div><div class="ttdeci">static uint8 CGM_ReadAttrCB(uint16 connHandle, gattAttribute_t *pAttr, uint8 *pValue, uint8 *pLen, uint16 offset, uint8 maxLen)</div><div class="ttdoc">The callback function when an attribute is being read by a collector. </div><div class="ttdef"><b>Definition:</b> cgmservice.c:412</div></div>
-<div class="ttc" id="cgmservice_8c_html_aaac5cf232850d4918c42dab3955691df"><div class="ttname"><a href="cgmservice_8c.html#aaac5cf232850d4918c42dab3955691df">CGM_WriteAttrCB</a></div><div class="ttdeci">static bStatus_t CGM_WriteAttrCB(uint16 connHandle, gattAttribute_t *pAttr, uint8 *pValue, uint8 len, uint16 offset)</div><div class="ttdoc">The CGM service layer callback function when an attribute is being written to by the collector...</div><div class="ttdef"><b>Definition:</b> cgmservice.c:465</div></div>
-</div><!-- fragment -->
-<p>Service Callbacks. </p>
-
-</div>
-</div>
 <a class="anchor" id="a338e9c6ab1ec08f00ad76a060b337e13"></a>
 <div class="memitem">
 <div class="memproto">
@@ -994,28 +628,6 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Variable for storing the client configuration for CGM Measurement Characteristic. </p>
-
-</div>
-</div>
-<a class="anchor" id="ae5c9724bd56fcaea8adfdbd4cfef39e8"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool cgmMeasDBSendInProgress</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>An variable to indicate whether the RACP transmission is in progress. </p>
 
 </div>
 </div>
@@ -1165,28 +777,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af03dbf8279dda1067d9201e07fc9e478"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="cgmservice_8h.html#acfa1ab7be02696f17542bfdd37554cf1">CGMServiceCB_t</a> CGMServiceCB</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The variable to register the CGM service callback function. </p>
-
-</div>
-</div>
 <a class="anchor" id="aa0eba4aba5c6bb78c01b8181a7f246d2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1326,8 +916,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>CGM Specific Ops Control Point stored as a constant. </p>
+<p>CGM Specific Ops Control Point stored as a constant </p>
 
 </div>
 </div>
@@ -1404,12 +993,16 @@ Variables</h2></td></tr>
 </div>
 </div>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_0d366a5812a235e2e84bf54d0150899c.html">Profiles</a></li><li class="navelem"><a class="el" href="dir_7111c12c3feacbe157dd0909bf2c1b55.html">CGM</a></li><li class="navelem"><a class="el" href="cgmservice_8c.html">cgmservice.c</a></li>
+    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

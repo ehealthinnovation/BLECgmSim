@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -40,8 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -61,19 +67,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
-      <li><a href="classes.html"><span>Data&#160;Structure&#160;Index</span></a></li>
-      <li><a href="functions.html"><span>Data&#160;Fields</span></a></li>
-    </ul>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
   </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('structcgmMeasC__t.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Groups</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -82,12 +96,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">cgmMeasC_t Struct Reference</div>  </div>
+<div class="title">cgmMeasC_t Struct Reference<div class="ingroups"><a class="el" href="group__glucosemeasgrp.html">Glucose Measurement Characteristic</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -108,9 +121,9 @@ Data Fields</h2></td></tr>
 <tr class="memitem:acf674e25c2949eb20af237ad3ca1474d"><td class="memItemLeft" align="right" valign="top">uint16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcgmMeasC__t.html#acf674e25c2949eb20af237ad3ca1474d">timeoffset</a></td></tr>
 <tr class="memdesc:acf674e25c2949eb20af237ad3ca1474d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timeoffset from the session start time from the record in the unit of minute.  <a href="#acf674e25c2949eb20af237ad3ca1474d">More...</a><br/></td></tr>
 <tr class="separator:acf674e25c2949eb20af237ad3ca1474d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a258df1cafea1a64d1f9f80630136c3d6"><td class="memItemLeft" align="right" valign="top">uint24&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcgmMeasC__t.html#a258df1cafea1a64d1f9f80630136c3d6">annunication</a></td></tr>
-<tr class="memdesc:a258df1cafea1a64d1f9f80630136c3d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Annunciation of relevant status of the sensor or the record.  <a href="#a258df1cafea1a64d1f9f80630136c3d6">More...</a><br/></td></tr>
-<tr class="separator:a258df1cafea1a64d1f9f80630136c3d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a151e34787f627b534b86f248775ed63d"><td class="memItemLeft" align="right" valign="top">uint24&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcgmMeasC__t.html#a151e34787f627b534b86f248775ed63d">annunciation</a></td></tr>
+<tr class="memdesc:a151e34787f627b534b86f248775ed63d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Annunciation of relevant status of the sensor or the record.  <a href="#a151e34787f627b534b86f248775ed63d">More...</a><br/></td></tr>
+<tr class="separator:a151e34787f627b534b86f248775ed63d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8e75935312283bfd5f3c8ffc7eb3bbf"><td class="memItemLeft" align="right" valign="top">uint16&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcgmMeasC__t.html#ad8e75935312283bfd5f3c8ffc7eb3bbf">trend</a></td></tr>
 <tr class="memdesc:ad8e75935312283bfd5f3c8ffc7eb3bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The rate of increase or decrease, in the SFLOAT data type. It has the unit of mg/dL/min.  <a href="#ad8e75935312283bfd5f3c8ffc7eb3bbf">More...</a><br/></td></tr>
 <tr class="separator:ad8e75935312283bfd5f3c8ffc7eb3bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,12 +134,12 @@ Data Fields</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Container for CGM measurement result data. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
-<a class="anchor" id="a258df1cafea1a64d1f9f80630136c3d6"></a>
+<a class="anchor" id="a151e34787f627b534b86f248775ed63d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint24 cgmMeasC_t::annunication</td>
+          <td class="memname">uint24 cgmMeasC_t::annunciation</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -223,12 +236,16 @@ Data Fields</h2></td></tr>
 <li><a class="el" href="cgm_8c.html">cgm.c</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="structcgmMeasC__t.html">cgmMeasC_t</a></li>
+    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

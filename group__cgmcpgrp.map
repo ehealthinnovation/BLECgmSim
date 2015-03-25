@@ -1,0 +1,8 @@
+<map id="CGM Specific Control Point (CGMCP)" name="CGM Specific Control Point (CGMCP)">
+<area shape="rect" id="node1" href="$group__gattgrp.html" title="This group contains modules related to generic attribute profile layer. " alt="" coords="7,135,167,182"/>
+<area shape="rect" id="node2" href="$group__patienthighlowgrp.html" title="This is a group of constants, variables, functions related to the patient defined high value alert..." alt="" coords="419,5,560,51"/>
+<area shape="rect" id="node3" href="$group__hyperalertgrp.html" title="This is a group of constants, variables, functions related to the patient defined hyperglycemia alert..." alt="" coords="420,74,559,121"/>
+<area shape="rect" id="node5" href="$group__calibrationgrp.html" title="This is a group of constants, variables, functions related to the calibration feature. " alt="" coords="424,144,555,173"/>
+<area shape="rect" id="node6" href="$group__hypoalertgrp.html" title="This is a group of constants, variables, functions related to the patient defined hypoglycemia alert..." alt="" coords="421,197,557,243"/>
+<area shape="rect" id="node7" href="$group__ratealertgrp.html" title="This is a group of constants, variables, functions related to the rate of increase/ decrease alert..." alt="" coords="417,266,561,313"/>
+</map>

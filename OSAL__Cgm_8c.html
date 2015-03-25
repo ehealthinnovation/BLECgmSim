@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
 <script type="text/javascript">
@@ -24,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -40,8 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -67,12 +73,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('OSAL__Cgm_8c.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Groups</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -81,11 +102,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_74389ed8173ad57b461b9d623a1f3867.html">Source</a></li>  </ul>
-</div>
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a> &#124;
@@ -164,6 +180,15 @@ Variables</h2></td></tr>
 <p>This function invokes the initialization function for each task. </p>
 <dl class="section return"><dt>Returns</dt><dd>none </dd></dl>
 
+<p><div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="OSAL__Cgm_8c_a7ad49ef9f96d7753c3e77e0e69231bb2_cgraph.png" border="0" usemap="#OSAL__Cgm_8c_a7ad49ef9f96d7753c3e77e0e69231bb2_cgraph" alt=""/></div>
+<map name="OSAL__Cgm_8c_a7ad49ef9f96d7753c3e77e0e69231bb2_cgraph" id="OSAL__Cgm_8c_a7ad49ef9f96d7753c3e77e0e69231bb2_cgraph">
+<area shape="rect" id="node3" href="group__appgrp.html#gacba44e75a8e99cc3b2b3a4601e38d5c3" title="Initialization function for the CGM App Task. " alt="" coords="156,96,233,125"/><area shape="rect" id="node5" href="group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93" title="Initializes the CGM service by registering GATT attributes with the GATT server. " alt="" coords="295,16,420,45"/><area shape="rect" id="node7" href="group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf" title="Register a callback function with the CGM Service. " alt="" coords="303,69,412,98"/><area shape="rect" id="node9" href="group__gattgrp.html#gad9d36d46d52f7bad5fe9316e881f8335" title="The callback function in the application layer when the GATT service layer receives read/write operat..." alt="" coords="303,122,412,152"/><area shape="rect" id="node22" href="group__appgrp.html#gaa21434c720a4f0d6721b418ccc568a9b" title="Initialize the CGM simulator application. Reset the historical database. " alt="" coords="283,389,432,418"/><area shape="rect" id="node11" href="group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5" title="CRC&#45;CCITT calculation using the tabular form. " alt="" coords="695,17,780,46"/><area shape="rect" id="node13" href="group__crc16grp.html#gad34bec376b346456ffa3cbb0d538cc0d" title="Test the input message against its attached CRC16 code. " alt="" coords="505,42,620,72"/><area shape="rect" id="node16" href="group__appgrp.html#ga7d5b52089f9e8c4784a7729996ca1573" title="Verify time zone values are compliant to the standard. " alt="" coords="493,96,632,125"/><area shape="rect" id="node18" href="group__appgrp.html#gadeba38cb321081ba7dce291314afadd4" title="Verify the daylight saving time input is compliant to the standard. " alt="" coords="491,149,635,178"/><area shape="rect" id="node20" href="group__crc16grp.html#ga00794c9f7422078eb769b33c6d5a40ec" title="This function checks the presence of the CRC field in the CGMCP command. " alt="" coords="481,202,644,232"/><area shape="rect" id="node24" href="cgmSimData_8c.html#afb238b22b0f57f8cb40be1b2af27c61c" title="Reset the simulator data return. " alt="" coords="496,256,629,285"/><area shape="rect" id="node26" href="group__calibrationgrp.html#ga55f3cacf30d0753a03754fa9c157878a" title="Reset the calibration data record database. " alt="" coords="501,309,624,338"/><area shape="rect" id="node28" href="group__patienthighlowgrp.html#ga2c65e7c0e60b0862da014609c4089cfb" title="Reset the variables related to patient defined glucose high alert of the sensor device. " alt="" coords="504,362,621,392"/><area shape="rect" id="node30" href="group__patienthighlowgrp.html#ga8132ef439ae2b12b880929b3ba6a7a3d" title="Reset the variables related to patient defined glucose low alert of the sensor device. " alt="" coords="505,416,620,445"/><area shape="rect" id="node32" href="group__hyperalertgrp.html#gaf45daf134f219ecc97ec0ae1f2d76929" title="Reset the variables related to patient defined glucose hyperglycemia alert of the sensor device..." alt="" coords="500,469,625,498"/><area shape="rect" id="node34" href="group__hypoalertgrp.html#ga05c0880d78bc3548e05eecfbb724e6fa" title="Reset the variables related to patient defined glucose hypoglycemia alert of the sensor device..." alt="" coords="501,522,624,552"/><area shape="rect" id="node36" href="group__ratealertgrp.html#ga69ddcd5abb3cce89fbb1b505ffe08c2c" title="Reset the variables related to the rate alert of the sensor device. " alt="" coords="504,576,621,605"/></map>
+</div>
+</p>
+
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -191,9 +216,9 @@ Variables</h2></td></tr>
 <div class="line">  GAPRole_ProcessEvent,</div>
 <div class="line">  GAPBondMgr_ProcessEvent,</div>
 <div class="line">  GATTServApp_ProcessEvent,</div>
-<div class="line">  <a class="code" href="cgm_8c.html#a4cc841bb1551cb45b719f171fff26092">CGM_ProcessEvent</a></div>
+<div class="line">  <a class="code" href="group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092">CGM_ProcessEvent</a></div>
 <div class="line">}</div>
-<div class="ttc" id="cgm_8c_html_a4cc841bb1551cb45b719f171fff26092"><div class="ttname"><a href="cgm_8c.html#a4cc841bb1551cb45b719f171fff26092">CGM_ProcessEvent</a></div><div class="ttdeci">uint16 CGM_ProcessEvent(uint8 task_id, uint16 events)</div><div class="ttdoc">CGM Application Task event processor. This function is called to process all events for the task...</div><div class="ttdef"><b>Definition:</b> cgm.c:349</div></div>
+<div class="ttc" id="group__appgrp_html_ga4cc841bb1551cb45b719f171fff26092"><div class="ttname"><a href="group__appgrp.html#ga4cc841bb1551cb45b719f171fff26092">CGM_ProcessEvent</a></div><div class="ttdeci">uint16 CGM_ProcessEvent(uint8 task_id, uint16 events)</div><div class="ttdoc">CGM Application Task event processor. This function is called to process all events for the task...</div><div class="ttdef"><b>Definition:</b> cgm.c:619</div></div>
 </div><!-- fragment -->
 <p>The order in this table must be identical to the task initialization calls below in osalInitTask. </p>
 
@@ -228,12 +253,16 @@ Variables</h2></td></tr>
 </div>
 </div>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 24 2015 00:32:04 for CGM Simulator by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.6
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_74389ed8173ad57b461b9d623a1f3867.html">Source</a></li><li class="navelem"><a class="el" href="OSAL__Cgm_8c.html">OSAL_Cgm.c</a></li>
+    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
+  </ul>
+</div>
 </body>
 </html>

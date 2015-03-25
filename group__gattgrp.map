@@ -1,0 +1,9 @@
+<map id="Generic Attribute Profile (GATT)" name="Generic Attribute Profile (GATT)">
+<area shape="rect" id="node2" href="$group__starttimegrp.html" title="This group contains modules related to session start time characteristic implementation. " alt="" coords="257,5,391,51"/>
+<area shape="rect" id="node3" href="$group__glucosemeasgrp.html" title="This group contains modules falling into glucose measurement preparation and reporting. " alt="" coords="248,74,400,121"/>
+<area shape="rect" id="node4" href="$group__statusgrp.html" title="This group contains modules related to CGM status characteristic implementation. " alt="" coords="237,144,411,173"/>
+<area shape="rect" id="node5" href="$group__cgmcpgrp.html" title="This group contains modules falling into the CGMCP. " alt="" coords="249,197,399,243"/>
+<area shape="rect" id="node6" href="$group__racpgrp.html" title="The macros, constants, variables, functions that are related to the RACP. " alt="" coords="245,266,403,313"/>
+<area shape="rect" id="node7" href="$group__runtimegrp.html" title="This group contains modules related to session run time characteristic implementation. " alt="" coords="217,336,431,365"/>
+<area shape="rect" id="node8" href="$group__featuregrp.html" title="This group contains modules related to CGM feature characteristic implementation. ..." alt="" coords="231,389,417,419"/>
+</map>
