@@ -36,6 +36,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  * CONSTANTS
  */
 // Position of glucose measurement value in attribute array
+/// \addtogroup gattgrp
+/// \@{
 #define CGM_MEAS_VALUE_POS                     2		///<The position of the value of the CGM measurement charateristic in the attribute array
 #define CGM_MEAS_CONFIG_POS                    3		///<The position of the Client Configuration of the CGM measurement charateristic in the attribute array
 #define CGM_FEATURE_VALUE_POS                  5		///<The position of the value of the CGM feature charateristic in the attribute array
@@ -46,6 +48,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define CGM_RACP_CONFIG_POS                    14   		///<The position of the Client Configuration of the RACP charateristic in the attribute array
 #define CGM_CGM_OPCP_VALUE_POS                 16   		///<The position of the value of the CGM Specific Operation Control Point (OPCP) charateristic in the attribute array
 #define CGM_CGM_OPCP_CONFIG_POS                17		///<The position of the Client Configuration of the CGM Specific Operation Control Point OPCP) charateristic in the attribute array
+/// \@}
 
 /*
  * TYPEDEFS
@@ -54,6 +57,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /*
  * GLOBAL VARIABLES
  */
+///\addtogroup gattgrp
+///\@{
 CONST uint8 CGMServiceUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SERV_UUID), HI_UINT16(CGM_SERV_UUID)};///< CGM service UUID Stored as a constant variable
 CONST uint8 CGMMeasUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_MEAS_UUID), HI_UINT16(CGM_MEAS_UUID)};///< CGM Measurement characteristic UUID stored as a constant variable
 CONST uint8 CGMFeatureUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_FEATURE_UUID), HI_UINT16(CGM_FEATURE_UUID)};///< CGM Feature UUID stored as a constant
@@ -62,6 +67,7 @@ CONST uint8 CGMSessionStartTimeUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SES_START
 CONST uint8 CGMSessionRunTimeUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SES_RUN_TIME_UUID), HI_UINT16(CGM_SES_RUN_TIME_UUID)};///<CGM Session Run stored as a constant
 CONST uint8 recordControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(REC_ACCESS_CTRL_PT_UUID), HI_UINT16(REC_ACCESS_CTRL_PT_UUID)};///<Record Control Point stored as a constant
 CONST uint8 CGMSpecificOpsControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SPEC_OPS_CTRL_PT_UUID), HI_UINT16(CGM_SPEC_OPS_CTRL_PT_UUID)};///<CGM Specific Ops Control Point stored as a constant
+///@}
 
 /*
  * EXTERNAL VARIABLES
@@ -74,14 +80,15 @@ CONST uint8 CGMSpecificOpsControlPointUUID[ATT_BT_UUID_SIZE] = {LO_UINT16(CGM_SP
 /*
  * LOCAL VARIABLES
  */
-static CGMServiceCB_t CGMServiceCB;		///< The variable to register the CGM service callback function
-static bool	      cgmMeasDBSendInProgress;	///< An variable to indicate whether the RACP transmission is in progress. 
+static CGMServiceCB_t CGMServiceCB;		///< The variable to register the CGM service callback function @ingroup gattgrp
+static bool	      cgmMeasDBSendInProgress;	///< An variable to indicate whether the RACP transmission is in progress. @ingroup racpgrp
 
 /*
  * Profile Attributes - variables
  */
+
 // CGM Service attribute
-static CONST gattAttrType_t CGMService = {ATT_BT_UUID_SIZE, CGMServiceUUID };		///< CGM GATT service declaration data structure
+static CONST gattAttrType_t CGMService = {ATT_BT_UUID_SIZE, CGMServiceUUID };		///< CGM GATT service declaration data structure 
 // CGM meaaurement Characteristic
 static uint8 CGMMeasProps = GATT_PROP_NOTIFY;						///< Variable storing the CGM Measurement Characteristic property
 static gattCharCfg_t CGMMeasConfig[GATT_MAX_NUM_CONN];					///< Variable for storing the client configuration for CGM Measurement Characteristic
@@ -112,6 +119,7 @@ static uint8 CGMControlDummy=0;								///< This is a dummy variable to register
 */
 
 /// This variable is used to define the attributes of the CGM service
+/// \ingroup gattgrp
 static gattAttribute_t CGMAttrTbl[] =
 {
   {
@@ -290,6 +298,7 @@ bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 
  * PROFILE CALLBACKS
  */
 /// Service Callbacks
+/// \ingroup gattgrp
 CONST gattServiceCBs_t  CGMCBs =
 {
   CGM_ReadAttrCB,   ///< Read callback function pointer
@@ -303,6 +312,7 @@ CONST gattServiceCBs_t  CGMCBs =
  */
 
 /**
+   @ingroup gattgrp
  * @brief   Initializes the CGM service by registering
  *          GATT attributes with the GATT server.
  * @param   services - services to add. This is a bit map and can
@@ -327,6 +337,7 @@ bStatus_t CGM_AddService( uint32 services )
 }
 
 /**
+   @ingroup gattgrp
  * @brief   Register a callback function with the CGM Service.
  * @param   pfnServiceCB - Callback function.
  * @return  None.*/
@@ -336,6 +347,7 @@ extern void CGM_Register( CGMServiceCB_t pfnServiceCB)
 }
 
 /**
+   @ingroup glucosemeasgrp
  * @brief       Send a CGM measurement via the CGM measurement notification
  * @param       connHandle - connection handle
  * @param       pNoti - pointer to notification structure
@@ -357,6 +369,7 @@ bStatus_t CGM_MeasSend( uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 ta
 }
 
 /**
+   @ingroup cgmcpgrp
  * @fn          CGM_CtlPntIndicate
  * @brief       Send an indication containing a control point
  *              message.
@@ -380,6 +393,7 @@ bStatus_t CGM_CtlPntIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint
 }
 
 /**
+   @ingroup racpgrp
  * @brief       Send an indication to the RACP characteristic.
  * @param       connHandle - connection handle
  * @param       pInd - pointer to indication structure
@@ -400,6 +414,7 @@ bStatus_t CGM_RACPIndicate( uint16 connHandle, attHandleValueInd_t *pInd, uint8 
 }
 
 /**
+   @ingroup gattgrp
  * @brief       The callback function when an attribute is being read by a collector.
  * @param       connHandle - connection message was received on
  * @param       pAttr - pointer to attribute
@@ -454,6 +469,7 @@ static uint8 CGM_ReadAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
 }
 
 /**
+   @ingroup gattgrp
  * @brief   The CGM service layer callback function when an attribute is being written to by the collector.
  * @param   connHandle - connection message was received on
  * @param   pAttr - pointer to attribute
@@ -577,6 +593,7 @@ static bStatus_t CGM_WriteAttrCB( uint16 connHandle, gattAttribute_t *pAttr,
 }
 
 /**
+   @ingroup accessgrp
  * @brief       Simple Profile link status change handler function.
  * @param       connHandle - connection handle
  * @param       changeType - type of change
@@ -600,6 +617,7 @@ static void CGM_HandleConnStatusCB( uint16 connHandle, uint8 changeType )
 }
 
 /**
+   @ingroup racpgrp
  * @brief       Set the state of the CGM database transmission indicator
  * @param       input - 
  * @return      none

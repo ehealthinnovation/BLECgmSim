@@ -14,9 +14,9 @@ copies of the Software, and to permit persons to whom the Software is furnished 
 
 #include <stdlib.h>
 #include "crc.h"
-
-/// @addtogroup crc16grp
-/// This group of constants, macros, variables and functions implement the CRC support.
+/// @ingroup featuregrp
+/// @defgroup crc16grp CCITT-CRC Feature
+/// @brief This group of constants, macros, variables and functions implement the CRC support.
 /// @{
 
 /**
@@ -75,7 +75,7 @@ return crc16;
  * @param [in] message - pointer to the message character array
  * @param [in] length - the length of the message array
  * @return the result of the test.
- * <table><th><td>Value</td><td>Meaning</td></th>
+ * <table><tr><th>Value</th><th>Meaning</th></tr>
  * 	  <tr><td>0</td><td>The CRC test is failed</td></tr>
  * 	  <tr><td>1</td><td>The CRC test is passed</td></tr>
  * </table>*/

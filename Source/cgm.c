@@ -41,6 +41,39 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "cgmsimdata.h"
 #include "crc.h"
 
+//Some Doxygen command - defining groups
+/// \defgroup gapgrp Generic Access Profile (GAP)
+/// \brief This group contains modules related to generic access profile layer.
+/// \defgroup gattgrp Generic Attribute Profile (GATT)
+/// \brief This group contains modules related to generic attribute profile layer.
+/// \defgroup appgrp Application Logic
+/// \brief The application level logic above the BLE GATT and GAP
+
+/// \addtogroup gattgrp
+///@{
+/// \defgroup cgmcpgrp CGM Specific Control Point (CGMCP)
+/// \brief This group contains modules falling into the CGMCP.
+/// \defgroup glucosemeasgrp Glucose Measurement Characteristic
+/// \brief This group contains modules falling into glucose measurement preparation and reporting.
+/// \defgroup starttimegrp Session Start Time Charateristic
+/// \brief This group contains modules related to session start time characteristic implementation.
+/// \defgroup runtimegrp Session Run Time Characteristic
+/// \brief This group contains modules related to session run time characteristic implementation.
+/// \defgroup statusgrp CGM Status Charateristic
+/// \brief This group contains modules related to CGM status characteristic implementation.
+/// \defgroup featuregrp CGM Feature Characteristic
+/// \brief This group contains modules related to CGM feature characteristic implementation.
+///@}
+
+/// \addtogroup gapgrp
+/// @{
+/// \defgroup accessgrp Device Access
+/// \brief Configure discoverability and connectivity of the device
+/// \defgroup securitygrp Security Related
+/// \brief Security related entities.
+/// @}
+
+
 
 /*
  * MACROS
@@ -48,21 +81,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define	SFLOAT	uint16	///< Using a unsigned 16bit integer to store a SFLOAT
 
 /// \defgroup featureactivation Feature Activation Macros
+/// \brief A set of macro definitions to enable/disable features.
 ///@{
-#define FEATURE_GLUCOSE_CALIBRATION		0	///< The glucose calibration feature
-#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0	///< The patient high feature
-#define FEATURE_GLUCOSE_HYPERALERT		0	///< The patient high feature
-#define FEATURE_GLUCOSE_HYPOALERT		0	///< The patient high feature
-#define FEATURE_GLUCOSE_RATEALERT		0	///< The rate of increase/decrease alert feature
-#define FEATURE_GLUCOSE_QUALITY			0	///< The CGM support quality indication
-#define FEATURE_GLUCOSE_CRC			0	///< The E2E-CRC support
-#define FEATURE_GLUCOSE_DEVICE_ALERT		0	///< The device alert support
+#define FEATURE_GLUCOSE_CALIBRATION		1	///< The glucose calibration feature
+#define FEATURE_GLUCOSE_PATIENTHIGHLOW		1	///< The patient set high/low alert feature
+#define FEATURE_GLUCOSE_HYPERALERT		1	///< The hyperglycemia alert feature
+#define FEATURE_GLUCOSE_HYPOALERT		1	///< The hypoglycemia alert feature
+#define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
+#define FEATURE_GLUCOSE_QUALITY			1	///< The CGM supports quality indication
+#define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
+#define FEATURE_GLUCOSE_DEVICE_ALERT		1	///< The device alert support
 ///@}
 // End of featureactivation 
 
 /*
  * CONSTANTS
  */
+/// \addtogroup accessgrp
+/// @{
 #define DEFAULT_FAST_ADV_INTERVAL             32 	///< Fast advertising interval in 625us units
 #define DEFAULT_FAST_ADV_DURATION             30	///< Duration of fast advertising duration in sec
 #define DEFAULT_SLOW_ADV_INTERVAL             1600	///< Slow advertising interval in 625us units
@@ -72,25 +108,39 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define DEFAULT_DESIRED_MAX_CONN_INTERVAL     1600	///< Maximum connection interval (units of 1.25ms) if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_SLAVE_LATENCY         1		///< Slave latency to use if automatic parameter update request is enabled
 #define DEFAULT_DESIRED_CONN_TIMEOUT          1000	///< Supervision timeout value (units of 10ms) if automatic parameter update request is enabled
+/// @}
+
+/// \addtogroup securitygrp
+/// @{
 #define DEFAULT_PASSCODE                      19655	///< Default passcode
 #define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_INITIATE
 #define DEFAULT_MITM_MODE                     TRUE	///< Default MITM mode (TRUE to require passcode or OOB when pairing)
 #define DEFAULT_BONDING_MODE                  TRUE	///< Default bonding mode, TRUE to bond
 #define DEFAULT_IO_CAPABILITIES               GAPBOND_IO_CAP_DISPLAY_ONLY	///< Default GAP bonding I/O capabilities
+/// @}
+
+/// \ingroup glucosemeasgrp
 #define DEFAULT_NOTI_PERIOD                   1000	///< Notification period in ms
-/// \defgroup calibrationgrp
+
+
+
+/// \ingroup cgmcpgrp
+/// \defgroup calibrationgrp Calibration Feature
+/// \brief This is a group of constants, variables, functions related to the calibration feature.
 /// @{
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 #define CALIBRATION_CONCENTRATION_MAX		300	///< The maximal value of input calibration concentration value
 #define CALIBRATION_CONCENTRATION_MIN		100	///< The minimal value of input calibration concentration value
 #define CALIBRATION_DATABASE_SIZE		10	///< The size of the circular database to store the calibration records.
-#define	CALIBRATION_INTERVAL			360	///< The recommended duration between calibrations. The default value is 360 min (6 hrs)
-#define CALIBRATION_TIME_TOLERANCE		60	///< The tolerance of time when the calibration data is deemed as acceptable. The default value is 60 min (1 hr) 
-#endif /* FEATURE_GLUCOSE_CALIBRATION==1 */
+#define	CALIBRATION_INTERVAL			360	///< The recommended duration between calibrations. The default value is 360 mins (6 hrs)
+#define CALIBRATION_TIME_TOLERANCE		60	///< The tolerance of time when the calibration data is deemed as acceptable. The default value is 60 mins (1 hr) 
+#endif
 /// @}
 // end of calibrationgrp
-/// \defgroup patienthighlowgrp
-/// This is a group of constants, variables, functions related to the patient defined high value alert.
+
+/// \ingroup cgmcpgrp
+/// \defgroup patienthighlowgrp Patient Defined High/Low Alert Feature
+/// \brief This is a group of constants, variables, functions related to the patient defined high value alert.
 /// @{
 #if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
 #define PATIENTHIGH_CONCENTRATION_MAX		600	///< The maximal value of the input concentration to set the patient defined glucose high level alert.
@@ -101,8 +151,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define PATIENTLOW_CONCENTRATION_DEFAULT	100 ///< The default value of the glucose high level alert is set to the maximal value allowed by the system.
 #endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
 /// @}
-/// \defgroup hyperalertgrp
-/// This is a group of constants, variables, functions related to the patient defined hyperglycemia alert.
+
+/// \ingroup cgmcpgrp
+/// \defgroup hyperalertgrp Hyperglycemia Alert Feature
+/// \brief This is a group of constants, variables, functions related to the patient defined hyperglycemia alert.
 ///@{
 #if (FEATURE_GLUCOSE_HYPERALERT==1)
 #define HYPERALERT_CONCENTRATION_MAX		600	///< The maximal value of the input concentration to set the patient defined hyperglycemia alert
@@ -110,8 +162,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define HYPERALERT_CONCENTRATION_DEFAULT	500 	///< The default value of the hyperglycemia alert.
 #endif /*FEATURE_GLUCOSE_HYPERALERT==1*/
 /// @}
-/// \defgroup hypoalertgrp
-/// This is a group of constants, variables, functions related to the patient defined hypoglycemia alert.
+
+/// \ingroup cgmcpgrp
+/// \defgroup hypoalertgrp Hypoglycemia Alert Feature
+/// \brief This is a group of constants, variables, functions related to the patient defined hypoglycemia alert.
 ///@{
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
 #define HYPOALERT_CONCENTRATION_MAX		600	///< The maximal value of the input concentration to set the patient defined hypoglycemia alert
@@ -120,8 +174,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
 /// @}
 
-/// \defgroup ratealertgrp
-/// This is a group of constants, variables, functions related to the rate of increase/ decrease alert.
+/// \ingroup cgmcpgrp
+/// \defgroup ratealertgrp Rate of Change Alert Feature
+/// \brief This is a group of constants, variables, functions related to the rate of increase/ decrease alert.
 ///@{
 #if (FEATURE_GLUCOSE_RATEALERT==1)
 #define RATEALERT_INCREASE_MAX			0xF7FD	///< The maximal rate of increase allowed by the system, which is 204.5 in decimal
@@ -137,6 +192,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /*********************************************************************
  * TYPEDEFS
  */
+/// \ingroup glucosemeasgrp
 /// \brief Container for CGM measurement result data
 typedef struct {
 	uint8         size;				///<The number of bytes inside the CGM measrement entries. This is not the size of the structure itself.
@@ -147,28 +203,33 @@ typedef struct {
 	uint16        trend;				///<The rate of increase or decrease, in the SFLOAT data type. It has the unit of mg/dL/min
 	uint16        quality;				///<The quality of the CGM measurement,
 } cgmMeasC_t;
+/// \ingroup featuregrp
 /// \brief Container for the CGM support feature characteristic
 typedef struct {
 	uint24 cgmFeature;				///<The CGM supported features
 	uint8  cgmTypeSample;				///<The measurement sample type and location
 } cgmFeature_t;
+/// \ingroup statusgrp
 /// \brief Container for the CGM sensor status characteristic
 typedef struct {
 	uint16 timeOffset;				///<The time offset from the session start time.
 	uint24 cgmStatus;				///<The CGM sensor status.
 } cgmStatus_t;
+/// \ingroup starttimegrp
 /// \brief Container for the CGM session start time characteristic
 typedef struct {
 	UTCTimeStruct startTime;			///<The date-time of the start time
 	int8         timeZone;				///<The time zone associated with the current start time
 	uint8         dstOffset;			///<The daylight saving time status associated with the current start time
 } cgmSessionStartTime_t;
+/// \ingroup cgmcpgrp
 /// \brief The container for receiving CGMCP data message from the CGM service layer
 typedef struct {
 	osal_event_hdr_t hdr; 				///< MSG_EVENT and status from the CGM service layer
 	uint8 len;					///< The length of the data being passed
 	uint8 data[CGM_CTL_PNT_MAX_SIZE];		///< The value of the data being passed
 } cgmCtlPntMsg_t;
+/// \ingroup racpgrp
 /// \brief The container for receiving RACP data message from the CGM service layer
 typedef struct {
 	osal_event_hdr_t hdr; 			///< MSG_EVENT and status
@@ -183,8 +244,8 @@ typedef struct {
 	uint16		calibrationTime;	///< The time the calibration value has been measured as relative offset to the Session Start Time in minutes.
 	uint8 		cgmTypeSample;		///< The measurement sample type and location
 	uint16		nextCalibrationTime;	///< The relative offset to the Session Start Time when the next calibration is required by the Server. A value of 0x0000 means that a calibration is required instantly.
-	uint16		recordNumber;		///< The calibration data record number. \detail Each Calibration record is identified by a number. A get operation with an operand of 0xFFFF in this field will return the last Calibration Data stored. A value of ¡°0¡± in this field represents no calibration value is stored. This field is ignored during a Set Glucose Calibration value procedure.
-	uint8		status;			///< Representing the status of the calibration procedure of the Server related to the Calibration Data Record. \detail This field is ignored during the Set Glucose Calibration value procedure. The value of this field represents the status of the calibration process of the Server.
+	uint16		recordNumber;		///< The calibration data record number. @details Each Calibration record is identified by a number. A get operation with an operand of 0xFFFF in this field will return the last Calibration Data stored. A value of ¡°0¡± in this field represents no calibration value is stored. This field is ignored during a Set Glucose Calibration value procedure.
+	uint8		status;			///< Representing the status of the calibration procedure of the Server related to the Calibration Data Record. @details This field is ignored during the Set Glucose Calibration value procedure. The value of this field represents the status of the calibration process of the Server.
 } cgmCalibrationDataRecord_t;
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1*/
 
@@ -196,6 +257,7 @@ typedef struct {
  * GLOBAL VARIABLES
  */
 uint8 cgmTaskId;				///< The task ID associated with the CGM simulator application. It is used to schedule task in the OS layer.
+/// \ingroup accessgrp
 uint16 gapConnHandle;				///< The handle for the current GAP connection.
 
 /*
@@ -211,6 +273,8 @@ uint16 gapConnHandle;				///< The handle for the current GAP connection.
 /*
  * LOCAL VARIABLES
  */
+/// \addtogroup accessgrp
+///@{
 static gaprole_States_t gapProfileState = GAPROLE_INIT;			///< The connection state of the GAP layer
 /// \brief GAP Profile - Name attribute for SCAN RSP data
 static uint8 scanData[] =
@@ -238,13 +302,20 @@ static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "CGM Simulator";	///< The devi
 static bool cgmBonded = FALSE;						///< Local variable storing the current bonding stage of the sensor.
 static uint8 cgmBondedAddr[B_ADDR_LEN];					///< Local variable storing the address of the bonded peer.
 static uint16 gapConnHandle;						///< Local version of the GAP connection handle.
-// Indication structures for cgm
-static attHandleValueInd_t	cgmCtlPntRsp;				///< Container for holding CGMCP response indication message, which would be passed down to the GATT service layer
-static attHandleValueNoti_t	CGMMeas;				///< Container for holding CGM measurement notification message, which would be passed down to the GATT service layer
-static attHandleValueInd_t 	cgmRACPRsp;				///< Container for holding the RACP response indication message, which would be passed down to the GATT service layer
-static attHandleValueNoti_t   cgmRACPRspNoti;				///< Container for holding the RACP notification message, which would be passed down to the GATT service layer. The notification will appear as the CGM measurement notification.
 static bool cgmAdvCancelled = FALSE;					///< Denote the advertising state.
+///@}
+// Indication structures for cgm
+/// \ingroup cgmcpgrp
+static attHandleValueInd_t	cgmCtlPntRsp;				///< Container for holding CGMCP response indication message, which would be passed down to the GATT service layer
+/// \ingroup glucosemeasgrp
+static attHandleValueNoti_t	CGMMeas;				///< Container for holding CGM measurement notification message, which would be passed down to the GATT service layer
+/// \ingroup racpgrp
+static attHandleValueInd_t 	cgmRACPRsp;				///< Container for holding the RACP response indication message, which would be passed down to the GATT service layer
+/// \ingroup racpgrp
+static attHandleValueNoti_t   cgmRACPRspNoti;				///< Container for holding the RACP notification message, which would be passed down to the GATT service layer. The notification will appear as the CGM measurement notification.
+
 //CGM Simulator configureation variables
+/// \ingroup featuregrp
 static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 						| CGM_FEATURE_CAL
@@ -268,20 +339,25 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 						| CGM_FEATURE_ALERTS_DEVICE_SPEC
 #endif /*(FEATURE_GLUCOSE_DEVICE_ALERT==1)*/
 						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
+/// \ingroup glucosemeasgrp
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
+/// \ingroup statusgrp
 static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
+/// \ingroup starttimegrp
 static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME};
 									///<The start time of the current session. The default value is 
+/// ingroup glucosemeasgrp
 static cgmMeasC_t        	cgmCurrentMeas;				///< Local variable storing the most current glucose estimate.
 //Time related local variables
-static UTCTime                 	cgmCurrentTime_UTC;			///<The UTC format of the current system time. Appear as the number of seconds from 2000-01-01-00:00:00
-static UTCTime			cgmStartTime_UTC;			///<The UTC format of the start time. Appear as the number of seconds from 2000-01-01-00:00:00
-static uint16			cgmTimeOffset;				///<The time offset from the session start time. 
-static uint16                   cgmSessionRunTime=0x00A8;		///<The run time of the current sensor. Default value is 7 days.
-static bool                     cgmSessionStartIndicator=false;		///<Indicate whether the sesstion has been started
-static bool			cgmStartTimeConfigIndicator=false;	///<Indicate whether the session start time has been configured before with the set start time CGMCP command.
-/// @adtogroup racpgrp
-/// The macros, constants, variables, functions that are related to the RACP.
+static UTCTime                 	cgmCurrentTime_UTC;			///<The UTC format of the current system time. Appear as the number of seconds from 2000-01-01-00:00:00 @ingroup glucosemeasgrp
+static UTCTime			cgmStartTime_UTC;			///<The UTC format of the start time. Appear as the number of seconds from 2000-01-01-00:00:00 @ingroup starttimegrp
+static uint16			cgmTimeOffset;				///<The time offset from the session start time. @ingroup glucosemeasgrp
+static uint16                   cgmSessionRunTime=0x00A8;		///<The run time of the current sensor. Default value is 7 days. @ingroup runtimegrp
+static bool                     cgmSessionStartIndicator=false;		///<Indicate whether the sesstion has been started @ingroup starttimegrp
+static bool			cgmStartTimeConfigIndicator=false;	///<Indicate whether the session start time has been configured before with the set start time CGMCP command.@ingroup starttimegrp
+/// @ingroup gattgrp
+/// @defgroup racpgrp Record Access Control Point (RACP)
+/// @brief The macros, constants, variables, functions that are related to the RACP.
 /// @{
 //RACP Related Variables
 static cgmMeasC_t *	cgmMeasDB;					///<Pointer to the glucose measurement history database.
@@ -293,7 +369,7 @@ static uint8		cgmMeasDBSearchEnd;				///<The ending index of records meeting the
 static uint16		cgmMeasDBSearchNum;   				///<The resulting record number that matches the criterion.
 static uint8		cgmMeasDBSendIndx;   				///<The index of the next record to be sent. It is used in RACP reporting record function.
 /// @}
-/// \ingroup calibrationgrp
+/// \addtogroup calibrationgrp
 ///@{
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 cgmCalibrationDataRecord_t * cgmCaliDB;					///< Pointer to the calibration record database.
@@ -304,26 +380,28 @@ static uint8		cgmCaliDBWriteIndx;				///< Pointing to the next calibration recor
 static uint8		cgmCaliDBRecordNum;				///< The record number of the most recently stored calibration data record.
 static SFLOAT		cgmCalibration;					///< The most current calibration value.
 #endif /* FEATURE_GLUCOSE_CALIBRATION==1*/
-///@} end of calibrationgrp
-/// \ingroup patienthighlowgrp
+///@} 
+//end of calibrationgrp
+/// \addtogroup patienthighlowgrp
 ///@{
 #if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
 static SFLOAT		cgmPatientHigh;					///< The patient high glucose set level.
 static SFLOAT		cgmPatientLow;					///< The patient low glucose set level. 
 #endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
 ///@}
-/// \ingroup hyperalertgrp
+/// \addtogroup hyperalertgrp
 /// @{
 #if (FEATURE_GLUCOSE_HYPERALERT==1)
 static SFLOAT		cgmHyperThreshold;				///< The hyperglycemia alert threshold.
 #endif /*FEATURE_GLUCOSE_HYPERALERT*/
-/// \ingroup hypoalertgrp
+/// @}
+/// \addtogroup hypoalertgrp
 ///@{
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
 static SFLOAT		cgmHypoThreshold;				///< The hypoglycemia alert threshold.
 #endif /*FEATURE_GLUCOSE_HYPOALERT==1*/
 ///@}
-/// \defgroup ratealertgrp
+/// \addtogroup ratealertgrp 
 ///@{
 #if (FEATURE_GLUCOSE_RATEALERT==1)
 static SFLOAT		cgmIncreaseThreshold;				///< The rate of increase alert threshold.
@@ -405,12 +483,14 @@ static  int8 cgmRACPMsgFindCRC( cgmRACPMsg_t* pMsg);
 /*********************************************************************
  * PROFILE CALLBACKS
  */
+/// \addtogroup accessgrp
 /// \brief Variable for registerint the  GAP Role Callbacks
 static gapRolesCBs_t cgm_PeripheralCBs =
 {
 	cgmGapStateCB,  	///< Profile State Change Callbacks
 	NULL                	///< When a valid RSSI is read from controller
 };
+/// \ingroup securitygrp
 /// \brief Bond Manager Callbacks
 static const gapBondCBs_t cgmBondCB =
 {
@@ -423,6 +503,7 @@ static const gapBondCBs_t cgmBondCB =
  */
 
 /*!
+   \ingroup appgrp
    \brief   Initialization function for the CGM App Task.
    \details  This is called during initialization and should contain
             any application specific initialization (ie. hardware
@@ -524,6 +605,7 @@ void CGM_Init( uint8 task_id )
 }
 
 /**
+  @ingroup appgrp
   @brief   CGM Application Task event processor.  This function
            is called to process all events for the task.  Events
            include timers, messages and any other user defined events.
@@ -586,6 +668,7 @@ uint16 CGM_ProcessEvent( uint8 task_id, uint16 events )
 }
 
 /**
+  @ingroup appgrp
     @brief   Process an incoming task message.
   @param   pMsg - message to process
   @return  none*/
@@ -608,7 +691,7 @@ static void cgm_ProcessOSALMsg( osal_event_hdr_t *pMsg )
 }
 
 /**
-   
+  @ingroup appgrp 
   @brief   Handles all key events for this device.
  
   @param   shift - true if in shift/alt.
@@ -649,6 +732,7 @@ static void cgm_HandleKeys( uint8 shift, uint8 keys )
 
 
 /**
+  @ingroup cgmcpgrp
     @brief   Process Control Point messages
   @param   pMsg - The input CGM control point message data structure
   @return  none*/
@@ -955,6 +1039,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
 
 
 /**
+  @ingroup accessgrp
     @brief   Notification from the profile of a state change.
   @param   newState - new state
   @return  none*/
@@ -1024,7 +1109,7 @@ static void cgmGapStateCB( gaprole_States_t newState )
 }
 
 /**
-   
+  @ingroup securitygrp
   @brief   Pairing state callback.
  
   @return  none*/
@@ -1049,6 +1134,7 @@ static void cgmPairStateCB( uint16 connHandle, uint8 state, uint8 status )
 }
 
 /**
+  @ingroup securitygrp
     @brief   Passcode callback.
   @return  none
 */
@@ -1059,6 +1145,7 @@ static void cgmPasscodeCB( uint8 *deviceAddr, uint16 connectionHandle, uint8 uiI
 }
 
 /**
+  @ingroup glucosemeasgrp
  *   @brief   Send the most current record stored in cgmCurrentMeas as a GATT notification to the CGM measurement characteristic.
   @return  none*/
 static void cgmMeasSend(void)
@@ -1104,6 +1191,7 @@ static void cgmMeasSend(void)
 }
 
 /**
+  @ingroup cgmcpgrp
     @brief   Send a record control point response
   @param   opcode - response opcode 
   @param   roperand - address of the array storing the response operand
@@ -1129,6 +1217,7 @@ static void cgmCtlPntResponse(uint8 opcode, uint8 * roperand, uint8 roperand_len
 
 
 /**
+  @ingroup gattgrp
     @brief   The callback function in the application layer when the GATT service layer receives
   	    read/write operation to one of the CGM service characteristic
   @param   event - service event. Enumeration can be found in cgmservice.h  
@@ -1318,6 +1407,7 @@ static void cgmservice_cb(uint8 event, uint8* valueP, uint8 *len, uint8 * result
 }
 
 /**
+  @ingroup appgrp
     @brief Verify time values are suitable for filtering
   @param pTime - UTC time struct
   @return true if time is ok, false otherwise*/
@@ -1345,6 +1435,7 @@ static uint8 cgmVerifyTime(UTCTimeStruct* pTime)
 }
 
 /**
+  @ingroup appgrp
     @brief Verify time zone values are compliant to the standard.
   @param input - the time zone code to be tested
   @return true if time is ok, false otherwise*/
@@ -1358,6 +1449,7 @@ static uint8 cgmVerifyTimeZone( int8 input)
 }
 
 /**
+  @ingroup appgrp
     @brief Verify the daylight saving time input is compliant to the standard.
   @param input - the dayligt saving code to be tested
   @return true if time is ok, false otherwise*/
@@ -1369,6 +1461,7 @@ static uint8 cgmVerifyDSTOffset( uint8 input)
 }
 
 /**
+  @ingroup glucosemeasgrp
     @brief   Update with the lastest reading while updating the internal database
   @param   pMeas - address to store the generated cgm measurement.
   @return  none*/
@@ -1478,6 +1571,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 }
 
 /**
+  @ingroup appgrp
     @brief   Initialize the CGM simulator application. Reset the historical database
   @return  none*/
 static void cgmSimulationAppInit()				
@@ -1527,6 +1621,7 @@ static void cgmSimulationAppInit()
 }	
 
 /**
+  @ingroup racpgrp
   @brief   This function implements the search function for the gluocose measurement. 
   @details It assumes the measurement database consists of continous records arranged in ascending order.
   	    The current version is based on the sequential search for demo purpose. Therefore, we assume
@@ -1673,6 +1768,7 @@ static uint8 cgmSearchMeasDB(uint8 filter,uint16 operand1, uint16 operand2)
 }
 
 /**
+  @ingroup racpgrp
     @brief  Add record to the database 
   @param   cgmCurrentMeas - the add of the current measurement to be added to the database.*/
 static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas)
@@ -1687,6 +1783,7 @@ static void cgmAddRecord(cgmMeasC_t *cgmCurrentMeas)
 }	
 
 /**
+  @ingroup racpgrp
     @brief   Record Access Control Point messages processing
   @param   pMsg - The input RACP message data structure
   @return  none*/
@@ -1905,6 +2002,7 @@ static void cgmRACPSendNextMeas(){
 
 
 /**
+  @ingroup racpgrp
     @brief   Reset the cgm measurement history database.
   @return  none */
 static void cgmResetMeasDB()
@@ -1913,10 +2011,11 @@ static void cgmResetMeasDB()
 	cgmMeasDBCount=0;
 }
 
-/// \ingroup calibrationgrp
+/// \addtogroup calibrationgrp
 /// @{
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 /**
+   @ingroup calibrationgrp
  * @brief Add the input record to the calibration data record database ( cgmCaliDB )
  * @param [in] inputrecord - the input record to be added
  * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> */
@@ -1945,7 +2044,7 @@ static int8 cgmCaliAddRecord(cgmCalibrationDataRecord_t *inputrecord){
 }
 /**
  * @brief Verify the input calibration record values.
- * @detail Upon successful execution of the function, if the input record does not pass the verification, the corresponding flag in the calibration status field will be set. The field values are reproduced as follow.<br>
+ * @details Upon successful execution of the function, if the input record does not pass the verification, the corresponding flag in the calibration status field will be set. The field values are reproduced as follow.<br>
  * 	   <table>
  * 	   <tr><th>bit</th><th>meaning</th></tr>
  * 	   <tr><td>0</td><td>Calibration Data rejected (Calibration failed)</td></tr>
@@ -1954,7 +2053,7 @@ static int8 cgmCaliAddRecord(cgmCalibrationDataRecord_t *inputrecord){
  * 	   <tr><td>3-7</td><td>Reserved</td></tr>
  * 	   </table><br>
  * 	   At the same time, the <tt>result</tt> parameter forms a response to the COCP request, whose value is documented in the following table.
- * 	   <tr><th>Value</th><th>Meaning</th></tr>
+ * 	   <table><tr><th>Value</th><th>Meaning</th></tr>
  * 	   <tr><td>1</td><td>Success</td></tr>
  * 	   <tr><td>2</td><td>Opcode not supported</td></tr>
  * 	   <tr><td>3</td><td>Invalid operand</td></tr>
@@ -1996,7 +2095,7 @@ static void cgmCaliVerifyInput(cgmCalibrationDataRecord_t *inputrecord, uint8 *r
 
 /**
  * @brief Process the calibration data. This is a place holder for implementing the actual calibration procedure of the sensor device.
- * @detail When this function is called, it always process the most recent calibration record.
+ * @details When this function is called, it always process the most recent calibration record.
  * @return <table><tr><td>0</td><td>Success</td></tr><tr><td>-1</td><td>Fail</td></tr></table> 
  * @note This function assumes the presence of the local cgmCaliDB database variables.*/
 static int8 cgmCaliProcessCalibration(void){
@@ -2023,12 +2122,12 @@ static int8 cgmCaliProcessCalibration(void){
 
 /**
  * @brief This function tests whether the CGM needs calibration.
- * @detail This function is called in the cgmNewGlucoseMeas(). If the method determines that calibration is needed, then the corresponding flag is set. 
+ * @details This function is called in the cgmNewGlucoseMeas(). If the method determines that calibration is needed, then the corresponding flag is set. 
  * @return <table><tr><td>0</td><td>Success with no recommendation</td></tr>
- * 		  <tr><td>-1</td><td>Fail</td></tr></table>
- * 		  <tr><td>0x000000</td><td>Success with calibration not required</td></tr></table>
- * 		  <tr><td>0x000200</td><td>Success with calibration required</td></tr></table>
- * 		  <tr><td>0x000400</td><td>Success with calibration recommended</td></tr></table>
+ * 		  <tr><td>-1</td><td>Fail</td></tr>
+ * 		  <tr><td>0x000000</td><td>Success with calibration not required</td></tr>
+ * 		  <tr><td>0x000200</td><td>Success with calibration required</td></tr>
+ * 		  <tr><td>0x000400</td><td>Success with calibration recommended</td></tr>
  * 		  <tr><td>0x000800</td><td>Success with calibration is not allowed</td></tr></table>
  * @note This function assumes the presence of the local cgmCaliDB database variables. At the same time, the exponent of glucose concentration is 0*/
 static int32 cgmCaliTestCalibration(SFLOAT currentConcentration){
@@ -2093,7 +2192,7 @@ static int16 cgmCaliDBSearch(uint16 recordnum){
 #endif /* FEATURE_GLUCOSE_CALIBRATION ==1*/
 /// @}
 
-/// \ingroup patienthighlowgrp
+/// \addtogroup patienthighlowgrp
 /// @{
 #if (FEATURE_GLUCOSE_PATIENTHIGHLOW==1)
 /**
@@ -2101,13 +2200,12 @@ static int16 cgmCaliDBSearch(uint16 recordnum){
  * @param [in] input - the input patient defined glucose high value.
  * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
  <table>
- <th><td>Value</td><td>Meaning</td></th>
+ <tr><th>Value</th><th>Meaning</th></tr>
  <tr><td>1</td><td>Success</td></tr>
  <tr><td>2</td><td>Op Code not supported</td></tr>
  <tr><td>3</td><td>Invalid Operand</td></tr>
  <tr><td>4</td><td>Procedure not completed</td></tr>
- <tr><td>5</td><td>Parameter out of range</td></tr>
- </table>*/
+ <tr><td>5</td><td>Parameter out of range</td></tr></table>*/
 static void cgmPHighVerifyInput(SFLOAT input, uint8 *result){
 	*result=CGM_SPEC_OP_RESP_SUCCESS;
 	if ( input > PATIENTHIGH_CONCENTRATION_MAX || input < PATIENTHIGH_CONCENTRATION_MIN)
@@ -2136,7 +2234,7 @@ static void cgmPHighReset(void){
 }
 /**
  * @brief This function tests whether the CGM measure exceeds the patient set glucose high level
- * @detail This function is called in the cgmNewGlucoseMeas(). If the method determines that current measurement exceeds the patient defined high level, then the corresponding flag is set. 
+ * @details This function is called in the cgmNewGlucoseMeas(). If the method determines that current measurement exceeds the patient defined high level, then the corresponding flag is set. 
  * @return <table><tr><td>0</td><td>Success with no alert set</td></tr>
  * 		  <tr><td>-1</td><td>Fail</td></tr></table>
  * 		  <tr><td>0x010000</td><td>Success patient high alert set</td></tr></table>*/
@@ -2153,7 +2251,7 @@ static int32 cgmPHighTest(SFLOAT currentConcentration){
  * @param [in] input - the input patient defined glucose low value.
  * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
  <table>
- <th><td>Value</td><td>Meaning</td></th>
+ <tr><th>Value</th><th>Meaning</th></tr>
  <tr><td>1</td><td>Success</td></tr>
  <tr><td>2</td><td>Op Code not supported</td></tr>
  <tr><td>3</td><td>Invalid Operand</td></tr>
@@ -2189,9 +2287,9 @@ static void cgmPLowReset(void){
 
 /**
  * @brief This function tests whether the CGM measure exceeds the patient set glucose low level
- * @detail This function is called in the cgmNewGlucoseMeas(). If the method determines that current measurement exceeds the patient defined low level, then the corresponding flag is set. 
+ * @details This function is called in the cgmNewGlucoseMeas(). If the method determines that current measurement exceeds the patient defined low level, then the corresponding flag is set. 
  * @return <table><tr><td>0</td><td>Success with no alert set</td></tr>
- * 		  <tr><td>-1</td><td>Fail</td></tr></table>
+ * 		  <tr><td>-1</td><td>Fail</td></tr>
  * 		  <tr><td>0x0800000</td><td>Success patient low alert set</td></tr></table>*/
 static int32 cgmPLowTest(SFLOAT currentConcentration){
 	if (currentConcentration < cgmPatientLow)
@@ -2203,7 +2301,7 @@ static int32 cgmPLowTest(SFLOAT currentConcentration){
 #endif /*FEATURE_GLUCOSE_PATIENTHIGHLOW==1*/
 /// @}
 
-/// \ingroup hyperalertgrp
+/// \addtogroup hyperalertgrp
 /// @{
 #if (FEATURE_GLUCOSE_HYPERALERT==1)
 /**
@@ -2229,7 +2327,7 @@ static int32 cgmAHyperTest(SFLOAT currentConcentration){
  * @param [in] input -  the input threshold value
  * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
  <table>
- <th><td>Value</td><td>Meaning</td></th>
+ <tr><th>Value</th><th>Meaning</th></tr>
  <tr><td>1</td><td>Success</td></tr>
  <tr><td>2</td><td>Op Code not supported</td></tr>
  <tr><td>3</td><td>Invalid Operand</td></tr>
@@ -2266,7 +2364,7 @@ static void cgmAHyperReset(void){
 #endif /* FEATURE_GLUCOSE_HYPERALERT*/
 /// @}
 
-/// \ingroup hypoalertgrp
+/// \addtogroup hypoalertgrp
 /// @{
 #if (FEATURE_GLUCOSE_HYPOALERT==1)
 /**
@@ -2292,7 +2390,7 @@ static int32 cgmAHypoTest(SFLOAT currentConcentration){
  * @param [in] input -  the input threshold value
  * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
  <table>
- <th><td>Value</td><td>Meaning</td></th>
+ <tr><th>Value</th><th>Meaning</th></tr>
  <tr><td>1</td><td>Success</td></tr>
  <tr><td>2</td><td>Op Code not supported</td></tr>
  <tr><td>3</td><td>Invalid Operand</td></tr>
@@ -2329,7 +2427,7 @@ static void cgmAHypoReset(void){
 /// @}
 
 
-/// \defgroup ratealertgrp
+/// \addtogroup ratealertgrp
 ///@{
 #if (FEATURE_GLUCOSE_RATEALERT==1)
 /**
@@ -2364,11 +2462,12 @@ static int32 cgmARateTest(SFLOAT currentRate)
 
 
 /**
+   @ingroup ratealertgrp
  * @brief Verify the input parameter meets the requirements.
  * @param [in] input -  the input threshold value
  * @param [in] *result - a pointer to a variable to hold the verification result. This value is compatible with the CGMCP generic response values.
  <table>
- <th><td>Value</td><td>Meaning</td></th>
+ <tr><th>Value</th><th>Meaning</th></tr>
  <tr><td>1</td><td>Success</td></tr>
  <tr><td>2</td><td>Op Code not supported</td></tr>
  <tr><td>3</td><td>Invalid Operand</td></tr>
@@ -2396,6 +2495,7 @@ static void cgmARateVerifyInput(SFLOAT input, uint8 *result)
 }
 
 /**
+   @ingroup ratealertgrp
  * @brief Configure the rate of increase/decrease alert of the sensoe.
  * @param [in] input - the input rate of change thresdhold in mg/dL/min
  * @param [in] opcode - the opcode of the caller operation. It is used to differentiate increase or decrease rate.
@@ -2411,6 +2511,7 @@ static int8 cgmARateProcessInput(SFLOAT input, uint8 opcode)
 }
 
 /**
+    @ingroup ratealertgrp
  *  @brief Reset the variables related to the rate alert of the sensor device.
  *  @return none.*/
 static void cgmARateReset(void)
@@ -2421,29 +2522,16 @@ static void cgmARateReset(void)
 #endif /*FEATURE_GLUCOSE_RATEALERT==1*/
 ///@}
 
-/// @addtogroup qualitygrp
-/// This is a group of constants, variables, functions related to the glucose measurement quality estimation
-#if (FEATURE_GLUCOSE_QUALITY==1)
-/**
- * \brief The function to determine the glucose measurement quality and set the value in the corresponding output variable.
- * \detail The exact decision of the quality is implementation specific. For demonstration purpose, the quality is hardcoded to be 90%. Any other calculation algorithm should be implemented here.
- * \param [in] input -  the input glucose concentration
- * \return The quality value.*/
-static SFLOAT cgmGQuality(SFLOAT input)
-{
-	return 0x005A;
-}
-#endif
 
-/// @addtogroup crc16grp
+/// @addtogroup crc16grp 
 /// @{
 #if (FEATURE_GLUCOSE_CRC==1)
 /**
  * \brief This function checks the presence of the CRC field in the CGMCP command.
- * \detail The function checks the presence of CRC by checking the command length corresponding to each of the possible CGMCP operation.
+ * @details The function checks the presence of CRC by checking the command length corresponding to each of the possible CGMCP operation.
  * \param [in] pMsg - the pointer to the CGMCP command message
  * \return The result
- * <table><th><td>Value</td><td>Meaning</td></th>
+ * <table><tr><th>Value</th><th>Meaning</th></tr>
  * 	  <tr><td>0</td><td>The CRC is missing</td></tr>
  * 	  <tr><td>1</td><td>The CRC is present</td></tr>
  * </table> */
@@ -2477,10 +2565,10 @@ static  int8 cgmCtlPntMsgFindCRC( cgmCtlPntMsg_t* pMsg){
 
 /**
  * \brief This function checks the presence of the CRC field in the RACP command.
- * \detail The function checks the presence of CRC by checking the command length corresponding to each of the possible RACP operation.
+ * @details The function checks the presence of CRC by checking the command length corresponding to each of the possible RACP operation.
  * \param [in] pMsg - the pointer to the RACP command message
  * \return The result
- * <table><th><td>Value</td><td>Meaning</td></th>
+ * <table><tr><th>Value</th><th>Meaning</th></tr>
  * 	  <tr><td>0</td><td>The CRC is missing</td></tr>
  * 	  <tr><td>1</td><td>The CRC is present</td></tr>
  * </table> */
@@ -2516,7 +2604,7 @@ static  int8 cgmRACPMsgFindCRC( cgmRACPMsg_t* pMsg){
 #endif /*FEATURE_GLUCOSE_CRC==1*/
 /// @}
 
-/// \ingroup racpgrp
+/// @addtogroup racpgrp
 /// @{
 /**
  * @brief The function to delete a block of entries from the measurement database.
@@ -2554,5 +2642,21 @@ static uint8 cgmRACPClearRecord(uint8 startindx, uint8 endindx, uint16 count){
 	cgmMeasDBCount-=count;
 	return CTL_PNT_RSP_SUCCESS;
 }
-///@}
+/// @}
 
+/// @ingroup glucosemeasgrp
+/// @defgroup qualitygrp The Measurement Quality Indication Feature
+/// @brief This is a group of constants, variables, functions related to the glucose measurement quality estimation
+/// @{
+#if (FEATURE_GLUCOSE_QUALITY==1)
+/**
+ * \brief The function to determine the glucose measurement quality and set the value in the corresponding output variable.
+ * @details The exact decision of the quality is implementation specific. For demonstration purpose, the quality is hardcoded to be 90%. Any other calculation algorithm should be implemented here.
+ * \param [in] input -  the input glucose concentration
+ * \return The quality value.*/
+static SFLOAT cgmGQuality(SFLOAT input)
+{
+	return 0x005A;
+}
+#endif
+///@}
