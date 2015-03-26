@@ -338,7 +338,8 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 #if (FEATURE_GLUCOSE_DEVICE_ALERT==1)
 						| CGM_FEATURE_ALERTS_DEVICE_SPEC
 #endif /*(FEATURE_GLUCOSE_DEVICE_ALERT==1)*/
-						, BUILD_UINT8(CGM_TYPE_ISF,CGM_SAMPLE_LOC_SUBCUT_TISSUE)};	///<The features supported by the CGM simulator
+						, BUILD_UINT8(CGM_SAMPLE_LOC_SUBCUT_TISSUE,CGM_TYPE_ISF)};	///<The features supported by the CGM simulator
+//                                                               ^Sample Location                ^Type
 /// \ingroup glucosemeasgrp
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 /// \ingroup statusgrp
@@ -810,7 +811,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
                         }
 			//Reset the sensor state
 			cgmResetMeasDB();
-#if (FEATURE_GLUCOSE_CALIBRATION==1)
+#if (_GLUCOSE_CALIBRATION==1)
 			cgmResetCaliDB();
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
 			cgmSessionStartIndicator=true;
