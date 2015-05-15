@@ -29,6 +29,8 @@ extern "C"
 /*********************************************************************
  * CONSTANTS
  */
+
+
 // CGM application level constant
 #define CGM_MEAS_DB_SIZE                              10	///< The size for the RACP history database
 // CGM Task Events
