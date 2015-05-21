@@ -29,6 +29,21 @@ extern "C"
 /*
  * CONSTANTS
  */
+  
+//ATT level constants. They can be allocated in "TEXAS INSTRUMENTS\BLE-CC254X-1.4.0\COMPONENTS\ble\include\att.h"
+#ifndef ATT_ERR_MISSING_CRC
+#define ATT_ERR_MISSING_CRC              0x80 //!< The CRC is missing (defined in the CGMS v1.0)
+#endif
+#ifndef ATT_ERR_INVALID_CRC
+#define ATT_ERR_INVALID_CRC              0x81 //!< The CRC is invalid (defined in the CGMS v1.0) 
+#endif
+#ifndef ATT_ERR_INVALID_VALUE
+#define ATT_ERR_INVALID_VALUE            0x82 //!< The attribute value is invalid for the operation
+#endif
+#ifndef ATT_ERR_INVALID_OPCP_OPCODE
+#define ATT_ERR_INVALID_OPCP_OPCODE      0x83 //!< The op code for CGM control point is not supported
+#endif
+  
 // Glucose Service bit fields
 #define CGM_SERVICE				0x00000001	///< Flag identifier for CGM service
 
