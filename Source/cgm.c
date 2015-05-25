@@ -90,8 +90,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define FEATURE_GLUCOSE_RATEALERT		0	///< The rate of increase/decrease alert feature
 #define FEATURE_GLUCOSE_QUALITY			0	///< The CGM supports quality indication
 #define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
-#define FEATURE_GLUCOSE_DEVICE_ALERT		0	///< The device alert support
-#define FEATURE_GLUCOSE_TREND                   0       ///< The glucose measurement trending feature
+#define FEATURE_GLUCOSE_DEVICE_ALERT		1	///< The device alert support
+#define FEATURE_GLUCOSE_TREND                   1       ///< The glucose measurement trending feature
 ///@}
 // End of featureactivation 
 
