@@ -150,8 +150,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 3.Characteristic Configuration
     {
       { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-      GATT_PERMIT_AUTHEN_READ | GATT_PERMIT_AUTHEN_WRITE |
-      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
+      GATT_PERMIT_READ | GATT_PERMIT_WRITE,
       0,
       (uint8 *)&CGMMeasConfig
     },
@@ -169,7 +168,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 5.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMFeatureUUID },
-      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_AUTHEN_READ,
+      GATT_PERMIT_READ | GATT_PERMIT_READ,
       0,
       &CGMFeatureDummy
     },
@@ -187,7 +186,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 7.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMStatusUUID },
-      GATT_PERMIT_AUTHEN_READ | GATT_PERMIT_ENCRYPT_READ,
+      GATT_PERMIT_READ | GATT_PERMIT_READ,
       0,
       &CGMStatusDummy
     },
@@ -205,8 +204,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 9.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMSessionStartTimeUUID },
-      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE |
-      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
+      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
       0,
       &CGMSessionStartTimeDummy
     },
@@ -224,7 +222,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 11.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMSessionRunTimeUUID },
-      GATT_PERMIT_AUTHEN_READ | GATT_PERMIT_ENCRYPT_READ,
+      GATT_PERMIT_READ,
       0,
       (uint8 *)&CGMSessionRunTimeDummy
     },
@@ -242,16 +240,14 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 13.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, recordControlPointUUID },
-      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE |
-      GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
+      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
       0,
       &CGMRacpDummy
     },
     /// 14.Characteristic Configuration
     {
       { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE|
-      GATT_PERMIT_ENCRYPT_READ |GATT_PERMIT_ENCRYPT_WRITE,
+      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
       0,
       (uint8 *)&CGMRacpConfig
     },
@@ -269,8 +265,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 16.Characteristic Value
     {
       { ATT_BT_UUID_SIZE, CGMSpecificOpsControlPointUUID },
-      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE|
-      GATT_PERMIT_ENCRYPT_READ |GATT_PERMIT_ENCRYPT_WRITE,
+      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
       0,
       &CGMControlDummy
     },
@@ -278,8 +273,7 @@ static gattAttribute_t CGMAttrTbl[] =
     /// 17.Characteristic Configuration
     {
       { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-      GATT_PERMIT_AUTHEN_READ |GATT_PERMIT_AUTHEN_WRITE|
-      GATT_PERMIT_ENCRYPT_READ |GATT_PERMIT_ENCRYPT_WRITE,
+      GATT_PERMIT_READ |GATT_PERMIT_WRITE,
       0,
       (uint8 *)&CGMControlConfig
     }
