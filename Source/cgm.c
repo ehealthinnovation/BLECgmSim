@@ -83,14 +83,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /// \defgroup featureactivation Feature Activation Macros
 /// \brief A set of macro definitions to enable/disable features.
 ///@{
-#define FEATURE_GLUCOSE_CALIBRATION		1	///< The glucose calibration feature
-#define FEATURE_GLUCOSE_PATIENTHIGHLOW		1	///< The patient set high/low alert feature
-#define FEATURE_GLUCOSE_HYPERALERT		1	///< The hyperglycemia alert feature
-#define FEATURE_GLUCOSE_HYPOALERT		1	///< The hypoglycemia alert feature
-#define FEATURE_GLUCOSE_RATEALERT		1	///< The rate of increase/decrease alert feature
-#define FEATURE_GLUCOSE_QUALITY			1	///< The CGM supports quality indication
-#define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
-#define FEATURE_GLUCOSE_DEVICE_ALERT		1	///< The device alert support
+#define FEATURE_GLUCOSE_CALIBRATION		0	///< The glucose calibration feature
+#define FEATURE_GLUCOSE_PATIENTHIGHLOW		0	///< The patient set high/low alert feature
+#define FEATURE_GLUCOSE_HYPERALERT		0	///< The hyperglycemia alert feature
+#define FEATURE_GLUCOSE_HYPOALERT		0	///< The hypoglycemia alert feature
+#define FEATURE_GLUCOSE_RATEALERT		0	///< The rate of increase/decrease alert feature
+#define FEATURE_GLUCOSE_QUALITY			0	///< The CGM supports quality indication
+#define FEATURE_GLUCOSE_CRC			0	///< The E2E-CRC support
+#define FEATURE_GLUCOSE_DEVICE_ALERT		0	///< The device alert support
+#define FEATURE_GLUCOSE_TREND                   0       ///< The glucose measurement trending feature
 ///@}
 // End of featureactivation 
 
@@ -113,9 +114,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /// \addtogroup securitygrp
 /// @{
 #define DEFAULT_PASSCODE                      19655	///< Default passcode
-#define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_INITIATE
-#define DEFAULT_MITM_MODE                     TRUE	///< Default MITM mode (TRUE to require passcode or OOB when pairing)
-#define DEFAULT_BONDING_MODE                  TRUE	///< Default bonding mode, TRUE to bond
+#define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_NO_PAIRING
+#define DEFAULT_MITM_MODE                     FALSE	///< Default MITM mode (TRUE to require passcode or OOB when pairing)
+#define DEFAULT_BONDING_MODE                  FALSE	///< Default bonding mode, TRUE to bond
 #define DEFAULT_IO_CAPABILITIES               GAPBOND_IO_CAP_DISPLAY_ONLY	///< Default GAP bonding I/O capabilities
 /// @}
 
@@ -343,7 +344,7 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 /// \ingroup glucosemeasgrp
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 /// \ingroup statusgrp
-static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
+static cgmStatus_t              cgmStatus={0x1234,0x000000}; 		///<The status of the CGM simulator. Default value is for testing purpose.
 /// \ingroup starttimegrp
 static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME};
 									///<The start time of the current session. The default value is 
@@ -811,7 +812,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
                         }
 			//Reset the sensor state
 			cgmResetMeasDB();
-#if (_GLUCOSE_CALIBRATION==1)
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
 			cgmResetCaliDB();
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
 			cgmSessionStartIndicator=true;
@@ -1510,7 +1511,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	} 
 #if (FEATURE_GLUCOSE_QUALITY==1)
 	//Prepare the quality field
-	pMeas->quality=cgmGQuality(glucoseGen);
+	quality=cgmGQuality(glucoseGen);
 #endif
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
@@ -1535,7 +1536,9 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	pMeas->annunciation=*annunciation;
 
 	//Prepare the flag
+#if (FEATURE_GLUCOSE_TREND==1)
 	flag |= CGM_TREND_INFO_PRES;
+#endif
 #if (FEATURE_GLUCOSE_QUALITY==1)
 	flag |= CGM_QUALITY_PRES;
 #endif
