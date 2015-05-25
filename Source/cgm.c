@@ -91,6 +91,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define FEATURE_GLUCOSE_QUALITY			1	///< The CGM supports quality indication
 #define FEATURE_GLUCOSE_CRC			1	///< The E2E-CRC support
 #define FEATURE_GLUCOSE_DEVICE_ALERT		1	///< The device alert support
+#define FEATURE_GLUCOSE_TREND                   1       ///< The glucose measurement trending feature
 ///@}
 // End of featureactivation 
 
@@ -343,7 +344,7 @@ static cgmFeature_t             cgmFeature={ 	CGM_FEATURE_TREND_INFO
 /// \ingroup glucosemeasgrp
 static uint16                   cgmCommInterval=1000;			///<The glucose measurement update interval in ms
 /// \ingroup statusgrp
-static cgmStatus_t              cgmStatus={0x1234,0x567890}; 		///<The status of the CGM simulator. Default value is for testing purpose.
+static cgmStatus_t              cgmStatus={0x1234,0x000000}; 		///<The status of the CGM simulator. Default value is for testing purpose.
 /// \ingroup starttimegrp
 static cgmSessionStartTime_t    cgmStartTime={{0,0,0,0,0,2000},TIME_ZONE_UTC_M5,DST_STANDARD_TIME};
 									///<The start time of the current session. The default value is 
@@ -600,8 +601,8 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
-        cgmSessionStartIndicator=true;
+	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+        cgmSessionStartIndicator=false;
         
 }
 
@@ -811,7 +812,7 @@ static void cgmProcessCtlPntMsg (cgmCtlPntMsg_t * pMsg)
                         }
 			//Reset the sensor state
 			cgmResetMeasDB();
-#if (_GLUCOSE_CALIBRATION==1)
+#if (FEATURE_GLUCOSE_CALIBRATION==1)
 			cgmResetCaliDB();
 #endif /*FEATURE_GLUCOSE_CALIBRATION==1)*/
 			cgmSessionStartIndicator=true;
@@ -1510,7 +1511,7 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	} 
 #if (FEATURE_GLUCOSE_QUALITY==1)
 	//Prepare the quality field
-	pMeas->quality=cgmGQuality(glucoseGen);
+	quality=cgmGQuality(glucoseGen);
 #endif
 #if (FEATURE_GLUCOSE_CALIBRATION==1)
 	//If the calibration feature is enabled. The newly generated glucose reading will be read to determine if the device needs calibration.
@@ -1535,7 +1536,9 @@ static void cgmNewGlucoseMeas(cgmMeasC_t * pMeas)
 	pMeas->annunciation=*annunciation;
 
 	//Prepare the flag
+#if (FEATURE_GLUCOSE_TREND==1)
 	flag |= CGM_TREND_INFO_PRES;
+#endif
 #if (FEATURE_GLUCOSE_QUALITY==1)
 	flag |= CGM_QUALITY_PRES;
 #endif
