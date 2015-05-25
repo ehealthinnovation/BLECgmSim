@@ -601,8 +601,8 @@ void CGM_Init( uint8 task_id )
 	osal_set_event( cgmTaskId, START_DEVICE_EVT );
 
 	//this command starts the CGM measurement record generation right after device reset
-	//osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
-        cgmSessionStartIndicator=false;
+	osal_start_timerEx( cgmTaskId, NOTI_TIMEOUT_EVT, cgmCommInterval);	
+        cgmSessionStartIndicator=true;
         
 }
 
