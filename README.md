@@ -1,6 +1,12 @@
 BLECgmSim
 ==============
 
+This is a pre-alpha release and as such some functionality is not finalized. The purpose of making this code available as a pre-alpha was to allow others to conduct feasibility assessments. As always, if you discover an issue or have a suggestion, please fork and submit a pull request.
+
+##Wish List
+
+New features ideas, comments are welcome. Edit [this wiki pages](https://github.com/uhnmdi/BLECgmSim/wiki/Wish-List) to share your voice.
+
 ##Description
 This library provides an implementation of the Continuous Glucose Monitor Service (CGMS) of the Bluetooth Low Energy (BLE)
 
