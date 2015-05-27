@@ -1,5 +1,9 @@
 var cgmservice_8h =
 [
+    [ "ATT_ERR_INVALID_CRC", "cgmservice_8h.html#a6797781c2f2029bb251bc178781fa850", null ],
+    [ "ATT_ERR_INVALID_OPCP_OPCODE", "cgmservice_8h.html#a6e46ebacab1dc2c942f7293ab94d6a72", null ],
+    [ "ATT_ERR_INVALID_VALUE", "cgmservice_8h.html#a489c0ffe6887625a0984f9161e8f56b0", null ],
+    [ "ATT_ERR_MISSING_CRC", "cgmservice_8h.html#aa5e5b712220df13b3fc93ae708b7a8d4", null ],
     [ "CGM_CALIBRATION_CLEAR", "cgmservice_8h.html#af5a995e1486f08f4b8ac40a77b1aa01a", null ],
     [ "CGM_CALIBRATION_NIR", "cgmservice_8h.html#aadf1cab7651aeda3ae4dc83431f05807", null ],
     [ "CGM_CALIBRATION_PENDING", "cgmservice_8h.html#a539e92bb9d04ed6dcc02e0d88623d15b", null ],

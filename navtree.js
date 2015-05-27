@@ -19,8 +19,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Cgm__Main_8c.html",
-"cgmservice_8h.html#adb9080760663b3a0f70e5adbf8fb0c81",
-"group__hyperalertgrp.html#gaf45daf134f219ecc97ec0ae1f2d76929"
+"cgmservice_8h.html#ad721c8215383074693974b72a4f699bf",
+"group__securitygrp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

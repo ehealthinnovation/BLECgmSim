@@ -7,5 +7,6 @@ var group__featureactivation =
     [ "FEATURE_GLUCOSE_HYPOALERT", "group__featureactivation.html#ga98e885e16b00fff9246709b402b0acaa", null ],
     [ "FEATURE_GLUCOSE_PATIENTHIGHLOW", "group__featureactivation.html#ga29b6c411ed1eb87e3207eeb65fd8813d", null ],
     [ "FEATURE_GLUCOSE_QUALITY", "group__featureactivation.html#gaa01c839f407279f08190564441a23624", null ],
-    [ "FEATURE_GLUCOSE_RATEALERT", "group__featureactivation.html#ga257ea208487db12f2070f3424a3bf104", null ]
+    [ "FEATURE_GLUCOSE_RATEALERT", "group__featureactivation.html#ga257ea208487db12f2070f3424a3bf104", null ],
+    [ "FEATURE_GLUCOSE_TREND", "group__featureactivation.html#ga10c19bbd6823ccb0c9a11149b6e657f1", null ]
 ];

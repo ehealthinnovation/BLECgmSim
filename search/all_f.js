@@ -47,7 +47,7 @@ var searchData=
   ['time_5fzone_5futc_5fp8p75',['TIME_ZONE_UTC_P8p75',['../cgmservice_8h.html#a57f09b4a870dbc27ab6b4ca66c278022',1,'cgmservice.h']]],
   ['time_5fzone_5futc_5fp9',['TIME_ZONE_UTC_P9',['../cgmservice_8h.html#a184b5ac8bfac14cc5a52961e8dc26711',1,'cgmservice.h']]],
   ['time_5fzone_5futc_5fp9p5',['TIME_ZONE_UTC_P9p5',['../cgmservice_8h.html#ac5b1507d293a32008cfa4c91b35fbdd4',1,'cgmservice.h']]],
-  ['timeoffset',['timeoffset',['../structcgmMeasC__t.html#acf674e25c2949eb20af237ad3ca1474d',1,'cgmMeasC_t::timeoffset()'],['../structcgmStatus__t.html#a658b461d4bb4b430948d54eba0beaaa6',1,'cgmStatus_t::timeOffset()']]],
+  ['timeoffset',['timeOffset',['../structcgmStatus__t.html#a658b461d4bb4b430948d54eba0beaaa6',1,'cgmStatus_t::timeOffset()'],['../structcgmMeasC__t.html#acf674e25c2949eb20af237ad3ca1474d',1,'cgmMeasC_t::timeoffset()']]],
   ['timezone',['timeZone',['../structcgmSessionStartTime__t.html#ae1e1f80dab963aafa4927cb968696cb1',1,'cgmSessionStartTime_t']]],
   ['trend',['trend',['../structcgmMeasC__t.html#ad8e75935312283bfd5f3c8ffc7eb3bbf',1,'cgmMeasC_t']]]
 ];

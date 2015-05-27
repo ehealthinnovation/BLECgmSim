@@ -1,28 +1,13 @@
 <map id="cgm_ProcessOSALMsg" name="cgm_ProcessOSALMsg">
-<area shape="rect" id="node3" href="$group__appgrp.html#ga6f82f30f260bbf813078ff7c1824a20d" title="Handles all key events for this device. " alt="" coords="233,403,359,432"/>
-<area shape="rect" id="node5" href="$group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="217,456,375,485"/>
-<area shape="rect" id="node45" href="$group__racpgrp.html#ga174761c312677278087f9769b23d206a" title="Record Access Control Point messages processing. " alt="" coords="217,963,375,992"/>
-<area shape="rect" id="node7" href="$group__racpgrp.html#gaaabeffca85d49988708f60d453c70729" title="Reset the cgm measurement history database. " alt="" coords="659,577,792,607"/>
-<area shape="rect" id="node9" href="$group__calibrationgrp.html#ga55f3cacf30d0753a03754fa9c157878a" title="Reset the calibration data record database. " alt="" coords="453,269,576,299"/>
-<area shape="rect" id="node11" href="$group__calibrationgrp.html#ga3c7d990d6555f472a1f1d2bab553e84a" title="Verify the input calibration record values. " alt="" coords="448,323,581,352"/>
-<area shape="rect" id="node13" href="$group__calibrationgrp.html#gaa9a047fd5c00f146f8fec275af0e4f5c" title="Add the input record to the calibration data record database ( cgmCaliDB ) " alt="" coords="448,376,581,405"/>
-<area shape="rect" id="node15" href="$group__calibrationgrp.html#ga8f19512441a655a7ce748e01d5b0499e" title="Process the calibration data. This is a place holder for implementing the actual calibration procedur..." alt="" coords="425,429,604,459"/>
-<area shape="rect" id="node17" href="$group__calibrationgrp.html#ga8af27597f8b33df95d18a6f5e516c39d" title="Search the calibration record according to the record number. " alt="" coords="449,483,580,512"/>
-<area shape="rect" id="node19" href="$group__patienthighlowgrp.html#ga908bae2be9c9a18352c54fd6ee11c6b3" title="Verify the input value of patient high setting fall into the server allowable range. " alt="" coords="441,536,588,565"/>
-<area shape="rect" id="node21" href="$group__patienthighlowgrp.html#gac77c5b64fb57f4ff7c3ae95f9062d99a" title="Configure the patient defined glucose high alert of the sensor device. " alt="" coords="435,589,595,619"/>
-<area shape="rect" id="node23" href="$group__patienthighlowgrp.html#ga0e947b7789563eefd0dd722244cfe2c7" title="Verify the input value of patient low setting fall into the server allowable range. " alt="" coords="444,643,585,672"/>
-<area shape="rect" id="node25" href="$group__patienthighlowgrp.html#ga7e08d98f530dd922f6c9486b168cca4d" title="Configure the patient defined glucose low alert of the sensor device. " alt="" coords="436,696,593,725"/>
-<area shape="rect" id="node27" href="$group__hyperalertgrp.html#ga42fca2b30be289ffc5db4321cb91df7c" title="Verify the input hyperglycemia threshold is within allowable range of the system. ..." alt="" coords="437,749,592,779"/>
-<area shape="rect" id="node29" href="$group__hyperalertgrp.html#ga03bf9ff71cc0fd11b671e6641fea5d2d" title="Configure the hyperglycemia alert threshold of the sensor device. " alt="" coords="431,803,599,832"/>
-<area shape="rect" id="node31" href="$group__hypoalertgrp.html#ga19994691446dbf35a5dba7f285915ca0" title="Verify the input hypoglycemia threshold is within allowable range of the system. " alt="" coords="440,856,589,885"/>
-<area shape="rect" id="node33" href="$group__hypoalertgrp.html#ga27a35e9cd7db647478006a2db6354e0e" title="Configure the hypoglycemia alert threshold of the sensor device. " alt="" coords="433,5,596,35"/>
-<area shape="rect" id="node35" href="$group__ratealertgrp.html#gab934378f37b2b68f536f50773000ff43" title="Verify the input parameter meets the requirements. " alt="" coords="441,59,588,88"/>
-<area shape="rect" id="node37" href="$group__ratealertgrp.html#gab857618aa0410ab022cb390f2d7c2571" title="Configure the rate of increase/decrease alert of the sensoe. " alt="" coords="435,112,595,141"/>
-<area shape="rect" id="node39" href="$group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51" title="Send a record control point response. " alt="" coords="444,165,585,195"/>
-<area shape="rect" id="node41" href="$group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5" title="CRC&#45;CCITT calculation using the tabular form. " alt="" coords="683,192,768,221"/>
-<area shape="rect" id="node43" href="$cgmservice_8c.html#a0499582a5412733ce20b318c836483cd" title="Send an indication containing a CGM measurement. " alt="" coords="655,139,796,168"/>
-<area shape="rect" id="node47" href="$group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f" title="Send an indication to the RACP characteristic. " alt="" coords="443,963,587,992"/>
-<area shape="rect" id="node49" href="$group__racpgrp.html#ga23e61e604774464abf1aa26ee15bb6ed" title="This function implements the search function for the gluocose measurement. " alt="" coords="445,1016,584,1045"/>
-<area shape="rect" id="node51" href="$group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8" title="Set the state of the CGM database transmission indicator. " alt="" coords="444,1069,585,1099"/>
-<area shape="rect" id="node53" href="$group__racpgrp.html#gaa70ab27b136437e7bc15951b06e27250" title="The function to delete a block of entries from the measurement database. " alt="" coords="436,909,593,939"/>
+<area shape="rect" id="node3" href="$group__appgrp.html#ga6f82f30f260bbf813078ff7c1824a20d" title="Handles all key events for this device. " alt="" coords="233,31,359,60"/>
+<area shape="rect" id="node5" href="$group__cgmcpgrp.html#gabf9bd92004225c06fb287cd38df4917d" title="Process Control Point messages. " alt="" coords="217,84,375,113"/>
+<area shape="rect" id="node15" href="$group__racpgrp.html#ga174761c312677278087f9769b23d206a" title="Record Access Control Point messages processing. " alt="" coords="217,189,375,219"/>
+<area shape="rect" id="node7" href="$group__racpgrp.html#gaaabeffca85d49988708f60d453c70729" title="Reset the cgm measurement history database. " alt="" coords="637,151,771,180"/>
+<area shape="rect" id="node9" href="$group__cgmcpgrp.html#ga7fa5b7e5f57194eae928a1f3e7af3f51" title="Send a record control point response. " alt="" coords="433,32,575,61"/>
+<area shape="rect" id="node11" href="$group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5" title="CRC&#45;CCITT calculation using the tabular form. " alt="" coords="661,59,747,88"/>
+<area shape="rect" id="node13" href="$cgmservice_8c.html#a0499582a5412733ce20b318c836483cd" title="Send an indication containing a CGM measurement. " alt="" coords="633,5,775,35"/>
+<area shape="rect" id="node17" href="$group__racpgrp.html#gac7c75c61070035c194830bafdc95d98f" title="Send an indication to the RACP characteristic. " alt="" coords="432,243,576,272"/>
+<area shape="rect" id="node19" href="$group__racpgrp.html#ga23e61e604774464abf1aa26ee15bb6ed" title="This function implements the search function for the gluocose measurement. " alt="" coords="435,296,573,325"/>
+<area shape="rect" id="node21" href="$group__racpgrp.html#ga82cd3c3024557c25c2c0917f3925bbd8" title="Set the state of the CGM database transmission indicator. " alt="" coords="433,136,575,165"/>
+<area shape="rect" id="node23" href="$group__racpgrp.html#gaa70ab27b136437e7bc15951b06e27250" title="The function to delete a block of entries from the measurement database. " alt="" coords="425,189,583,219"/>
 </map>

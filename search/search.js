@@ -11,9 +11,9 @@ var indexSectionsWithContent =
   1: "c",
   2: "cmo",
   3: "cmo",
-  4: "acdfghilnqrst",
+  4: "acdfghilqrst",
   5: "c",
-  6: "cdnrstu",
+  6: "acdnrstu",
   7: "acdfghprst",
   8: "ditw"
 };

@@ -3,17 +3,11 @@
 <area shape="rect" id="node5" href="$group__gattgrp.html#ga0771376939d0c4f54b2075cf71b03e93" title="Initializes the CGM service by registering GATT attributes with the GATT server. " alt="" coords="295,16,420,45"/>
 <area shape="rect" id="node7" href="$group__gattgrp.html#ga1b9e6c9397b03e5aa9f622af47e617cf" title="Register a callback function with the CGM Service. " alt="" coords="303,69,412,98"/>
 <area shape="rect" id="node9" href="$group__gattgrp.html#gad9d36d46d52f7bad5fe9316e881f8335" title="The callback function in the application layer when the GATT service layer receives read/write operat..." alt="" coords="303,122,412,152"/>
-<area shape="rect" id="node22" href="$group__appgrp.html#gaa21434c720a4f0d6721b418ccc568a9b" title="Initialize the CGM simulator application. Reset the historical database. " alt="" coords="283,389,432,418"/>
+<area shape="rect" id="node22" href="$group__appgrp.html#gaa21434c720a4f0d6721b418ccc568a9b" title="Initialize the CGM simulator application. Reset the historical database. " alt="" coords="283,202,432,232"/>
 <area shape="rect" id="node11" href="$group__crc16grp.html#ga0e1eca8ac94e27939e6560c0c824d3d5" title="CRC&#45;CCITT calculation using the tabular form. " alt="" coords="695,17,780,46"/>
 <area shape="rect" id="node13" href="$group__crc16grp.html#gad34bec376b346456ffa3cbb0d538cc0d" title="Test the input message against its attached CRC16 code. " alt="" coords="505,42,620,72"/>
 <area shape="rect" id="node16" href="$group__appgrp.html#ga7d5b52089f9e8c4784a7729996ca1573" title="Verify time zone values are compliant to the standard. " alt="" coords="493,96,632,125"/>
 <area shape="rect" id="node18" href="$group__appgrp.html#gadeba38cb321081ba7dce291314afadd4" title="Verify the daylight saving time input is compliant to the standard. " alt="" coords="491,149,635,178"/>
 <area shape="rect" id="node20" href="$group__crc16grp.html#ga00794c9f7422078eb769b33c6d5a40ec" title="This function checks the presence of the CRC field in the CGMCP command. " alt="" coords="481,202,644,232"/>
 <area shape="rect" id="node24" href="$cgmSimData_8c.html#afb238b22b0f57f8cb40be1b2af27c61c" title="Reset the simulator data return. " alt="" coords="496,256,629,285"/>
-<area shape="rect" id="node26" href="$group__calibrationgrp.html#ga55f3cacf30d0753a03754fa9c157878a" title="Reset the calibration data record database. " alt="" coords="501,309,624,338"/>
-<area shape="rect" id="node28" href="$group__patienthighlowgrp.html#ga2c65e7c0e60b0862da014609c4089cfb" title="Reset the variables related to patient defined glucose high alert of the sensor device. " alt="" coords="504,362,621,392"/>
-<area shape="rect" id="node30" href="$group__patienthighlowgrp.html#ga8132ef439ae2b12b880929b3ba6a7a3d" title="Reset the variables related to patient defined glucose low alert of the sensor device. " alt="" coords="505,416,620,445"/>
-<area shape="rect" id="node32" href="$group__hyperalertgrp.html#gaf45daf134f219ecc97ec0ae1f2d76929" title="Reset the variables related to patient defined glucose hyperglycemia alert of the sensor device..." alt="" coords="500,469,625,498"/>
-<area shape="rect" id="node34" href="$group__hypoalertgrp.html#ga05c0880d78bc3548e05eecfbb724e6fa" title="Reset the variables related to patient defined glucose hypoglycemia alert of the sensor device..." alt="" coords="501,522,624,552"/>
-<area shape="rect" id="node36" href="$group__ratealertgrp.html#ga69ddcd5abb3cce89fbb1b505ffe08c2c" title="Reset the variables related to the rate alert of the sensor device. " alt="" coords="504,576,621,605"/>
 </map>

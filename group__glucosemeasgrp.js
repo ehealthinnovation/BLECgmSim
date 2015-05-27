@@ -1,6 +1,6 @@
 var group__glucosemeasgrp =
 [
-    [ "The Measurement Quality Indication Feature", "group__qualitygrp.html", "group__qualitygrp" ],
+    [ "The Measurement Quality Indication Feature", "group__qualitygrp.html", null ],
     [ "cgmMeasC_t", "structcgmMeasC__t.html", [
       [ "annunciation", "structcgmMeasC__t.html#a151e34787f627b534b86f248775ed63d", null ],
       [ "concentration", "structcgmMeasC__t.html#a73cec18bd924cf2401351b7070ad3864", null ],

@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.2</span>
+   &#160;<span id="projectnumber">0.1.3</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -113,6 +113,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 </ul>
 </li>
 <li class="level1"><a href="#programming">Procedure for Functional Implementation</a></li>
+<li class="level1"><a href="#flashingimage">Flashing Compiled Images to Hardware</a></li>
 <li class="level1"><a href="#revision">Revision History</a></li>
 </ul>
 </div>
@@ -124,6 +125,7 @@ Overview of the Library</h1>
 <p>A recently approved BLE service is <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=294794">Continuous Glucose Monitor Service (CGMS)</a>. It standardizes the information exchange rules between a collector and a CGM sensor. Specifically, the CGMS describes the packet format for reporting a glucose measurement, device feature, device status, session start time, sensor runtime and history records. Moreover, it specifies data structure for configuring a CGM (<em>eg.</em>set hyperglycemia alert). As data format and behavioral logic are well defined by the specification, the data collector device and the CGM sensor can be developed independently, provided that both of them conform to the BLE CGMS specification. In such way, the interoperability between CGM sensors and collectors device becomes feasible.</p>
 <p>This software library is an implementation of the <a href="https://developer.bluetooth.org/gatt/services/Pages/ServiceViewer.aspx?u=org.bluetooth.service.continuous_glucose_monitoring.xml">Continuous Glucose Monitor Service (CGMS)</a> on the Texas Instrument (TI) BLE stack. The library implements the semantic definition, data structure, application level behavior of a CGMS. At the same time, the compiled program can be run on TI's <a href="https://www.ti.com/product/cc2540">CC254X</a> series of BLE chips.</p>
 <p>The application specific CGMS implementation in this library is built on top of the more generic BLE protocol layers, including the Generic Attribute (GATT) layer and the Generic Profile Access (GAP) layer. These layers are implemented in the TI's <a href="http://www.ti.com/tool/ble-stack">BLE stack library</a>, and generally they remain the same for different services.</p>
+<p>Precompiled images are also available <a href="#flashingimage">here</a>. Manager APP developers may find it handy to flash those images into a TI evaluation module.</p>
 <h2><a class="anchor" id="mapping"></a>
 Structure of the Firmware</h2>
 <div class="image">
@@ -276,9 +278,45 @@ Procedure for Functional Implementation</h1>
 <li>
 <a href="http://www.ti.com/lit/ug/swru297c/swru297c.pdf">TI BLE Sample Application Guide</a> </li>
 </ul>
+<h1><a class="anchor" id="flashingimage"></a>
+Flashing Compiled Images to Hardware</h1>
+<p>Once the source codes are compiled into .hex files. It can be flashed to a target hardware platform using <a href="http://www.ti.com/tool/flash-programmer">TI SmartRF Flash Programmer</a>. The following diagram illustrates the steps involved in flashing a hex images to the hardware.</p>
+<div class="image">
+<img src="flash_procedure.png" alt="flash_procedure.png"/>
+<div class="caption">
+Procedure to Flash an Hex Image</div></div>
+<p>APP developers, who need a CGM simulator agent to quickly test out a collector implementation, may find it handy to flash the precompiled images to a CC2541 evaluation module. These images locate in /Image/CC2541. Different subversions of the agent offer different levels of capability, which are summarized in the followint table. User can select and flash the image based on individual needs.</p>
+<table class="doxtable">
+<tr>
+<th align="center">Version Number</th><th align="center">CRC-Checking</th><th align="center">Pairing Required</th><th align="center">Session Autostart</th><th align="center">Additional Functions<sup>1</sup></th><th align="left">Remarks  </th></tr>
+<tr>
+<td align="center">v0.1.3a</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center"></td><td align="left">Most basic implementation. It does not require pairing and CRC checking. Mainly for testing purpose. To start reporting glucose, send a "0x1A" to CGMCP. </td></tr>
+<tr>
+<td align="center">v0.1.3b</td><td align="center"></td><td align="center"></td><td align="center">*</td><td align="center"></td><td align="left">Most basic implementation. It does not require pairing and CRC checking. Mainly for testing purpose. </td></tr>
+<tr>
+<td align="center">v0.1.3c</td><td align="center"></td><td align="center">*</td><td align="center"></td><td align="center"></td><td align="left">Require pairing for read and right characteristic. PIN:19655 </td></tr>
+<tr>
+<td align="center">v0.1.3d</td><td align="center">*</td><td align="center">*</td><td align="center"></td><td align="center"></td><td align="left">Compliant to the standard in terms of security mode and integrity check. This version passes a majority of PTS tests<sup>2</sup> . PIN:19655 </td></tr>
+<tr>
+<td align="center">v0.1.3e</td><td align="center">*</td><td align="center">*</td><td align="center"></td><td align="center">*</td><td align="left">Compliant to the standard in terms of security mode and integrity check. This version passes a majority of PTS tests<sup>2</sup>. PIN:19655 </td></tr>
+<tr>
+<td align="center">v0.1.3f</td><td align="center">*</td><td align="center">*</td><td align="center">*</td><td align="center">*</td><td align="left">Compliant to the standard in terms of security mode and integrity check. This version passes a majority of PTS tests<sup>2</sup>. Auto-starting the measurement.PIN:19655 </td></tr>
+<tr>
+<td align="center">v0.1.3g</td><td align="center"></td><td align="center"></td><td align="center">*</td><td align="center">*</td><td align="left">Full functionality and autostart a glucose reporting session. It does not require pairing and CRC checking. Mainly for testing purpose. </td></tr>
+</table>
+<p><sup>1</sup>They include optional functions such as calibration, patient define high/low level alert, etc.<br/>
+ <sup>2</sup>This version passes all the mandatory PTS test cases given that prerequisit conditions are met (a certain number of records are stored in the data base etc.). Subjecting the image to test will only pass a majority of PTS test cases.</p>
 <h1><a class="anchor" id="revision"></a>
 Revision History</h1>
 <ul>
+<li>
+2015-05-26 <ul>
+<li>
+Fixed a undefined constant compilation error </li>
+<li>
+Started offering precompiled images for CC2541 hardware and the accompanied documentation </li>
+</ul>
+</li>
 <li>
 2015-03-24 <ul>
 <li>
@@ -306,7 +344,7 @@ Updated documentation: deleted the future implementation session.  </li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <li class="footer">Generated on Tue May 26 2015 16:26:40 for CGM Simulator by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

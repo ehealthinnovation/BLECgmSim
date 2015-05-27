@@ -1467,4 +1467,9 @@ div.image img[src ~= 'stuc_stackfilemapping.png']
  	width: 1000px;
 }
 
+div.image img[src ~= 'flash_procedure.png']
+{
+	width: 500px;
+}
+
 /* End of Image Styling */

@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">CGM Simulator
-   &#160;<span id="projectnumber">1.0.2</span>
+   &#160;<span id="projectnumber">0.1.3</span>
    </div>
    <div id="projectbrief">A CGM simulator to demonstrate the BLE CGM profile v1.1</div>
   </td>
@@ -122,12 +122,12 @@ Macros</h2></td></tr>
 <tr class="memitem:gae1e63bb29703c2f4bda0bc4519dee173"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#gae1e63bb29703c2f4bda0bc4519dee173">DEFAULT_PASSCODE</a>&#160;&#160;&#160;19655</td></tr>
 <tr class="memdesc:gae1e63bb29703c2f4bda0bc4519dee173"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default passcode.  <a href="#gae1e63bb29703c2f4bda0bc4519dee173">More...</a><br/></td></tr>
 <tr class="separator:gae1e63bb29703c2f4bda0bc4519dee173"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafd72a5ce31b4d3265c44d4ea3709c71a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#gafd72a5ce31b4d3265c44d4ea3709c71a">DEFAULT_PAIRING_MODE</a>&#160;&#160;&#160;GAPBOND_PAIRING_MODE_INITIATE</td></tr>
+<tr class="memitem:gafd72a5ce31b4d3265c44d4ea3709c71a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#gafd72a5ce31b4d3265c44d4ea3709c71a">DEFAULT_PAIRING_MODE</a>&#160;&#160;&#160;GAPBOND_PAIRING_MODE_NO_PAIRING</td></tr>
 <tr class="separator:gafd72a5ce31b4d3265c44d4ea3709c71a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6ca457294e47e81797e61da6a5f07a40"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#ga6ca457294e47e81797e61da6a5f07a40">DEFAULT_MITM_MODE</a>&#160;&#160;&#160;TRUE</td></tr>
+<tr class="memitem:ga6ca457294e47e81797e61da6a5f07a40"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#ga6ca457294e47e81797e61da6a5f07a40">DEFAULT_MITM_MODE</a>&#160;&#160;&#160;FALSE</td></tr>
 <tr class="memdesc:ga6ca457294e47e81797e61da6a5f07a40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default MITM mode (TRUE to require passcode or OOB when pairing)  <a href="#ga6ca457294e47e81797e61da6a5f07a40">More...</a><br/></td></tr>
 <tr class="separator:ga6ca457294e47e81797e61da6a5f07a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf47aee41bc3199a564690cdcec2fb663"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#gaf47aee41bc3199a564690cdcec2fb663">DEFAULT_BONDING_MODE</a>&#160;&#160;&#160;TRUE</td></tr>
+<tr class="memitem:gaf47aee41bc3199a564690cdcec2fb663"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#gaf47aee41bc3199a564690cdcec2fb663">DEFAULT_BONDING_MODE</a>&#160;&#160;&#160;FALSE</td></tr>
 <tr class="memdesc:gaf47aee41bc3199a564690cdcec2fb663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default bonding mode, TRUE to bond.  <a href="#gaf47aee41bc3199a564690cdcec2fb663">More...</a><br/></td></tr>
 <tr class="separator:gaf47aee41bc3199a564690cdcec2fb663"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1fadbe6dc7229b541ea15e7e49b77035"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__securitygrp.html#ga1fadbe6dc7229b541ea15e7e49b77035">DEFAULT_IO_CAPABILITIES</a>&#160;&#160;&#160;GAPBOND_IO_CAP_DISPLAY_ONLY</td></tr>
@@ -156,7 +156,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define DEFAULT_BONDING_MODE&#160;&#160;&#160;TRUE</td>
+          <td class="memname">#define DEFAULT_BONDING_MODE&#160;&#160;&#160;FALSE</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -183,7 +183,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define DEFAULT_MITM_MODE&#160;&#160;&#160;TRUE</td>
+          <td class="memname">#define DEFAULT_MITM_MODE&#160;&#160;&#160;FALSE</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -197,7 +197,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define DEFAULT_PAIRING_MODE&#160;&#160;&#160;GAPBOND_PAIRING_MODE_INITIATE</td>
+          <td class="memname">#define DEFAULT_PAIRING_MODE&#160;&#160;&#160;GAPBOND_PAIRING_MODE_NO_PAIRING</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -334,8 +334,8 @@ Variables</h2></td></tr>
 <div class="line">    <a class="code" href="group__securitygrp.html#ga77520224060d061e23e0fa5b0eabc082">cgmPasscodeCB</a>,      </div>
 <div class="line">    <a class="code" href="group__securitygrp.html#ga643679134719ede6e8f5f277076661e9">cgmPairStateCB</a>      </div>
 <div class="line">}</div>
-<div class="ttc" id="group__securitygrp_html_ga77520224060d061e23e0fa5b0eabc082"><div class="ttname"><a href="group__securitygrp.html#ga77520224060d061e23e0fa5b0eabc082">cgmPasscodeCB</a></div><div class="ttdeci">static void cgmPasscodeCB(uint8 *deviceAddr, uint16 connectionHandle, uint8 uiInputs, uint8 uiOutputs)</div><div class="ttdoc">Passcode callback. </div><div class="ttdef"><b>Definition:</b> cgm.c:1141</div></div>
-<div class="ttc" id="group__securitygrp_html_ga643679134719ede6e8f5f277076661e9"><div class="ttname"><a href="group__securitygrp.html#ga643679134719ede6e8f5f277076661e9">cgmPairStateCB</a></div><div class="ttdeci">static void cgmPairStateCB(uint16 connHandle, uint8 state, uint8 status)</div><div class="ttdoc">Pairing state callback. </div><div class="ttdef"><b>Definition:</b> cgm.c:1116</div></div>
+<div class="ttc" id="group__securitygrp_html_ga77520224060d061e23e0fa5b0eabc082"><div class="ttname"><a href="group__securitygrp.html#ga77520224060d061e23e0fa5b0eabc082">cgmPasscodeCB</a></div><div class="ttdeci">static void cgmPasscodeCB(uint8 *deviceAddr, uint16 connectionHandle, uint8 uiInputs, uint8 uiOutputs)</div><div class="ttdoc">Passcode callback. </div><div class="ttdef"><b>Definition:</b> cgm.c:1143</div></div>
+<div class="ttc" id="group__securitygrp_html_ga643679134719ede6e8f5f277076661e9"><div class="ttname"><a href="group__securitygrp.html#ga643679134719ede6e8f5f277076661e9">cgmPairStateCB</a></div><div class="ttdeci">static void cgmPairStateCB(uint16 connHandle, uint8 state, uint8 status)</div><div class="ttdoc">Pairing state callback. </div><div class="ttdef"><b>Definition:</b> cgm.c:1118</div></div>
 </div><!-- fragment -->
 <p>Bond Manager Callbacks. </p>
 
@@ -347,7 +347,7 @@ Variables</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Mar 25 2015 11:39:13 for CGM Simulator by
+    <li class="footer">Generated on Tue May 26 2015 16:26:40 for CGM Simulator by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
